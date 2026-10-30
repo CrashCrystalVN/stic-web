@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --accent: #2563eb;
+  --accent-light: #3b82f6;
+}
+
+html {
+  scroll-behavior: auto;
+  scroll-padding-top: 72px;
+}
+
+/* === SMOOTH THEME TRANSITION === */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow;
+  transition-duration: 350ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  background-color: #fafafa;
+  color: #0f172a;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark body {
+  background-color: #080c14;
+  color: #f1f5f9;
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.15);
+  color: #1d4ed8;
+}
+
+.dark ::selection {
+  background: rgba(99, 179, 255, 0.2);
+  color: #93c5fd;
+}
+
+/* Thin elegant scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
+.dark ::-webkit-scrollbar-thumb { background: #1e293b; }
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtle accent glow */
+.accent-glow {
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.1), 0 4px 24px rgba(37, 99, 235, 0.08);
+}
+.dark .accent-glow {
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.18), 0 4px 32px rgba(59, 130, 246, 0.12);
+}
