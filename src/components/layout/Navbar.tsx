@@ -58,18 +58,17 @@ export function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={cn(
-          "fixed top-0 left-0 right-0 z-40 transition-all duration-500 px-3 sm:px-6",
-          isScrolled
-            ? "py-3"
-            : "py-4 sm:py-5"
+          "fixed top-0 left-0 right-0 z-40 transition-all duration-300 px-3 sm:px-6",
+          isScrolled ? "py-2.5 sm:py-3" : "py-3.5 sm:py-4"
         )}
       >
+        {/* High-Contrast Pill: Nền trắng chữ đen rõ nét theo yêu cầu */}
         <div
           className={cn(
-            "max-w-6xl mx-auto px-4 sm:px-6 transition-all duration-500 rounded-full",
-            isScrolled
-              ? "liquid-glass py-2.5 shadow-lg shadow-blue-500/5 dark:shadow-black/20"
-              : "bg-transparent py-1"
+            "max-w-6xl mx-auto px-4 sm:px-6 transition-all duration-300 rounded-full",
+            "bg-white/95 dark:bg-[#0c121e]/95 backdrop-blur-xl border border-slate-200/90 dark:border-white/15",
+            "shadow-lg shadow-slate-900/5 dark:shadow-black/40",
+            isScrolled ? "py-2" : "py-2.5"
           )}
         >
           <div className="flex items-center justify-between">
@@ -77,7 +76,7 @@ export function Navbar() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setIsTocOpen(true)}
-                className="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white/60 dark:hover:bg-white/10 transition-all cursor-pointer"
+                className="p-2 rounded-full text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-white/10 transition-all cursor-pointer"
                 aria-label={t(T.nav.toc)}
               >
                 <Menu className="w-5 h-5" />
@@ -89,7 +88,7 @@ export function Navbar() {
                 className="flex items-center gap-2.5 group focus-visible:outline-none"
               >
                 {/* Official STIC Logo */}
-                <div className="relative w-9 h-9 rounded-xl overflow-hidden liquid-glass-pill bg-white/95 dark:bg-white/90 flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shadow-sm">
+                <div className="relative w-9 h-9 rounded-xl overflow-hidden bg-white border border-slate-200 dark:border-white/20 flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shadow-sm">
                   <Image
                     src="/logo.png"
                     alt="STIC Logo"
@@ -100,13 +99,17 @@ export function Navbar() {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-bold tracking-widest uppercase text-slate-400 dark:text-slate-500 leading-none">{t(T.nav.clubName)}</span>
-                  <span className="text-sm font-bold text-slate-900 dark:text-white leading-tight">STIC</span>
+                  <span className="text-[10px] font-bold tracking-widest uppercase text-slate-600 dark:text-slate-300 leading-none">
+                    {t(T.nav.clubName)}
+                  </span>
+                  <span className="text-sm font-extrabold text-slate-950 dark:text-white leading-tight">
+                    STIC
+                  </span>
                 </div>
               </Link>
             </div>
 
-            {/* Center nav — desktop */}
+            {/* Center nav — desktop: Chữ đen nền trắng tương phản cao */}
             <nav className="hidden lg:flex items-center gap-1">
               {NAV_SECTIONS.map((sec) => {
                 const isActive = activeSection === sec.id;
@@ -115,17 +118,17 @@ export function Navbar() {
                     key={sec.id}
                     onClick={() => scrollToSection(sec.id)}
                     className={cn(
-                      "relative px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200 cursor-pointer",
+                      "relative px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 cursor-pointer select-none",
                       isActive
-                        ? "text-blue-600 dark:text-blue-400"
-                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                        ? "text-blue-600 dark:text-blue-400 font-bold"
+                        : "text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400"
                     )}
                   >
                     {isActive && (
                       <motion.span
                         layoutId="nav-pill"
-                        className="absolute inset-0 liquid-glass-pill rounded-full"
-                        transition={{ type: "spring", stiffness: 400, damping: 35 }}
+                        className="absolute inset-0 bg-slate-100 dark:bg-white/10 border border-slate-200/80 dark:border-white/15 rounded-full shadow-sm"
+                        transition={{ type: "spring", stiffness: 450, damping: 35 }}
                       />
                     )}
                     <span className="relative">{sec.name}</span>
