@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { 
   Sparkles, 
   ExternalLink, 
@@ -48,17 +49,15 @@ export default function JoinPage() {
           </p>
         </div>
 
-        {/* Khung Banner để trống theo yêu cầu */}
-        <div className="rounded-3xl border-2 border-dashed border-blue-200/80 dark:border-slate-700 bg-white/40 dark:bg-slate-900/40 backdrop-blur-sm p-8 text-center mb-12">
-          <div className="flex flex-col items-center justify-center space-y-1.5">
-            <ImageIcon className="w-6 h-6 text-blue-500/80 dark:text-blue-400/80" />
-            <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-              Khu Vực Ảnh Nền / Banner Đăng Ký
-            </p>
-            <p className="text-[11px] text-slate-400 dark:text-slate-500">
-              (Khu vực để trống — Tự động hiển thị khi bạn cập nhật file ảnh nền sau này)
-            </p>
-          </div>
+        {/* Banner Dang Ky Tuyen Quan GEN 1.0 */}
+        <div className="relative w-full aspect-[2.55/1] rounded-3xl overflow-hidden border border-blue-100 dark:border-white/10 shadow-xl shadow-blue-500/10 mb-12">
+          <Image
+            src="/banner.png"
+            alt="STIC GEN 1.0 Recruitment Banner"
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
 
         {/* Khung Form Đăng Ký Trực Tiếp 1 Trang Gọn Gàng */}

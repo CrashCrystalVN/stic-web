@@ -97,7 +97,15 @@ export function ScrollScaleBanner({
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1600px) 95vw, 1500px"
                 className="w-full h-full object-cover block"
+                priority
               />
+              {/* Antigravity Glass Status Pill */}
+              <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-20">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/65 dark:bg-black/70 backdrop-blur-xl border border-white/25 text-white text-xs font-semibold shadow-2xl transition-all duration-300 group-hover:bg-slate-900/85">
+                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                  <span>STIC Lab // GEN 1.0</span>
+                </div>
+              </div>
             </div>
           ) : (
             /* Antigravity Elegant Empty Stage */

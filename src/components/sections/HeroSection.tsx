@@ -137,8 +137,8 @@ export function HeroSection() {
           ======================================================== */}
       <div id="showcase" className="relative z-10 w-full pb-16 md:pb-24">
         <ScrollScaleBanner
-          imageSrc={null}
-          title="STIC Ecosystem Showcase"
+          imageSrc="/banner.png"
+          title="STIC — Science, Technology & Innovation Club"
         />
       </div>
     </section>
