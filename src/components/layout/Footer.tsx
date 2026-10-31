@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Mail, Heart } from "lucide-react";
 import { smoothScrollTo } from "@/lib/utils";
 import { useLang } from "@/context/LangContext";
@@ -32,8 +33,16 @@ export function Footer() {
         <div className="flex flex-col sm:flex-row items-start justify-between gap-8">
           {/* Brand */}
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white text-[9px] font-bold">ST</div>
+            <div className="flex items-center gap-2.5">
+              <div className="relative w-8 h-8 rounded-lg overflow-hidden liquid-glass-pill bg-white/95 dark:bg-white/90 flex items-center justify-center p-0.5 shadow-sm">
+                <Image
+                  src="/logo.png"
+                  alt="STIC Logo"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-contain rounded-md"
+                />
+              </div>
               <span className="text-sm font-bold text-slate-900 dark:text-white">CLB KHKT STIC</span>
             </div>
             <p className="text-xs text-slate-400 dark:text-slate-500 max-w-xs leading-relaxed whitespace-pre-line">

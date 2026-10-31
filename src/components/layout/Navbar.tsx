@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 import { cn, smoothScrollTo } from "@/lib/utils";
@@ -17,17 +18,17 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isTocOpen, setIsTocOpen] = useState(false);
 
-  const NAV_SECTIONS = [
+  const NAV_SECTIONS = useMemo(() => [
     { id: "hero",     name: t(T.nav.home) },
     { id: "about",    name: t(T.nav.about) },
     { id: "teams",    name: t(T.nav.teams) },
     { id: "projects", name: t(T.nav.projects) },
     { id: "join",     name: t(T.nav.join) },
-  ];
+  ], [t]);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
+      setIsScrolled(window.scrollY > 20);
       const scrollPosition = window.scrollY + 160;
       for (const sec of NAV_SECTIONS) {
         const el = document.getElementById(sec.id);
@@ -57,19 +58,26 @@ export function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={cn(
-          "fixed top-0 left-0 right-0 z-40 transition-all duration-500",
+          "fixed top-0 left-0 right-0 z-40 transition-all duration-500 px-3 sm:px-6",
           isScrolled
-            ? "bg-white/80 dark:bg-[#080c14]/85 backdrop-blur-xl border-b border-slate-200/60 dark:border-slate-800/60 py-3"
-            : "bg-transparent py-4"
+            ? "py-3"
+            : "py-4 sm:py-5"
         )}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+          className={cn(
+            "max-w-6xl mx-auto px-4 sm:px-6 transition-all duration-500 rounded-full",
+            isScrolled
+              ? "liquid-glass py-2.5 shadow-lg shadow-blue-500/5 dark:shadow-black/20"
+              : "bg-transparent py-1"
+          )}
+        >
           <div className="flex items-center justify-between">
             {/* Left: hamburger + logo */}
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setIsTocOpen(true)}
-                className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-all cursor-pointer"
+                className="p-2 rounded-full text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white/60 dark:hover:bg-white/10 transition-all cursor-pointer"
                 aria-label={t(T.nav.toc)}
               >
                 <Menu className="w-5 h-5" />
@@ -78,13 +86,21 @@ export function Navbar() {
               <Link
                 href="#hero"
                 onClick={(e) => { e.preventDefault(); scrollToSection("hero"); }}
-                className="flex items-center gap-2 group focus-visible:outline-none"
+                className="flex items-center gap-2.5 group focus-visible:outline-none"
               >
-                <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white text-[10px] font-bold tracking-tight group-hover:bg-blue-700 transition-colors">
-                  ST
+                {/* Official STIC Logo */}
+                <div className="relative w-9 h-9 rounded-xl overflow-hidden liquid-glass-pill bg-white/95 dark:bg-white/90 flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shadow-sm">
+                  <Image
+                    src="/logo.png"
+                    alt="STIC Logo"
+                    width={36}
+                    height={36}
+                    className="w-full h-full object-contain rounded-lg"
+                    priority
+                  />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[11px] font-bold tracking-widest uppercase text-slate-400 dark:text-slate-500 leading-none">{t(T.nav.clubName)}</span>
+                  <span className="text-[10px] font-bold tracking-widest uppercase text-slate-400 dark:text-slate-500 leading-none">{t(T.nav.clubName)}</span>
                   <span className="text-sm font-bold text-slate-900 dark:text-white leading-tight">STIC</span>
                 </div>
               </Link>
@@ -102,13 +118,13 @@ export function Navbar() {
                       "relative px-4 py-1.5 text-xs font-medium rounded-full transition-all duration-200 cursor-pointer",
                       isActive
                         ? "text-blue-600 dark:text-blue-400"
-                        : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                        : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
                     )}
                   >
                     {isActive && (
                       <motion.span
                         layoutId="nav-pill"
-                        className="absolute inset-0 bg-blue-50 dark:bg-blue-950/50 rounded-full border border-blue-200/60 dark:border-blue-800/60"
+                        className="absolute inset-0 liquid-glass-pill rounded-full"
                         transition={{ type: "spring", stiffness: 400, damping: 35 }}
                       />
                     )}
@@ -119,14 +135,15 @@ export function Navbar() {
             </nav>
 
             {/* Right: lang + theme + CTA */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <LangToggle />
               <ThemeToggle />
               <button
                 onClick={() => scrollToSection("join")}
-                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors cursor-pointer"
+                className="hidden sm:inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer"
               >
-                {t(T.nav.apply)}
+                <span>✦</span>
+                <span>{t(T.nav.apply)}</span>
               </button>
             </div>
           </div>

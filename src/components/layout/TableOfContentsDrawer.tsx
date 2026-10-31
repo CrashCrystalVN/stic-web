@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowRight, Send, Home, Compass, Layers, Rocket, Calendar } from "lucide-react";
 import { useLang } from "@/context/LangContext";
@@ -42,9 +43,20 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
-              <div>
-                <p className="text-sm font-bold text-slate-900 dark:text-white">{t(T.toc.title)}</p>
-                <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">{t(T.toc.sub)}</p>
+              <div className="flex items-center gap-2.5">
+                <div className="relative w-8 h-8 rounded-lg overflow-hidden liquid-glass-pill bg-white/95 dark:bg-white/90 flex items-center justify-center p-0.5 shadow-sm">
+                  <Image
+                    src="/logo.png"
+                    alt="STIC Logo"
+                    width={32}
+                    height={32}
+                    className="w-full h-full object-contain rounded-md"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">{t(T.toc.title)}</p>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">{t(T.toc.sub)}</p>
+                </div>
               </div>
               <button
                 onClick={onClose}
@@ -93,7 +105,7 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
             <div className="px-4 py-5 border-t border-slate-100 dark:border-slate-800 space-y-2">
               <button
                 onClick={() => onNavigate("join")}
-                className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-blue-500/20"
               >
                 <Send className="w-3.5 h-3.5" />
                 {t(T.toc.applyCta)}

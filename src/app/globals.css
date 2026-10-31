@@ -15,10 +15,10 @@ html {
   scroll-padding-top: 72px;
 }
 
-/* === SMOOTH THEME TRANSITION === */
-*, *::before, *::after {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow;
-  transition-duration: 350ms;
+/* === SMOOTH THEME TRANSITION (Selective to prevent scroll jank) === */
+body, header, nav, footer, section {
+  transition-property: background-color, border-color, color;
+  transition-duration: 250ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -51,12 +51,61 @@ body {
 ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
 .dark ::-webkit-scrollbar-thumb { background: #1e293b; }
 
-/* Gradient text utility */
+/* Gradient text utility — Google Gemini Aurora style */
 .gradient-text {
-  background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+  background: linear-gradient(135deg, #1a73e8 0%, #8e24aa 50%, #ea4335 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+.dark .gradient-text {
+  background: linear-gradient(135deg, #60a5fa 0%, #c084fc 50%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === GOOGLE GEMINI LIQUID GLASS UTILITIES === */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 
+    0 24px 60px -12px rgba(66, 133, 244, 0.12),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 2px 0 rgba(0, 0, 0, 0.02);
+}
+
+.dark .liquid-glass {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 24px 60px -12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.liquid-glass-pill {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 4px 16px rgba(66, 133, 244, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95);
+}
+
+.dark .liquid-glass-pill {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.18);
 }
 
 /* Subtle accent glow */
