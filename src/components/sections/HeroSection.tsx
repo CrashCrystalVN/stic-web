@@ -7,6 +7,7 @@ import { smoothScrollTo } from "@/lib/utils";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
 import { ScrollScaleBanner } from "./ScrollScaleBanner";
+import { CountdownTimer } from "@/components/common/CountdownTimer";
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -109,6 +110,11 @@ export function HeroSection() {
               <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 font-medium">{s.label}</p>
             </div>
           ))}
+        </motion.div>
+
+        {/* Countdown Timer (Đóng đơn GEN 1.0 - Trạng thái Soon!) */}
+        <motion.div {...fade(0.36)} className="w-full max-w-3xl mt-8">
+          <CountdownTimer />
         </motion.div>
 
         {/* Scroll hint button inviting scroll into showcase */}

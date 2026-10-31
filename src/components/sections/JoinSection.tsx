@@ -9,6 +9,7 @@ import { TEAMS } from "@/lib/data";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
+import { CountdownTimer } from "@/components/common/CountdownTimer";
 
 interface FormData {
   fullName: string;
@@ -230,6 +231,11 @@ export function JoinSection() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* Countdown Timer */}
+          <div className="mb-8">
+            <CountdownTimer />
+          </div>
 
           {/* Card */}
           <div className="bg-white dark:bg-[#111827] border border-slate-100 dark:border-slate-800 rounded-2xl p-5 sm:p-6 accent-glow">

@@ -168,6 +168,35 @@ export const translations = {
     made:     { vi: "for STEM Đà Nẵng", en: "for STEM Da Nang" },
   },
 
+  // ── COUNTDOWN TIMER ─────────────────────────────────────────────────────────
+  countdown: {
+    badge:       { vi: "Tuyển quân GEN 1.0",              en: "GEN 1.0 Recruitment" },
+    title:       { vi: "Hạn Đóng Đơn Ứng Tuyển",           en: "Application Deadline" },
+    sub:         { vi: "Cơ hội trở thành thế hệ khai sinh CLB KHKT STIC", en: "Opportunity to join the founding generation of STIC Club" },
+    days:        { vi: "Ngày",                            en: "Days" },
+    hours:       { vi: "Giờ",                             en: "Hours" },
+    minutes:     { vi: "Phút",                            en: "Mins" },
+    seconds:     { vi: "Giây",                            en: "Secs" },
+    soon:        { vi: "Soon!",                           en: "Soon!" },
+    status:      { vi: "Hạn chót đóng đơn sẽ được công bố sớm · Nhanh tay đăng ký", en: "Deadline closing soon · Apply early to secure your spot" },
+    cta:         { vi: "Nộp đơn ngay",                    en: "Apply Now" },
+  },
+
+  // ── PROJECT SHOWCASE WINDOW ─────────────────────────────────────────────────
+  projectModal: {
+    windowTitle: { vi: "STIC Studio // Project Window",   en: "STIC Studio // Project Window" },
+    statusBadge: { vi: "✦ DỰ ÁN GEN 1.0 · SOON!",         en: "✦ GEN 1.0 PROJECT · SOON!" },
+    incubating:  { vi: "Giai đoạn Ươm mầm (Incubating)",  en: "Incubation Phase" },
+    soonDesc:    { vi: "Dự án đang trong giai đoạn ươm mầm cùng thế hệ thành viên GEN 1.0. Các bạn trúng tuyển sẽ trực tiếp tham gia thiết kế, phát triển và thi đấu cùng dự án này!", 
+                   en: "This project is in its incubation phase with GEN 1.0 members. Selected members will directly design, engineer, and compete with this project!" },
+    deptLabel:   { vi: "Mảng chuyên môn phụ trách",       en: "Host Department" },
+    techLabel:   { vi: "Kỹ năng & Công nghệ dự kiến",     en: "Expected Skills & Tech" },
+    joinCta:     { vi: "Nộp đơn để tham gia dự án này",    en: "Apply to Join this Project" },
+    closeBtn:    { vi: "Đóng Window",                      en: "Close Window" },
+    openWindow:  { vi: "Mở Project Window",               en: "Open Project Window" },
+    allDepartments: { vi: "Tất cả mảng",                  en: "All Departments" },
+  },
+
   // ── TOC DRAWER ──────────────────────────────────────────────────────────────
   toc: {
     title:    { vi: "Mục Lục",       en: "Contents" },
