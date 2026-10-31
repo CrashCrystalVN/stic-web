@@ -34,13 +34,13 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-3">
             <div className="flex items-center gap-2.5">
-              <div className="relative w-8 h-8 rounded-lg overflow-hidden liquid-glass-pill bg-white/95 dark:bg-white/90 flex items-center justify-center p-0.5 shadow-sm">
+              <div className="relative w-8 h-8 rounded-full overflow-hidden liquid-glass-pill bg-white/95 dark:bg-white/90 flex items-center justify-center p-0.5 shadow-sm">
                 <Image
                   src="/logo.png"
                   alt="STIC Logo"
                   width={32}
                   height={32}
-                  className="w-full h-full object-contain rounded-md"
+                  className="w-full h-full object-cover rounded-full"
                 />
               </div>
               <span className="text-sm font-bold text-slate-900 dark:text-white">CLB KHKT STIC</span>
