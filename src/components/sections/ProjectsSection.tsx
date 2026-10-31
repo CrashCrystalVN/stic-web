@@ -4,14 +4,37 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/common/SectionWrapper";
 import { smoothScrollTo } from "@/lib/utils";
-import { ArrowRight, Sparkles, Rocket, Layers } from "lucide-react";
+import { ArrowRight, Sparkles, Rocket, Layers, ExternalLink } from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
-import { TEAMS } from "@/lib/data";
+import { TEAMS, PROJECTS, type ProjectItem } from "@/lib/data";
+import { ProjectModal } from "./ProjectModal";
 
 export function ProjectsSection() {
   const { t, lang } = useLang();
   const [selectedTeam, setSelectedTeam] = useState<string>("all");
+  const [activeModalProject, setActiveModalProject] = useState<ProjectItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = (teamName?: string) => {
+    const targetName = teamName || (selectedTeam === "all" ? "AI & Coding" : selectedTeam);
+    const match = PROJECTS.find((p) => p.team.toLowerCase().includes(targetName.toLowerCase())) || {
+      id: "incubation-preview",
+      title: `${targetName} // GEN 1.0 Incubation Project`,
+      tagline: lang === "vi" ? "Dự án nghiên cứu & phát triển chuyên sâu do GEN 1.0 thực hiện" : "Advanced R&D project initiated by GEN 1.0 cohort",
+      description: "Dự án KHKT đang ươm mầm cho GEN 1.0",
+      team: targetName,
+      category: "Dự án chuyên môn",
+      tags: ["STEM", "KHKT", "STIC Lab", "GEN 1.0"],
+      githubLink: "https://github.com/CrashCrystalVN/stic-web",
+      liveLink: "#",
+      status: "upcoming" as const,
+      image: "",
+      metrics: "GEN 1.0",
+    };
+    setActiveModalProject(match);
+    setIsModalOpen(true);
+  };
 
   const FEATURES = [
     { label: t(T.projects.f1l), desc: t(T.projects.f1d) },
@@ -125,8 +148,16 @@ export function ProjectsSection() {
             ))}
           </div>
 
-          {/* Quick Apply CTA */}
-          <div className="mt-8">
+          {/* Quick Apply CTA & Open Project Window */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <button
+              onClick={() => handleOpenModal()}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 text-xs font-bold transition-all cursor-pointer border border-slate-300 dark:border-slate-700 shadow-sm hover:scale-[1.02]"
+            >
+              <span>{lang === "vi" ? "Mở Project Window (Soon)" : "Open Project Window (Soon)"}</span>
+              <ExternalLink className="w-3.5 h-3.5 text-blue-500" />
+            </button>
+
             <button
               onClick={() => smoothScrollTo("join")}
               className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.03] transition-all cursor-pointer"
@@ -152,6 +183,13 @@ export function ProjectsSection() {
           ))}
         </div>
       </div>
+
+      {/* Project Window Modal */}
+      <ProjectModal
+        project={activeModalProject}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </SectionWrapper>
   );
 }
