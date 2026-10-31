@@ -75,14 +75,14 @@ export function Navbar() {
             onClick={(e) => { e.preventDefault(); scrollToSection("hero"); }}
             className="flex items-center gap-2.5 group focus-visible:outline-none select-none shrink-0"
           >
-            {/* Official STIC Logo with circular liquid glass badge */}
-            <div className="relative w-9 h-9 rounded-full overflow-hidden bg-white dark:bg-white/95 border border-white/90 dark:border-white/20 flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shadow-sm backdrop-blur-md">
+            {/* Official STIC Logo with glass refraction badge */}
+            <div className="relative w-9 h-9 rounded-xl overflow-hidden bg-white/90 dark:bg-white/10 border border-white/80 dark:border-white/20 flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shadow-sm backdrop-blur-md">
               <Image
                 src="/logo.png"
                 alt="STIC Logo"
                 width={36}
                 height={36}
-                className="w-full h-full object-cover rounded-full"
+                className="w-full h-full object-contain rounded-lg"
                 priority
               />
             </div>

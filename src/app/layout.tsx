@@ -70,11 +70,14 @@ export const metadata: Metadata = {
     images: ["/banner.png"],
   },
 
-  // Icons
+  // Icons (Favicon tròn dạng circular avatar trên tab trình duyệt Cốc Cốc / Chrome)
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: [
+      { url: "/favicon.png", type: "image/png" },
+      { url: "/favicon.ico" },
+    ],
+    shortcut: "/favicon.png",
+    apple: "/apple-touch-icon.png",
   },
 
   // Cho phép Google index toàn bộ website
