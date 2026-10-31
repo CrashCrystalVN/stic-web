@@ -44,7 +44,11 @@ export function Navbar() {
   }, [NAV_SECTIONS]);
 
   const scrollToSection = (sectionId: string) => {
-    smoothScrollTo(sectionId);
+    if (sectionId === "join") {
+      smoothScrollTo("application-form");
+    } else {
+      smoothScrollTo(sectionId);
+    }
   };
 
   return (

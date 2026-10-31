@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/context/LangContext";
-import { CountdownTimer } from "@/components/common/CountdownTimer";
 
 export interface STICApplicationData {
   fullName: string;
@@ -293,11 +292,6 @@ export function JoinSection() {
             </p>
           </div>
 
-          {/* Countdown Timer */}
-          <div>
-            <CountdownTimer />
-          </div>
-
           {/* 1. OFFICIAL CLUB OVERVIEW & REQUIREMENTS ACCORDION / CARD */}
           <div className="rounded-3xl bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-white/10 p-6 sm:p-8 shadow-sm space-y-6">
             {/* Overview */}
@@ -463,7 +457,10 @@ export function JoinSection() {
           </AnimatePresence>
 
           {/* 2. THE APPLICATION FORM (SYNCHRONIZED WITH GOOGLE FORM) */}
-          <div className="bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-white/10 rounded-3xl p-6 sm:p-10 shadow-xl shadow-slate-900/5">
+          <div
+            id="application-form"
+            className="bg-white dark:bg-[#101726] border border-slate-200/90 dark:border-white/10 rounded-3xl p-6 sm:p-10 shadow-xl shadow-slate-900/5 scroll-mt-28"
+          >
             <AnimatePresence mode="wait">
               {isSuccess ? (
                 <motion.div

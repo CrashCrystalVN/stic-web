@@ -73,11 +73,12 @@ export const metadata: Metadata = {
   // Icons (Favicon tròn dạng circular avatar trên tab trình duyệt Cốc Cốc / Chrome)
   icons: {
     icon: [
-      { url: "/favicon.png", type: "image/png" },
-      { url: "/favicon.ico" },
+      { url: "/favicon.png?v=5", type: "image/png" },
+      { url: "/icon.png?v=5", type: "image/png" },
+      { url: "/favicon.ico?v=5" },
     ],
-    shortcut: "/favicon.png",
-    apple: "/apple-touch-icon.png",
+    shortcut: "/favicon.png?v=5",
+    apple: "/apple-touch-icon.png?v=5",
   },
 
   // Cho phép Google index toàn bộ website

@@ -7,7 +7,6 @@ import { smoothScrollTo } from "@/lib/utils";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
 import { ScrollScaleBanner } from "./ScrollScaleBanner";
-import { CountdownTimer } from "@/components/common/CountdownTimer";
 
 const fade = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -72,7 +71,7 @@ export function HeroSection() {
         <motion.div {...fade(0.24)} className="mt-8 flex flex-col sm:flex-row items-center gap-3.5">
           {/* Primary Gemini Gradient Button */}
           <button
-            onClick={() => smoothScrollTo("join")}
+            onClick={() => smoothScrollTo("application-form")}
             className="group relative inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-sm font-semibold transition-all duration-300 cursor-pointer shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.03] active:scale-[0.98]"
           >
             <span className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
@@ -110,11 +109,6 @@ export function HeroSection() {
               <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 font-medium">{s.label}</p>
             </div>
           ))}
-        </motion.div>
-
-        {/* Countdown Timer (Đóng đơn GEN 1.0 - Trạng thái Soon!) */}
-        <motion.div {...fade(0.36)} className="w-full max-w-3xl mt-8">
-          <CountdownTimer />
         </motion.div>
 
         {/* Scroll hint button inviting scroll into showcase */}
