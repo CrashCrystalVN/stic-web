@@ -107,7 +107,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
           aria-hidden="true"
         />
 
-        {/* macOS / Antigravity Window Frame */}
+        {/* macOS / Antigravity Window Frame with Liquid Glass Aesthetics */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 16 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -115,13 +115,13 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           onClick={(e) => e.stopPropagation()}
           onWheel={handleFrameWheel}
-          className="relative z-10 w-full max-w-2xl max-h-[85vh] sm:max-h-[82vh] bg-white dark:bg-[#0c121e] border-2 border-slate-200/90 dark:border-white/15 rounded-2xl sm:rounded-3xl shadow-2xl shadow-slate-950/20 dark:shadow-black/70 flex flex-col overflow-hidden"
+          className="relative z-10 w-full max-w-2xl max-h-[85vh] sm:max-h-[82vh] bg-white/95 dark:bg-[#0c121e]/95 backdrop-blur-2xl border border-white/80 dark:border-white/15 rounded-2xl sm:rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.25),inset_0_1px_1.5px_rgba(255,255,255,0.9)] dark:shadow-[0_30px_70px_rgba(0,0,0,0.8),inset_0_1px_1.5px_rgba(255,255,255,0.15)] flex flex-col overflow-hidden"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-title"
         >
-          {/* 1. Window Titlebar (Fixed header, never scrolls away) */}
-          <div className="shrink-0 flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-slate-200/80 dark:border-white/10 bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-md select-none z-10">
+          {/* 1. Window Titlebar (Fixed header, never scrolls away, frosted liquid glass) */}
+          <div className="shrink-0 flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-slate-200/80 dark:border-white/10 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl select-none z-10">
             {/* macOS 3 Window Controls */}
             <div className="flex items-center gap-2">
               <button
@@ -290,8 +290,8 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
             </div>
           </div>
 
-          {/* 3. Window Action Footer (Fixed bottom dock, always visible) */}
-          <div className="shrink-0 flex flex-col sm:flex-row items-center justify-between gap-3 px-5 sm:px-6 py-3.5 border-t border-slate-200/80 dark:border-white/10 bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-md z-10">
+          {/* 3. Window Action Footer (Fixed bottom dock, frosted liquid glass) */}
+          <div className="shrink-0 flex flex-col sm:flex-row items-center justify-between gap-3 px-5 sm:px-6 py-3.5 border-t border-slate-200/80 dark:border-white/10 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl z-10">
             <button
               onClick={onClose}
               className="w-full sm:w-auto px-5 py-2.5 rounded-full text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-slate-800 transition-colors cursor-pointer text-center"
