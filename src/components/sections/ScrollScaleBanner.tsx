@@ -1,124 +1,85 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import Image from "next/image";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { Play } from "lucide-react";
+import { useLang } from "@/context/LangContext";
 
 interface ScrollScaleBannerProps {
   imageSrc?: string | null;
   videoSrc?: string | null;
   title?: string;
+  className?: string;
 }
 
 export function ScrollScaleBanner({
-  imageSrc = "/banner.png",
+  imageSrc = null,
   videoSrc = null,
-  title = "STIC Ecosystem Showcase",
+  title = "STIC Showcase",
+  className = "",
 }: ScrollScaleBannerProps) {
+  const { lang } = useLang();
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Theo dõi trực tiếp vị trí cuộn scrollY của trang web
-  const { scrollY } = useScroll();
-
-  // Điểm cuộn mục tiêu để đạt kích thước 1.0 (khi banner nằm chính giữa màn hình)
-  const [targetScroll, setTargetScroll] = useState(380);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const updateTarget = () => {
-      // Khi cuộn khoảng 35% - 40% chiều cao màn hình thì banner sẽ đạt cực đại
-      setTargetScroll(Math.max(260, Math.min(window.innerHeight * 0.4, 420)));
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
     };
-    updateTarget();
-    window.addEventListener("resize", updateTarget);
-    return () => window.removeEventListener("resize", updateTarget);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Lò xo theo dõi scrollY cực nhạy, phản hồi lập tức và mượt mà 60-120fps
-  const smoothY = useSpring(scrollY, {
-    stiffness: 120,
-    damping: 22,
-    restDelta: 0.5,
+  // Chuẩn cấu hình ScrollTrigger từ Google Antigravity (antigravity.google):
+  // trigger: r, start: 'top bottom', end: isMobile ? 'top 80%' : 'top center', scrub: 1
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: isMobile ? ["start end", "start 80%"] : ["start end", "start 50%"],
   });
 
-  // ĐÚNG THỜI ĐIỂM:
-  // - scroll = 0 (đang ở đầu trang): banner thu nhỏ 0.80, nghiêng 3D 14deg (dạng card preview)
-  // - cuộn từ 0 -> targetScroll: banner phóng to lên 1.0, phẳng 0deg và tràn màn hình
-  // - cuộn tiếp: giữ nguyên 1.0 để xem trọn vẹn
-  const scale = useTransform(
-    smoothY,
-    [0, targetScroll, targetScroll + 400, targetScroll + 850],
-    [0.80, 1.0, 1.0, 0.95]
+  // Antigravity GSAP: scale bắt đầu từ 0.5 (desktop) hoặc 0.92 (mobile), phóng to đến 1.0
+  const rawScale = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [isMobile ? 0.92 : 0.5, 1.0]
   );
 
-  const rotateX = useTransform(
-    smoothY,
-    [0, targetScroll],
-    [14, 0]
-  );
-
-  const borderRadius = useTransform(
-    smoothY,
-    [0, targetScroll],
-    [32, 18]
-  );
-
-  const translateY = useTransform(
-    smoothY,
-    [0, targetScroll],
-    [25, 0]
-  );
+  // Hiệu ứng scrub siêu mượt 60-120fps (tương đương GSAP scrub: 1)
+  const scale = useSpring(rawScale, {
+    stiffness: 90,
+    damping: 22,
+    mass: 0.5,
+    restDelta: 0.001,
+  });
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full py-2 [perspective:1400px]"
+      className={`relative w-full flex items-center justify-center overflow-visible px-4 sm:px-6 md:px-8 ${className}`}
     >
-      {/* 1. Google Gemini Fluid Aurora Mesh Glow phía sau */}
+      {/* Google Antigravity Aura Glow */}
       <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-visible">
-        <div className="w-[90%] h-[360px] rounded-full bg-gradient-to-r from-blue-400/25 via-sky-400/20 to-indigo-500/20 blur-[100px]" />
+        <div className="w-[85%] h-[320px] rounded-full bg-gradient-to-r from-blue-500/15 via-sky-500/10 to-indigo-500/15 blur-[100px]" />
       </div>
 
-      {/* 2. Banner ẩn dưới nền blur đồng điệu theo khung: Lan tỏa quầng sáng ra ngoài mép kính */}
+      {/* Main Animated Showcase Card */}
       <motion.div
         style={{
           scale,
-          translateY,
-          transformStyle: "preserve-3d",
+          transformOrigin: "center center",
           willChange: "transform",
         }}
-        className="pointer-events-none absolute -inset-x-8 -inset-y-8 z-0 flex items-center justify-center overflow-visible"
+        className="relative z-10 w-full max-w-[1400px] 2xl:max-w-[1560px] mx-auto"
       >
-        <div className="relative w-full h-full rounded-[36px] overflow-hidden blur-2xl md:blur-3xl opacity-80 dark:opacity-60 scale-105">
-          {imageSrc && (
-            <Image
-              src={imageSrc}
-              alt="Blurred Banner Reflection"
-              fill
-              sizes="100vw"
-              className="object-cover object-top saturate-150"
-            />
-          )}
-        </div>
-      </motion.div>
+        {/* Antigravity Video/Banner Wrapper Container */}
+        <div className="relative w-full aspect-[16/9] max-h-[calc(100vh-140px)] min-h-[300px] rounded-[24px] sm:rounded-[30px] md:rounded-[36px] overflow-hidden bg-[#0d121f]/90 dark:bg-[#070a12]/95 backdrop-blur-2xl border border-slate-700/40 dark:border-white/10 shadow-2xl shadow-blue-500/10 group cursor-pointer transition-shadow duration-500 hover:shadow-blue-500/20">
+          {/* Top specular edge reflection */}
+          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none z-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] via-transparent to-transparent pointer-events-none z-10" />
 
-      {/* 3. KHUNG NGOÀI LIQUID GLASS (Nổi phía trên z-10) */}
-      <motion.div
-        style={{
-          scale,
-          rotateX,
-          translateY,
-          borderRadius,
-          transformStyle: "preserve-3d",
-          willChange: "transform",
-        }}
-        className="relative z-10 mx-auto w-full overflow-hidden liquid-glass shadow-2xl shadow-blue-500/10 dark:shadow-blue-500/5"
-      >
-        {/* Lớp gương bóng kính lỏng trên mặt khung */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-transparent pointer-events-none z-20" />
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/80 dark:via-white/30 to-transparent pointer-events-none z-20" />
-
-        {/* Khung ảnh CĂN VỪA KHÍT 1 TRANG MÀN HÌNH (max-h: calc(100vh - 130px)) — Không bị lòi xuống đáy */}
-        <div className="relative w-full h-[65vh] sm:h-[72vh] md:h-[78vh] lg:h-[80vh] max-h-[calc(100vh-130px)] min-h-[360px] bg-[#c8e0f8] dark:bg-slate-900 overflow-hidden flex items-center justify-center">
+          {/* Banner Content (Tạm thời để trống theo yêu cầu) */}
           {videoSrc ? (
             <video
               src={videoSrc}
@@ -134,17 +95,42 @@ export function ScrollScaleBanner({
                 src={imageSrc}
                 alt={title}
                 fill
-                priority
-                sizes="(max-width: 768px) 100vw, (max-width: 1600px) 98vw, 1800px"
-                className="object-cover object-top w-full h-full block"
+                sizes="(max-width: 768px) 100vw, (max-width: 1600px) 95vw, 1500px"
+                className="w-full h-full object-cover block"
               />
-              {/* Ánh sáng phản chiếu kính lỏng */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none" />
             </div>
           ) : (
-            <div className="relative w-full h-full flex items-center justify-center text-slate-400 dark:text-slate-600 text-sm font-medium">
-              ✦ Banner Placeholder
+            /* Antigravity Elegant Empty Stage */
+            <div className="relative w-full h-full flex flex-col items-center justify-center select-none overflow-hidden">
+              {/* Subtle tech background grid pattern */}
+              <div
+                className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06] pointer-events-none"
+                style={{
+                  backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
+                  backgroundSize: "32px 32px",
+                }}
+              />
+
+              {/* Minimalist Antigravity Center Accent */}
+              <div className="relative z-10 flex flex-col items-center text-center px-4">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/5 dark:bg-white/5 border border-white/10 flex items-center justify-center backdrop-blur-md shadow-inner transition-transform duration-300 group-hover:scale-110">
+                  <Play className="w-5 h-5 sm:w-6 sm:h-6 text-white/80 fill-white/80 translate-x-0.5" />
+                </div>
+                <p className="mt-4 text-xs sm:text-sm font-medium text-slate-300 dark:text-slate-300 tracking-wide">
+                  STIC Innovation & Showcase
+                </p>
+                <span className="mt-1 text-[11px] text-slate-500 dark:text-slate-500 font-mono">
+                  [ Banner Showcase ]
+                </span>
+              </div>
+
+              {/* Antigravity status badge in bottom-right corner */}
+              <div className="absolute bottom-5 right-5 sm:bottom-7 sm:right-7 z-20">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 dark:bg-white/10 backdrop-blur-xl border border-white/15 text-white text-xs font-medium shadow-lg transition-all duration-300 group-hover:bg-white/20">
+                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                  <span>{lang === "vi" ? "Sẵn sàng kết nối" : "Ready to Connect"}</span>
+                </div>
+              </div>
             </div>
           )}
         </div>

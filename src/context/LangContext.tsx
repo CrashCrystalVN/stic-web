@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import type { Lang } from "@/lib/i18n";
 
 interface LangContextValue {
@@ -11,15 +11,30 @@ interface LangContextValue {
 }
 
 const LangContext = createContext<LangContextValue>({
-  lang: "vi",
+  lang: "en",
   toggle: () => {},
-  t: (obj) => obj.vi,
+  t: (obj) => obj.en,
   contentVisible: true,
 });
 
 export function LangProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLang] = useState<Lang>("vi");
+  // Mặc định ngôn ngữ Tiếng Anh (English)
+  const [lang, setLang] = useState<Lang>("en");
   const [contentVisible, setContentVisible] = useState(true);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("stic_lang_v2") as Lang;
+      if (saved === "vi" || saved === "en") {
+        setLang(saved);
+      } else {
+        setLang("en");
+        localStorage.setItem("stic_lang_v2", "en");
+      }
+    } catch {
+      // Ignore localStorage errors in SSR / private mode
+    }
+  }, []);
 
   const toggle = useCallback(() => {
     // Step 1: fade OUT (250ms)
@@ -27,7 +42,15 @@ export function LangProvider({ children }: { children: React.ReactNode }) {
 
     // Step 2: switch language at the middle of transition
     setTimeout(() => {
-      setLang((prev) => (prev === "vi" ? "en" : "vi"));
+      setLang((prev) => {
+        const next: Lang = prev === "vi" ? "en" : "vi";
+        try {
+          localStorage.setItem("stic_lang_v2", next);
+        } catch {
+          // Ignore
+        }
+        return next;
+      });
 
       // Step 3: fade IN
       setTimeout(() => {
@@ -37,7 +60,7 @@ export function LangProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const t = useCallback(
-    (obj: { vi: string; en: string }) => obj[lang],
+    (obj: { vi: string; en: string }) => obj[lang] || obj.en,
     [lang]
   );
 

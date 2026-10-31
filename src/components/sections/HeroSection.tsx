@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { smoothScrollTo } from "@/lib/utils";
@@ -21,24 +20,18 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center px-2 sm:px-4 pt-28 pb-16 bg-[#fafbfc] dark:bg-[#080c14] overflow-hidden"
+      className="relative bg-[#fafbfc] dark:bg-[#080c14] overflow-hidden"
     >
-      {/* 0. Banner ẩn dưới nền toàn trang (Hiển thị rõ nét qua lớp blur nhẹ, tạo không gian vũ trụ STIC) */}
-      <div className="absolute inset-x-0 top-0 h-[90vh] max-h-[920px] pointer-events-none overflow-hidden z-0 select-none">
-        <Image
-          src="/banner.png"
-          alt="Ambient Background Banner"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-top scale-105 blur-xl md:blur-2xl opacity-70 dark:opacity-45"
-        />
-        {/* Lớp gradient làm dịu chữ phía trên và hòa dần vào màu nền ở chân đáy */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#fafbfc]/40 via-[#fafbfc]/20 to-[#fafbfc] dark:from-[#080c14]/50 dark:via-[#080c14]/30 dark:to-[#080c14]" />
+      {/* Google Antigravity Ambient Background Atmosphere */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
+        <div className="absolute -top-[10%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] rounded-full bg-gradient-to-b from-blue-500/15 via-indigo-500/10 to-transparent blur-[130px]" />
+        <div className="absolute top-[40%] right-[-10%] w-[500px] h-[500px] rounded-full bg-purple-500/5 blur-[100px]" />
       </div>
 
-      {/* 1. Header Text Area (Nằm nổi phía trên z-10) */}
-      <div className="relative z-10 max-w-4xl w-full mx-auto text-center flex flex-col items-center px-4">
+      {/* ========================================================
+          SCREEN 1: WELCOME / HERO CONTENT (Google Antigravity Style)
+          ======================================================== */}
+      <div className="relative z-10 min-h-[85vh] lg:min-h-[92vh] flex flex-col items-center justify-center px-4 pt-28 pb-12 text-center max-w-5xl mx-auto">
         {/* Google Gemini Style Liquid Glass Live Badge */}
         <motion.div {...fade(0.04)} className="mb-6">
           <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full liquid-glass-pill shadow-sm hover:scale-[1.02] transition-transform">
@@ -75,7 +68,7 @@ export function HeroSection() {
         </motion.p>
 
         {/* Google Gemini Style Liquid Glass CTA Buttons */}
-        <motion.div {...fade(0.24)} className="mt-9 flex flex-col sm:flex-row items-center gap-3.5">
+        <motion.div {...fade(0.24)} className="mt-8 flex flex-col sm:flex-row items-center gap-3.5">
           {/* Primary Gemini Gradient Button */}
           <button
             onClick={() => smoothScrollTo("join")}
@@ -94,21 +87,11 @@ export function HeroSection() {
             <span>{t(T.hero.cta2)}</span>
           </button>
         </motion.div>
-      </div>
 
-      {/* 2. Banner Showcase Container — Nổi trên z-10 */}
-      <div className="relative z-10 w-full max-w-[98vw] 2xl:max-w-[1720px] mx-auto mt-6 md:mt-8">
-        <ScrollScaleBanner
-          imageSrc="/banner.png"
-          title="STIC Club Showcase"
-        />
-      </div>
-
-      {/* 3. Stats Grid Container */}
-      <div className="relative z-10 max-w-3xl w-full mx-auto text-center mt-6 px-4">
+        {/* Quick Highlights / Stats Grid */}
         <motion.div
-          {...fade(0.32)}
-          className="w-full grid grid-cols-1 sm:grid-cols-3 gap-3.5"
+          {...fade(0.3)}
+          className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-3 gap-3 mt-10"
         >
           {[
             { value: t(T.hero.stat1v), label: t(T.hero.stat1l), icon: "✦" },
@@ -117,31 +100,41 @@ export function HeroSection() {
           ].map((s) => (
             <div
               key={s.label}
-              className="liquid-glass rounded-2xl p-4 transition-transform duration-300 hover:scale-[1.03] text-center"
+              className="liquid-glass rounded-2xl py-3 px-4 transition-transform duration-300 hover:scale-[1.02] text-center"
             >
               <div className="flex items-center justify-center gap-1.5">
                 <span className="text-blue-500 text-xs font-bold">{s.icon}</span>
-                <p className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">{s.value}</p>
+                <p className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{s.value}</p>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 font-medium">{s.label}</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 font-medium">{s.label}</p>
             </div>
           ))}
         </motion.div>
+
+        {/* Scroll hint button inviting scroll into showcase */}
+        <motion.button
+          onClick={() => smoothScrollTo("showcase")}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="mt-8 inline-flex items-center justify-center w-9 h-9 rounded-full liquid-glass text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors cursor-pointer hover:scale-110"
+          aria-label="Cuộn xuống khám phá"
+        >
+          <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
+            <ChevronDown className="w-4 h-4" />
+          </motion.div>
+        </motion.button>
       </div>
 
-      {/* Scroll hint with Liquid Glass Pill */}
-      <motion.button
-        onClick={() => smoothScrollTo("about")}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        className="relative z-10 mt-14 inline-flex items-center justify-center w-10 h-10 rounded-full liquid-glass text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors cursor-pointer hover:scale-110"
-        aria-label="Cuộn xuống"
-      >
-        <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2.2, ease: "easeInOut" }}>
-          <ChevronDown className="w-4 h-4" />
-        </motion.div>
-      </motion.button>
+      {/* ========================================================
+          SCREEN 2: GOOGLE ANTIGRAVITY SHOWCASE BANNER
+          ======================================================== */}
+      <div id="showcase" className="relative z-10 w-full pb-16 md:pb-24">
+        <ScrollScaleBanner
+          imageSrc={null}
+          title="STIC Ecosystem Showcase"
+        />
+      </div>
     </section>
   );
 }
