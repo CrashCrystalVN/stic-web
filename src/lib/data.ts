@@ -10,9 +10,15 @@ export interface StatItem {
 export interface TeamItem {
   id: string;
   name: string;
+  nameVi?: string;
+  nameEn?: string;
   tagline: string;
+  taglineVi?: string;
+  taglineEn?: string;
   icon: string;
   description: string;
+  descriptionVi?: string;
+  descriptionEn?: string;
   lead: string;
   memberCount: number;
   skills: string[];

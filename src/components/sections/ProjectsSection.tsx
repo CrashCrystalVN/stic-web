@@ -22,9 +22,9 @@ export function ProjectsSection() {
       id: "incubation-preview",
       title: `${targetName} // GEN 1.0 Incubation Project`,
       tagline: lang === "vi" ? "Dự án nghiên cứu & phát triển chuyên sâu do GEN 1.0 thực hiện" : "Advanced R&D project initiated by GEN 1.0 cohort",
-      description: "Dự án KHKT đang ươm mầm cho GEN 1.0",
+      description: lang === "vi" ? "Dự án KHKT đang ươm mầm cho GEN 1.0" : "Flagship STEM project under incubation for GEN 1.0",
       team: targetName,
-      category: "Dự án chuyên môn",
+      category: lang === "vi" ? "Dự án chuyên môn" : "Department Project",
       tags: ["STEM", "KHKT", "STIC Lab", "GEN 1.0"],
       githubLink: "https://github.com/CrashCrystalVN/stic-web",
       liveLink: "#",
@@ -95,7 +95,7 @@ export function ProjectsSection() {
                   : "bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
               }`}
             >
-              {tm.name}
+              {lang === "en" ? (tm.nameEn || tm.name) : (tm.nameVi || tm.name)}
             </button>
           ))}
         </div>

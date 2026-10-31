@@ -18,19 +18,24 @@ const ICON_MAP: Record<string, React.ElementType> = {
 };
 
 export function TeamsSection() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [activeProject, setActiveProject] = useState<ProjectItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenTeamProject = (team: TeamItem) => {
+    const teamTitle = lang === "en" ? (team.nameEn || team.name) : (team.nameVi || team.name);
+    const teamTagline = lang === "en" ? (team.taglineEn || team.tagline) : (team.taglineVi || team.tagline);
+    const teamDesc = lang === "en" ? (team.descriptionEn || team.description) : (team.descriptionVi || team.description);
+    const category = lang === "en" ? "Department Project" : "Dự án chuyên môn";
+
     // Find project matching this team, or construct a representative project
     const match = PROJECTS.find((p) => p.team.toLowerCase().includes(team.name.toLowerCase())) || {
       id: team.id,
-      title: `${team.name} // GEN 1.0 Flagship Project`,
-      tagline: team.tagline,
-      description: team.description,
-      team: team.name,
-      category: "Dự án chuyên môn",
+      title: `${teamTitle} // GEN 1.0 Flagship Project`,
+      tagline: teamTagline,
+      description: teamDesc,
+      team: teamTitle,
+      category,
       tags: team.skills,
       githubLink: "https://github.com/CrashCrystalVN/stic-web",
       liveLink: "#",
@@ -64,6 +69,9 @@ export function TeamsSection() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {TEAMS.map((team, index) => {
             const Icon = ICON_MAP[team.icon] || Sparkles;
+            const teamTitle = lang === "en" ? (team.nameEn || team.name) : (team.nameVi || team.name);
+            const teamDesc = lang === "en" ? (team.descriptionEn || team.description) : (team.descriptionVi || team.description);
+
             return (
               <motion.div
                 key={team.id}
@@ -87,10 +95,10 @@ export function TeamsSection() {
                   </div>
 
                   <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
-                    {team.name}
+                    {teamTitle}
                   </h3>
-                  <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-2 leading-relaxed line-clamp-2">
-                    {team.description}
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-3">
+                    {teamDesc}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-1">
                     {team.skills.slice(0, 3).map((skill, sIdx) => (
