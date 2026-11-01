@@ -410,18 +410,19 @@ def build_separated_report():
     ws5.column_dimensions['G'].width = 60
 
     out_clean = "STIC_Bao_Cao_Chinh_Thuc_Gen1.xlsx"
+
+    # Xóa toàn bộ file báo cáo cũ trước khi lưu báo cáo mới
+    import glob
+    for old_f in glob.glob("STIC_Bao_Cao_*.xlsx"):
+        if os.path.abspath(old_f) != os.path.abspath(out_clean):
+            try:
+                os.remove(old_f)
+                print(f"Đã xóa file báo cáo cũ: {old_f}")
+            except Exception as e:
+                pass
+
     wb.save(out_clean)
     print(f"Saved cleanly to {out_clean}")
-
-    try:
-        wb.save("STIC_Bao_Cao_Truy_Cap_Va_Khao_Sat.xlsx")
-    except Exception as e:
-        print(f"File STIC_Bao_Cao_Truy_Cap_Va_Khao_Sat.xlsx is currently open in Excel: {e}")
-
-    try:
-        wb.save("STIC_Bao_Cao_Toan_Dien_Tach_Loc_Bot.xlsx")
-    except Exception as e:
-        print(f"File STIC_Bao_Cao_Toan_Dien_Tach_Loc_Bot.xlsx is currently open in Excel: {e}")
 
 if __name__ == "__main__":
     build_separated_report()

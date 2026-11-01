@@ -47,6 +47,9 @@ dataconnect/.dataconnect/pgliteData/
 .claude/
 skills-lock.json
 
-# Office temporary files
+# Office & Report temporary files (Local machine only, do not sync to GitHub)
 ~$*
 *.tmp
+*.xlsx
+*.xls
+stress_test_results.json

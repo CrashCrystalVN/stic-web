@@ -314,8 +314,20 @@ def generate_stress_excel():
     ws4.column_dimensions['E'].width = 60
 
     out_file = "STIC_Bao_Cao_Stress_Test_200_Den_2000_Users.xlsx"
+
+    # Xóa toàn bộ file báo cáo cũ trước khi lưu báo cáo mới (theo yêu cầu của user)
+    import glob
+    for old_f in glob.glob("STIC_Bao_Cao_*.xlsx"):
+        if os.path.abspath(old_f) != os.path.abspath(out_file):
+            try:
+                os.remove(old_f)
+                print(f"Đã xóa file báo cáo cũ: {old_f}")
+            except Exception as e:
+                pass
+
     wb.save(out_file)
     print(f"Report successfully saved to: {out_file}")
 
 if __name__ == "__main__":
     generate_stress_excel()
+
