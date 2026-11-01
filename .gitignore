@@ -42,3 +42,7 @@ prisma/*.db-journal
 
 firebase-debug.log*
 dataconnect/.dataconnect/pgliteData/
+
+.agents/
+.claude/
+skills-lock.json

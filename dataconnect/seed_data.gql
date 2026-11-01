@@ -2,7 +2,7 @@
 # STIC CLUB - LOCAL SEED DATA (FIREBASE SQL CONNECT)
 # ========================================================
 
-mutation @transaction {
+mutation SeedSticData @transaction {
   department_insertMany(
     data: [
       {
