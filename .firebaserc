@@ -1,1 +1,5 @@
-{}
+{
+  "projects": {
+    "default": "stic-a2244"
+  }
+}
