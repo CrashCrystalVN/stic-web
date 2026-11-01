@@ -274,12 +274,45 @@ export function JoinSection() {
       gformData.append("entry.1623231100", form.ideaExecution || "");
       gformData.append("entry.1860646974", form.commitment || "Có thể tham gia thường xuyên");
 
-      await fetch(GOOGLE_FORM_ACTION, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: gformData.toString(),
+      // 1. Gửi ngầm qua hidden iframe chuẩn native để vượt mọi rào cản CORS của trình duyệt
+      const iframeName = `gform_target_${Date.now()}`;
+      const iframe = document.createElement("iframe");
+      iframe.name = iframeName;
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
+
+      const formElem = document.createElement("form");
+      formElem.action = GOOGLE_FORM_ACTION;
+      formElem.method = "POST";
+      formElem.target = iframeName;
+      formElem.style.display = "none";
+
+      Array.from(gformData.entries()).forEach(([key, val]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = val;
+        formElem.appendChild(input);
       });
+
+      document.body.appendChild(formElem);
+      formElem.submit();
+
+      // Dọn dẹp DOM sau khi submit
+      setTimeout(() => {
+        if (document.body.contains(formElem)) document.body.removeChild(formElem);
+        if (document.body.contains(iframe)) document.body.removeChild(iframe);
+      }, 3000);
+
+      // 2. Lưu bản sao vào LocalStorage máy người dùng để tra cứu
+      try {
+        localStorage.setItem("stic_last_registration", JSON.stringify({
+          submittedAt: new Date().toISOString(),
+          ...form
+        }));
+      } catch {
+        // ignore storage errors
+      }
 
       setGoogleSynced(true);
       setShowConfirm(false);
