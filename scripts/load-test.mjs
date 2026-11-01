@@ -1,7 +1,7 @@
 import https from 'node:https';
 import { performance } from 'node:perf_hooks';
 
-const TARGET_HOST = process.env.TARGET_HOST || 'sticdanang.web.app';
+const TARGET_HOST = process.env.TARGET_HOST || 'stic.web.app';
 const CONCURRENCY = parseInt(process.env.CONCURRENCY || '900', 10);
 const PATHS = ['/', '/join', '/banner.jpg', '/logo.png'];
 

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sticdanang.web.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://stic.web.app";
 
 export const metadata: Metadata = {
   title: "Đơn Tuyển Thành Viên GEN 1.0",

@@ -17,7 +17,7 @@ const font = Plus_Jakarta_Sans({
   preload: true,
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sticdanang.web.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://stic.web.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
