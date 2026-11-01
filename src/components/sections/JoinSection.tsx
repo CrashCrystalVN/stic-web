@@ -130,12 +130,14 @@ function ConfirmModal({
   onConfirm,
   onCancel,
   isSubmitting,
+  prefillUrl,
 }: {
   form: STICApplicationData;
   lang: string;
   onConfirm: () => void;
   onCancel: () => void;
   isSubmitting: boolean;
+  prefillUrl: string;
 }) {
   const [mounted, setMounted] = useState(false);
 
@@ -229,18 +231,16 @@ function ConfirmModal({
           >
             {lang === "vi" ? "Kiểm tra lại" : "Back to edit"}
           </button>
-          <button
+          <a
+            href={prefillUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={onConfirm}
-            disabled={isSubmitting}
-            className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold transition-all cursor-pointer disabled:opacity-60 flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/20"
+            className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/20 text-center"
           >
-            {isSubmitting ? (
-              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            ) : (
-              <ExternalLink className="w-3.5 h-3.5" />
-            )}
-            {lang === "vi" ? "Tiếp tục đến Google Form" : "Continue to Google Form"}
-          </button>
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>{lang === "vi" ? "Tiếp tục đến Google Form" : "Continue to Google Form"}</span>
+          </a>
         </div>
       </motion.div>
     </div>,
@@ -392,11 +392,6 @@ export function JoinSection() {
         }));
       } catch {
         // ignore storage errors
-      }
-
-      // Tự động mở Google Form đã điền sẵn sang một tab mới
-      if (typeof window !== "undefined") {
-        window.open(url, "_blank");
       }
 
       setShowConfirm(false);
@@ -1070,6 +1065,7 @@ export function JoinSection() {
             onConfirm={handleConfirm}
             onCancel={() => setShowConfirm(false)}
             isSubmitting={isSubmitting}
+            prefillUrl={generatePrefilledUrl(form)}
           />
         )}
       </AnimatePresence>
