@@ -14,7 +14,7 @@ const font = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://stic-club.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sticdanang.web.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -42,21 +42,23 @@ export const metadata: Metadata = {
   authors: [{ name: "CLB KHKT STIC", url: siteUrl }],
   creator: "CLB KHKT STIC — Đà Nẵng",
 
-  // Open Graph: preview đẹp khi chia sẻ lên Facebook / Zalo / Discord
+  // Open Graph: preview đẹp khi chia sẻ lên Facebook / Zalo / Discord / Messenger
   openGraph: {
     type: "website",
     locale: "vi_VN",
     url: siteUrl,
     siteName: "CLB KHKT STIC",
-    title: "STIC — CLB Khoa học Kỹ thuật Đà Nẵng | Đang tuyển GEN 1.0 🔥",
+    title: "STIC — CLB Khoa học Kỹ thuật Đà Nẵng",
     description:
-      "Sân chơi STEM thực chiến cho học sinh THPT TP. Đà Nẵng. 7 mảng chuyên môn: AI, Robotics, Design, STEM… Nộp đơn GEN 1.0 ngay!",
+      "Sân chơi STEM thực chiến cho học sinh THPT TP. Đà Nẵng. 7 ban chuyên môn — Nộp đơn tuyển GEN 1.0 ngay!",
     images: [
       {
-        url: "/banner.png",
-        width: 1200,
-        height: 630,
-        alt: "CLB Khoa học Kỹ thuật STIC — GEN 1.0",
+        url: `${siteUrl}/banner.png`,
+        secureUrl: `${siteUrl}/banner.png`,
+        width: 1024,
+        height: 402,
+        type: "image/png",
+        alt: "STIC — CLB Khoa học Kỹ thuật Đà Nẵng",
       },
     ],
   },
@@ -66,8 +68,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "STIC — CLB Khoa học Kỹ thuật Đà Nẵng",
     description:
-      "Sân chơi STEM thực chiến cho học sinh THPT TP. Đà Nẵng. Đang tuyển GEN 1.0.",
-    images: ["/banner.png"],
+      "Sân chơi STEM thực chiến cho học sinh THPT TP. Đà Nẵng. Đang tuyển thành viên GEN 1.0!",
+    images: [`${siteUrl}/banner.png`],
   },
 
   // Icons (Favicon tròn dạng circular avatar trên tab trình duyệt Cốc Cốc / Chrome)

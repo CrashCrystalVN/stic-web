@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { cn, smoothScrollTo } from "@/lib/utils";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
@@ -10,31 +11,61 @@ import { LangToggle } from "@/components/common/LangToggle";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
 import { CLUB_INFO } from "@/lib/data";
-import { ExternalLink, ArrowRight } from "lucide-react";
+import { ExternalLink, ArrowRight, ArrowDown } from "lucide-react";
 
 export function Navbar() {
-  const { t } = useLang();
-  const [activeSection, setActiveSection] = useState("hero");
+  const { t, lang } = useLang();
+  const pathname = usePathname();
+  const isJoin = pathname === "/join";
+
+  const [activeSection, setActiveSection] = useState(isJoin ? "join" : "hero");
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const NAV_SECTIONS = useMemo(() => [
-    { id: "hero",     name: t(T.nav.home) },
-    { id: "about",    name: t(T.nav.about) },
-    { id: "teams",    name: t(T.nav.teams) },
-    { id: "projects", name: t(T.nav.projects) },
-  ], [t]);
+  // Define nav items based on whether user is on the home page or the /join page
+  const NAV_ITEMS = useMemo(() => {
+    if (isJoin) {
+      return [
+        { id: "hero", href: "/", name: t(T.nav.home), isAnchor: false },
+        { id: "about", href: "/#about", name: t(T.nav.about), isAnchor: false },
+        { id: "teams", href: "/#teams", name: t(T.nav.teams), isAnchor: false },
+        { id: "projects", href: "/#projects", name: t(T.nav.projects), isAnchor: false },
+        {
+          id: "join",
+          href: "#application-form",
+          name: lang === "vi" ? "Đơn ứng tuyển" : "Application",
+          isAnchor: true,
+        },
+      ];
+    }
+    return [
+      { id: "hero", href: "#hero", name: t(T.nav.home), isAnchor: true },
+      { id: "about", href: "#about", name: t(T.nav.about), isAnchor: true },
+      { id: "teams", href: "#teams", name: t(T.nav.teams), isAnchor: true },
+      { id: "projects", href: "#projects", name: t(T.nav.projects), isAnchor: true },
+    ];
+  }, [isJoin, t, lang]);
 
   useEffect(() => {
+    if (isJoin) {
+      setActiveSection("join");
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 20);
+      };
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
       const scrollPosition = window.scrollY + 160;
-      for (const sec of NAV_SECTIONS) {
-        const el = document.getElementById(sec.id);
+      for (const item of NAV_ITEMS) {
+        if (!item.isAnchor) continue;
+        const el = document.getElementById(item.id);
         if (el) {
           const top = el.offsetTop;
           const height = el.offsetHeight;
           if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(sec.id);
+            setActiveSection(item.id);
             break;
           }
         }
@@ -42,7 +73,7 @@ export function Navbar() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [NAV_SECTIONS]);
+  }, [isJoin, NAV_ITEMS]);
 
   const scrollToSection = (sectionId: string) => {
     smoothScrollTo(sectionId);
@@ -72,9 +103,15 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           {/* Left: Official STIC Logo & Name */}
           <Link
-            href="#hero"
-            onClick={(e) => { e.preventDefault(); scrollToSection("hero"); }}
+            href={isJoin ? "/" : "#hero"}
+            onClick={(e) => {
+              if (!isJoin) {
+                e.preventDefault();
+                scrollToSection("hero");
+              }
+            }}
             className="flex items-center gap-2.5 group focus-visible:outline-none select-none shrink-0"
+            title={isJoin ? (lang === "vi" ? "Về trang chủ" : "Back to Home") : "STIC"}
           >
             {/* Official STIC Logo with glass refraction badge */}
             <div className="relative w-9 h-9 rounded-xl overflow-hidden bg-white/90 dark:bg-white/10 border border-white/80 dark:border-white/20 flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shadow-sm backdrop-blur-md">
@@ -99,12 +136,37 @@ export function Navbar() {
 
           {/* Center nav — desktop: Chữ đen nền kính tương phản cao tuyệt đối */}
           <nav className="hidden md:flex items-center gap-1">
-            {NAV_SECTIONS.map((sec) => {
-              const isActive = activeSection === sec.id;
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeSection === item.id;
+
+              if (!item.isAnchor) {
+                return (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    className={cn(
+                      "relative px-4 py-1.5 text-xs font-bold rounded-full transition-all duration-200 cursor-pointer select-none",
+                      isActive
+                        ? "text-blue-600 dark:text-blue-400 font-extrabold"
+                        : "text-slate-950 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white/60 dark:hover:bg-white/10"
+                    )}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-pill"
+                        className="absolute inset-0 bg-white/90 dark:bg-white/15 border border-slate-200/90 dark:border-white/20 rounded-full shadow-sm"
+                        transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                      />
+                    )}
+                    <span className="relative">{item.name}</span>
+                  </Link>
+                );
+              }
+
               return (
                 <button
-                  key={sec.id}
-                  onClick={() => scrollToSection(sec.id)}
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id === "join" ? "application-form" : item.id)}
                   className={cn(
                     "relative px-4 py-1.5 text-xs font-bold rounded-full transition-all duration-200 cursor-pointer select-none",
                     isActive
@@ -119,7 +181,7 @@ export function Navbar() {
                       transition={{ type: "spring", stiffness: 450, damping: 35 }}
                     />
                   )}
-                  <span className="relative">{sec.name}</span>
+                  <span className="relative">{item.name}</span>
                 </button>
               );
             })}
@@ -129,18 +191,29 @@ export function Navbar() {
           <div className="flex items-center gap-2 shrink-0">
             <LangToggle />
             <ThemeToggle />
-            <Link
-              href="/join"
-              className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer"
-            >
-              <span>✦</span>
-              <span>{t(T.nav.apply)}</span>
-              <ArrowRight className="w-3 h-3 opacity-80" />
-            </Link>
+            {isJoin ? (
+              <button
+                onClick={() => scrollToSection("application-form")}
+                title={lang === "vi" ? "Cuộn nhanh xuống đơn ứng tuyển" : "Jump to application form"}
+                className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer"
+              >
+                <span>✦</span>
+                <span>{lang === "vi" ? "Điền đơn ngay" : "Apply Now"}</span>
+                <ArrowDown className="w-3 h-3 opacity-80" />
+              </button>
+            ) : (
+              <Link
+                href="/join"
+                className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer"
+              >
+                <span>✦</span>
+                <span>{t(T.nav.apply)}</span>
+                <ArrowRight className="w-3 h-3 opacity-80" />
+              </Link>
+            )}
           </div>
         </div>
       </div>
     </motion.header>
   );
 }
-
