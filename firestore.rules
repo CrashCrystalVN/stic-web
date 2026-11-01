@@ -1,0 +1,379 @@
+rules_version = '2';
+
+// ===============================================================
+// STIC Club (Science, Technology & Innovation Club) - Cloud Firestore Security Rules
+// Project ID: stic-a2244
+// ===============================================================
+//
+// Assumed Data Model
+// ===============================================================
+//
+// Collection: registrations
+// Document ID: auto-generated ID (UUID or Firestore Push ID)
+// Description: Candidate membership applications for STIC GEN 1.0 recruitment.
+// Fields:
+//   - fullName: string (required, 2-100 chars) - Candidate's full name
+//   - grade: string (required, 1-100 chars) - Grade and high school name
+//   - email: string (required, 5-150 chars, valid email pattern) - Contact email
+//   - phone: string (required, 9-20 chars, valid phone pattern) - Phone / Zalo number
+//   - reason: string (required, 5-5000 chars) - Statement of purpose / motivation
+//   - commitment: string (required, 2-200 chars) - Schedule and commitment level
+//   - ideaExecution: string (required, 5-5000 chars) - Proposed project approach / execution idea
+//   - facebook: string (optional, 1-300 chars) - Candidate Facebook profile URL
+//   - interests: list of strings (optional, max 20 items) OR string (optional, max 500 chars) - Chosen specialties
+//   - pastClubExperience: string (optional, max 200 chars) - Previous club experience
+//   - pastStemExperience: string (optional, max 200 chars) - Previous STEM/KHKT project experience
+//   - projectDescription: string (optional, max 5000 chars) - Detailed description of previous project
+//   - status: string (optional, allowed: PENDING, REVIEWING, ACCEPTED, REJECTED; candidates can only create with PENDING)
+//   - id: string (optional, max 100 chars, immutable) - Document identifier
+//   - createdAt: timestamp (optional, immutable) - Submission timestamp
+//   - updatedAt: timestamp (optional) - Last update timestamp
+//
+// Collection: projects / clubProjects
+// Document ID: auto-generated ID or project slug
+// Description: Science & Technology showcase projects, prototypes, and research.
+// Fields:
+//   - title: string (required, 2-200 chars) - Project title
+//   - titleVi: string (optional, max 200 chars) - Vietnamese title
+//   - titleEn: string (optional, max 200 chars) - English title
+//   - tagline: string (optional, max 300 chars) - Short subtitle
+//   - taglineVi: string (optional, max 300 chars) - Vietnamese subtitle
+//   - taglineEn: string (optional, max 300 chars) - English subtitle
+//   - description: string (required, 5-5000 chars) - Project narrative and details
+//   - descriptionVi: string (optional, max 5000 chars) - Vietnamese description
+//   - descriptionEn: string (optional, max 5000 chars) - English description
+//   - category: string (required, 2-100 chars) - Technical category (AI, Robotics, IoT, STEM...)
+//   - categoryVi: string (optional, max 100 chars) - Category in Vietnamese
+//   - categoryEn: string (optional, max 100 chars) - Category in English
+//   - team: string (optional, max 100 chars) - Responsible department / track
+//   - teamVi: string (optional, max 100 chars) - Department name in Vietnamese
+//   - teamEn: string (optional, max 100 chars) - Department name in English
+//   - tags: list of strings (optional, max 20 items) - Tech stack and keyword tags
+//   - githubLink: string (optional, max 500 chars) - GitHub repository URL
+//   - liveLink: string (optional, max 500 chars) - Live demo or external documentation URL
+//   - stage: string (optional, max 50 chars) - Stage (e.g. INCUBATING, PROTOTYPING, LAUNCHED)
+//   - status: string (optional, max 50 chars) - Publication status (published, active, completed, upcoming, draft, archived)
+//   - progress: number (optional, 0-100) - Project completion percentage
+//   - image: string (optional, max 1000 chars) - Cover image URL
+//   - metrics: string (optional, max 200 chars) - Impact metric / highlight badge
+//   - metricsVi: string (optional, max 200 chars) - Metric text in Vietnamese
+//   - metricsEn: string (optional, max 200 chars) - Metric text in English
+//   - published: bool (optional) - Explicit publication flag
+//   - isPublished: bool (optional) - Alternative publication flag
+//   - order: number (optional, >= 0) - Display sort order
+//   - id: string (optional, max 100 chars, immutable) - Document identifier
+//   - createdAt: timestamp (optional, immutable) - Creation timestamp
+//   - updatedAt: timestamp (optional) - Last update timestamp
+//
+// Collection: departments
+// Document ID: department slug (e.g. ai-coding, robotics-engineering) or UUID
+// Description: The 7 specialized club departments / research tracks.
+// Fields:
+//   - name: string (required, 2-100 chars) - Department title
+//   - nameVi: string (optional, max 100 chars) - Vietnamese title
+//   - nameEn: string (optional, max 100 chars) - English title
+//   - code: string (optional, max 50 chars) - Department short code (e.g. AI_CODING)
+//   - tagline: string (optional, max 300 chars) - Slogan or motto
+//   - taglineVi: string (optional, max 300 chars) - Slogan in Vietnamese
+//   - taglineEn: string (optional, max 300 chars) - Slogan in English
+//   - description: string (required, 5-2000 chars) - Department scope and mission
+//   - descriptionVi: string (optional, max 2000 chars) - Description in Vietnamese
+//   - descriptionEn: string (optional, max 2000 chars) - Description in English
+//   - icon: string (optional, max 100 chars) - Lucide icon name identifier
+//   - lead: string (optional, max 100 chars) - Team lead name
+//   - memberCount: number (optional, >= 0) - Active member count
+//   - skills: list of strings (optional, max 30 items) - Core technologies and skill set
+//   - tags: list of strings (optional, max 30 items) OR string (optional, max 500 chars)
+//   - color: string (optional, max 100 chars) - Tailwind gradient or hex color code
+//   - order: number (optional, >= 0) - Display sort order
+//   - id: string (optional, max 100 chars, immutable) - Identifier
+//   - createdAt: timestamp (optional, immutable) - Creation timestamp
+//   - updatedAt: timestamp (optional) - Last update timestamp
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    // Check if the request is from an authenticated user
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if the authenticated user has verified admin privileges.
+    // Authority is derived ONLY from trusted sources: custom token claims
+    // or the official verified bootstrap club administrator email.
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.get('admin', false) == true ||
+        request.auth.token.get('role', '') == 'admin' ||
+        (request.auth.token.get('email', '') == 'clbstic@gmail.com' && request.auth.token.get('email_verified', false) == true)
+      );
+    }
+
+    // Validate that all required field keys exist in the document payload
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    // Validate that the document contains strictly only the allowed fields
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // Ensure specified critical fields cannot be modified on update
+    function areImmutableFieldsUnchanged(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+
+    // Validate that a field exists, is a string, and falls within length bounds
+    function isValidString(field, minLen, maxLen) {
+      return field in request.resource.data &&
+             request.resource.data[field] is string &&
+             request.resource.data[field].size() >= minLen &&
+             request.resource.data[field].size() <= maxLen;
+    }
+
+    // Validate an optional string field: if present, must be string and within length bounds
+    function isValidOptionalString(field, minLen, maxLen) {
+      return !(field in request.resource.data) ||
+             (request.resource.data[field] is string &&
+              request.resource.data[field].size() >= minLen &&
+              request.resource.data[field].size() <= maxLen);
+    }
+
+    // Validate standard email format (escaped dots for regex in CEL)
+    function isValidEmail(email) {
+      return email is string &&
+             email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    // Validate standard phone format (Vietnamese and international digits, 9-20 chars)
+    function isValidPhone(phone) {
+      return phone is string &&
+             phone.matches("^[0-9+() -]{9,20}$");
+    }
+
+    // Validate optional external link/URL
+    function isValidOptionalUrl(field) {
+      return !(field in request.resource.data) ||
+             (request.resource.data[field] is string &&
+              request.resource.data[field].size() <= 1000 &&
+              (request.resource.data[field].matches("^https?://.*") || request.resource.data[field] == "#"));
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    // Domain validator for candidate registrations (used in create and update)
+    function isValidRegistration() {
+      let data = request.resource.data;
+      return hasOnlyAllowedFields([
+        'id', 'fullName', 'grade', 'email', 'phone', 'reason',
+        'commitment', 'ideaExecution', 'facebook', 'interests',
+        'pastClubExperience', 'pastStemExperience', 'projectDescription',
+        'status', 'createdAt', 'updatedAt'
+      ]) &&
+      hasRequiredFields([
+        'fullName', 'grade', 'email', 'phone', 'reason',
+        'commitment', 'ideaExecution'
+      ]) &&
+      isValidString('fullName', 2, 100) &&
+      isValidString('grade', 1, 100) &&
+      isValidString('email', 5, 150) &&
+      isValidEmail(data.email) &&
+      isValidString('phone', 9, 20) &&
+      isValidPhone(data.phone) &&
+      isValidString('reason', 5, 5000) &&
+      isValidString('commitment', 2, 200) &&
+      isValidString('ideaExecution', 5, 5000) &&
+      isValidOptionalString('facebook', 1, 300) &&
+      (!('interests' in data) || (data.interests is list && data.interests.size() <= 20) || (data.interests is string && data.interests.size() <= 500)) &&
+      isValidOptionalString('pastClubExperience', 1, 200) &&
+      isValidOptionalString('pastStemExperience', 1, 200) &&
+      isValidOptionalString('projectDescription', 0, 5000) &&
+      (!('status' in data) || (data.status is string && data.status in ['PENDING', 'REVIEWING', 'ACCEPTED', 'REJECTED', 'pending', 'reviewing', 'accepted', 'rejected'])) &&
+      isValidOptionalString('id', 1, 100) &&
+      (!('createdAt' in data) || (data.createdAt is timestamp && data.createdAt <= request.time + duration.value(1, 'm'))) &&
+      (!('updatedAt' in data) || (data.updatedAt is timestamp && data.updatedAt <= request.time + duration.value(1, 'm')));
+    }
+
+    // Strict validator for new candidate submissions to prevent self-approval
+    function isValidNewRegistration() {
+      let data = request.resource.data;
+      return isValidRegistration() &&
+             (!('status' in data) || data.status in ['PENDING', 'pending']);
+    }
+
+    // Domain validator for club projects
+    function isValidProject() {
+      let data = request.resource.data;
+      return hasOnlyAllowedFields([
+        'id', 'title', 'titleVi', 'titleEn', 'tagline', 'taglineVi', 'taglineEn',
+        'description', 'descriptionVi', 'descriptionEn', 'team', 'teamVi', 'teamEn',
+        'category', 'categoryVi', 'categoryEn', 'tags', 'githubLink', 'liveLink',
+        'stage', 'status', 'progress', 'image', 'metrics', 'metricsVi', 'metricsEn',
+        'published', 'isPublished', 'order', 'createdAt', 'updatedAt'
+      ]) &&
+      hasRequiredFields(['title', 'description', 'category']) &&
+      isValidString('title', 2, 200) &&
+      isValidOptionalString('titleVi', 1, 200) &&
+      isValidOptionalString('titleEn', 1, 200) &&
+      isValidOptionalString('tagline', 0, 300) &&
+      isValidOptionalString('taglineVi', 0, 300) &&
+      isValidOptionalString('taglineEn', 0, 300) &&
+      isValidString('description', 5, 5000) &&
+      isValidOptionalString('descriptionVi', 0, 5000) &&
+      isValidOptionalString('descriptionEn', 0, 5000) &&
+      isValidString('category', 2, 100) &&
+      isValidOptionalString('categoryVi', 1, 100) &&
+      isValidOptionalString('categoryEn', 1, 100) &&
+      isValidOptionalString('team', 1, 100) &&
+      isValidOptionalString('teamVi', 1, 100) &&
+      isValidOptionalString('teamEn', 1, 100) &&
+      (!('tags' in data) || (data.tags is list && data.tags.size() <= 20)) &&
+      isValidOptionalUrl('githubLink') &&
+      isValidOptionalString('liveLink', 0, 500) &&
+      isValidOptionalString('stage', 1, 50) &&
+      isValidOptionalString('status', 1, 50) &&
+      (!('progress' in data) || (data.progress is number && data.progress >= 0 && data.progress <= 100)) &&
+      isValidOptionalString('image', 0, 1000) &&
+      isValidOptionalString('metrics', 0, 200) &&
+      isValidOptionalString('metricsVi', 0, 200) &&
+      isValidOptionalString('metricsEn', 0, 200) &&
+      (!('published' in data) || data.published is bool) &&
+      (!('isPublished' in data) || data.isPublished is bool) &&
+      (!('order' in data) || (data.order is number && data.order >= 0)) &&
+      isValidOptionalString('id', 1, 100) &&
+      (!('createdAt' in data) || (data.createdAt is timestamp && data.createdAt <= request.time + duration.value(1, 'm'))) &&
+      (!('updatedAt' in data) || (data.updatedAt is timestamp && data.updatedAt <= request.time + duration.value(1, 'm')));
+    }
+
+    // Check whether a project is published for public viewing
+    function isProjectPublished() {
+      return (
+        ('published' in resource.data && resource.data.published == true) ||
+        ('isPublished' in resource.data && resource.data.isPublished == true) ||
+        ('status' in resource.data && resource.data.status in ['published', 'active', 'completed', 'upcoming']) ||
+        ('stage' in resource.data && resource.data.stage in ['INCUBATING', 'PROTOTYPING', 'LAUNCHED'])
+      );
+    }
+
+    // Domain validator for club departments / tracks
+    function isValidDepartment() {
+      let data = request.resource.data;
+      return hasOnlyAllowedFields([
+        'id', 'name', 'nameVi', 'nameEn', 'code', 'tagline', 'taglineVi', 'taglineEn',
+        'description', 'descriptionVi', 'descriptionEn', 'icon', 'lead',
+        'memberCount', 'skills', 'tags', 'color', 'order', 'createdAt', 'updatedAt'
+      ]) &&
+      hasRequiredFields(['name', 'description']) &&
+      isValidString('name', 2, 100) &&
+      isValidOptionalString('nameVi', 1, 100) &&
+      isValidOptionalString('nameEn', 1, 100) &&
+      isValidOptionalString('code', 1, 50) &&
+      isValidOptionalString('tagline', 0, 300) &&
+      isValidOptionalString('taglineVi', 0, 300) &&
+      isValidOptionalString('taglineEn', 0, 300) &&
+      isValidString('description', 5, 2000) &&
+      isValidOptionalString('descriptionVi', 0, 2000) &&
+      isValidOptionalString('descriptionEn', 0, 2000) &&
+      isValidOptionalString('icon', 0, 100) &&
+      isValidOptionalString('lead', 0, 100) &&
+      (!('memberCount' in data) || (data.memberCount is number && data.memberCount >= 0)) &&
+      (!('skills' in data) || (data.skills is list && data.skills.size() <= 30)) &&
+      (!('tags' in data) || (data.tags is list && data.tags.size() <= 30) || (data.tags is string && data.tags.size() <= 500)) &&
+      isValidOptionalString('color', 0, 100) &&
+      (!('order' in data) || (data.order is number && data.order >= 0)) &&
+      isValidOptionalString('id', 1, 100) &&
+      (!('createdAt' in data) || (data.createdAt is timestamp && data.createdAt <= request.time + duration.value(1, 'm'))) &&
+      (!('updatedAt' in data) || (data.updatedAt is timestamp && data.updatedAt <= request.time + duration.value(1, 'm')));
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    // 1. Registrations Collection
+    // Candidates can submit new applications. All reads, updates, and deletions
+    // are strictly restricted to authenticated club administrators to shield PII.
+    match /registrations/{registrationId} {
+      // Only authenticated admins can read candidate applications
+      allow read: if isAdmin();
+
+      // Anyone (or authenticated admins) can submit a valid application
+      // Unauthenticated candidates cannot self-approve (status restricted to PENDING)
+      allow create: if isValidNewRegistration() || (isAdmin() && isValidRegistration());
+
+      // Only authenticated admins can review or update an application
+      allow update: if isAdmin() &&
+                       isValidRegistration() &&
+                       areImmutableFieldsUnchanged(['id', 'createdAt']);
+
+      // Only authenticated admins can delete an application
+      allow delete: if isAdmin();
+    }
+
+    // 2. Projects & ClubProjects Collections
+    // Public visitors can read published projects. Only authenticated club admins can write.
+    match /projects/{projectId} {
+      // Public can read published projects; admins can read all projects (including drafts)
+      allow read: if isAdmin() || isProjectPublished();
+
+      // Only authenticated admins can create projects
+      allow create: if isAdmin() && isValidProject();
+
+      // Only authenticated admins can update projects
+      allow update: if isAdmin() &&
+                       isValidProject() &&
+                       areImmutableFieldsUnchanged(['id', 'createdAt']);
+
+      // Only authenticated admins can delete projects
+      allow delete: if isAdmin();
+    }
+
+    match /clubProjects/{projectId} {
+      // Public can read published club projects; admins can read all
+      allow read: if isAdmin() || isProjectPublished();
+
+      // Only authenticated admins can create club projects
+      allow create: if isAdmin() && isValidProject();
+
+      // Only authenticated admins can update club projects
+      allow update: if isAdmin() &&
+                       isValidProject() &&
+                       areImmutableFieldsUnchanged(['id', 'createdAt']);
+
+      // Only authenticated admins can delete club projects
+      allow delete: if isAdmin();
+    }
+
+    // 3. Departments Collection
+    // Public visitors can browse department tracks. Only authenticated club admins can write.
+    match /departments/{departmentId} {
+      // Public read access for department showcase
+      allow read: if true;
+
+      // Only authenticated admins can create departments
+      allow create: if isAdmin() && isValidDepartment();
+
+      // Only authenticated admins can update departments
+      allow update: if isAdmin() &&
+                       isValidDepartment() &&
+                       areImmutableFieldsUnchanged(['id', 'createdAt']);
+
+      // Only authenticated admins can delete departments
+      allow delete: if isAdmin();
+    }
+
+    // 4. Admin Management Collection (if used for admin directory / audit logs)
+    match /admins/{adminId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

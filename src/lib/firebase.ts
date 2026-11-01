@@ -1,4 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 import { getDataConnect, connectDataConnectEmulator } from "firebase/data-connect";
 import { connectorConfig } from "@dataconnect/generated";
 
@@ -12,6 +13,7 @@ const firebaseConfig = {
 };
 
 export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+export const db = getFirestore(app);
 export const dataConnect = getDataConnect(app, connectorConfig);
 
 // Connect to local Data Connect emulator on port 50001 when in dev mode
