@@ -1,9 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/common/SectionWrapper";
-import { TEAMS, PROJECTS, type ProjectItem, type TeamItem } from "@/lib/data";
+import { TEAMS, PROJECTS, CLUB_INFO, type ProjectItem, type TeamItem } from "@/lib/data";
 import { smoothScrollTo } from "@/lib/utils";
 import {
   Brain, Cpu, Lightbulb, Leaf, Palette, BarChart2, FlaskConical,
@@ -29,21 +30,33 @@ export function TeamsSection() {
     const category = lang === "en" ? "Department Project" : "Dự án chuyên môn";
 
     // Find project matching this team, or construct a representative project
-    const match = PROJECTS.find((p) => p.team.toLowerCase().includes(team.name.toLowerCase())) || {
-      id: team.id,
-      title: `${teamTitle} // GEN 1.0 Flagship Project`,
-      tagline: teamTagline,
-      description: teamDesc,
-      team: teamTitle,
-      category,
-      tags: team.skills,
-      githubLink: "https://github.com/CrashCrystalVN/stic-web",
-      liveLink: "#",
-      status: "upcoming" as const,
-      image: "",
-      metrics: "GEN 1.0",
-    };
-    setActiveProject(match);
+    const match = PROJECTS.find((p) => p.team.toLowerCase().includes(team.name.toLowerCase()));
+    if (match) {
+      setActiveProject({
+        ...match,
+        title: lang === "en" ? (match.titleEn || match.title) : (match.titleVi || match.title),
+        tagline: lang === "en" ? (match.taglineEn || match.tagline) : (match.taglineVi || match.tagline),
+        description: lang === "en" ? (match.descriptionEn || match.description) : (match.descriptionVi || match.description),
+        team: teamTitle,
+        category: lang === "en" ? (match.categoryEn || match.category) : (match.categoryVi || match.category),
+        metrics: lang === "en" ? (match.metricsEn || match.metrics) : (match.metricsVi || match.metrics),
+      });
+    } else {
+      setActiveProject({
+        id: team.id,
+        title: `${teamTitle} // GEN 1.0 Flagship Project`,
+        tagline: teamTagline,
+        description: teamDesc,
+        team: teamTitle,
+        category,
+        tags: team.skills,
+        githubLink: "https://github.com/CrashCrystalVN/stic-web",
+        liveLink: "#",
+        status: "upcoming" as const,
+        image: "",
+        metrics: "GEN 1.0",
+      });
+    }
     setIsModalOpen(true);
   };
 
@@ -122,13 +135,13 @@ export function TeamsSection() {
         </div>
 
         <div className="mt-10">
-          <button
-            onClick={() => smoothScrollTo("join")}
+          <Link
+            href="/join"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors cursor-pointer group"
           >
             {t(T.teams.cta)}
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </button>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
         </div>
       </div>
 

@@ -9,6 +9,8 @@ import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { LangToggle } from "@/components/common/LangToggle";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
+import { CLUB_INFO } from "@/lib/data";
+import { ExternalLink, ArrowRight } from "lucide-react";
 
 export function Navbar() {
   const { t } = useLang();
@@ -20,7 +22,6 @@ export function Navbar() {
     { id: "about",    name: t(T.nav.about) },
     { id: "teams",    name: t(T.nav.teams) },
     { id: "projects", name: t(T.nav.projects) },
-    { id: "join",     name: t(T.nav.join) },
   ], [t]);
 
   useEffect(() => {
@@ -44,11 +45,7 @@ export function Navbar() {
   }, [NAV_SECTIONS]);
 
   const scrollToSection = (sectionId: string) => {
-    if (sectionId === "join") {
-      smoothScrollTo("application-form");
-    } else {
-      smoothScrollTo(sectionId);
-    }
+    smoothScrollTo(sectionId);
   };
 
   return (
@@ -132,13 +129,14 @@ export function Navbar() {
           <div className="flex items-center gap-2 shrink-0">
             <LangToggle />
             <ThemeToggle />
-            <button
-              onClick={() => scrollToSection("join")}
+            <Link
+              href="/join"
               className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer"
             >
               <span>✦</span>
               <span>{t(T.nav.apply)}</span>
-            </button>
+              <ArrowRight className="w-3 h-3 opacity-80" />
+            </Link>
           </div>
         </div>
       </div>

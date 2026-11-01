@@ -5,7 +5,6 @@ import { StatsSection } from "@/components/sections/StatsSection";
 import { TeamsSection } from "@/components/sections/TeamsSection";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
 import { EventsSection } from "@/components/sections/EventsSection";
-import { JoinSection } from "@/components/sections/JoinSection";
 
 export default function HomePage() {
   return (
@@ -25,11 +24,8 @@ export default function HomePage() {
       {/* 5. Dự án GEN 1.0 (Giai đoạn ươm mầm) */}
       <ProjectsSection />
 
-      {/* 6. Sự kiện tuyển quân */}
+      {/* 6. Sự kiện tuyển quân & Đăng ký Google Form */}
       <EventsSection />
-
-      {/* 7. Đăng ký thành viên trực tiếp trên web */}
-      <JoinSection />
     </div>
   );
 }

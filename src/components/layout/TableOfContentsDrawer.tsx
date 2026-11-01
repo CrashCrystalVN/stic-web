@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, Send, Home, Compass, Layers, Rocket, Calendar } from "lucide-react";
+import { X, ArrowRight, Send, Home, Compass, Layers, Rocket, Calendar, ExternalLink } from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
+import { CLUB_INFO } from "@/lib/data";
 
 const ICONS = [Home, Compass, Layers, Rocket, Calendar, Send];
 
@@ -18,6 +20,15 @@ interface Props {
 export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
   const { t } = useLang();
   const items = T.toc.items;
+
+  const handleItemClick = (id: string) => {
+    if (id === "join") {
+      onClose();
+      window.location.href = "/join";
+    } else {
+      onNavigate(id);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -61,6 +72,7 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
               <button
                 onClick={onClose}
                 className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer"
+                aria-label="Close Drawer"
               >
                 <X className="w-[18px] h-[18px]" />
               </button>
@@ -76,7 +88,7 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
                     initial={{ opacity: 0, x: 16 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.04 * index, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                    onClick={() => onNavigate(item.id)}
+                    onClick={() => handleItemClick(item.id)}
                     className="w-full text-left px-3 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/70 group transition-all flex items-center justify-between cursor-pointer"
                   >
                     <div className="flex items-center gap-3">
@@ -87,8 +99,9 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
                         <Icon className="w-3.5 h-3.5" />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                          {t({ vi: item.vi, en: item.en })}
+                        <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
+                          <span>{t({ vi: item.vi, en: item.en })}</span>
+                          {item.id === "join" && <ExternalLink className="w-3 h-3 text-blue-500 opacity-75" />}
                         </p>
                         <p className="text-[10px] text-slate-400 dark:text-slate-500">
                           {t({ vi: item.dvi, en: item.den })}
@@ -101,16 +114,17 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
               })}
             </div>
 
-            {/* Bottom CTA */}
+            {/* Bottom CTA (Navigates to /join subpage) */}
             <div className="px-4 py-5 border-t border-slate-100 dark:border-slate-800 space-y-2">
-              <button
-                onClick={() => onNavigate("join")}
+              <Link
+                href="/join"
+                onClick={onClose}
                 className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-blue-500/20"
               >
                 <Send className="w-3.5 h-3.5" />
-                {t(T.toc.applyCta)}
-              </button>
-              <p className="text-center text-[10px] text-slate-400 dark:text-slate-600">{t(T.toc.email)}</p>
+                <span>{t(T.toc.applyCta)}</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </motion.div>
         </>

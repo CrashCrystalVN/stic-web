@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/common/SectionWrapper";
 import { smoothScrollTo } from "@/lib/utils";
 import { ArrowRight, Sparkles, Rocket, Layers, ExternalLink } from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
-import { TEAMS, PROJECTS, type ProjectItem } from "@/lib/data";
+import { TEAMS, PROJECTS, CLUB_INFO, type ProjectItem } from "@/lib/data";
 import { ProjectModal } from "./ProjectModal";
 
 export function ProjectsSection() {
@@ -18,21 +19,33 @@ export function ProjectsSection() {
 
   const handleOpenModal = (teamName?: string) => {
     const targetName = teamName || (selectedTeam === "all" ? "AI & Coding" : selectedTeam);
-    const match = PROJECTS.find((p) => p.team.toLowerCase().includes(targetName.toLowerCase())) || {
-      id: "incubation-preview",
-      title: `${targetName} // GEN 1.0 Incubation Project`,
-      tagline: lang === "vi" ? "Dự án nghiên cứu & phát triển chuyên sâu do GEN 1.0 thực hiện" : "Advanced R&D project initiated by GEN 1.0 cohort",
-      description: lang === "vi" ? "Dự án KHKT đang ươm mầm cho GEN 1.0" : "Flagship STEM project under incubation for GEN 1.0",
-      team: targetName,
-      category: lang === "vi" ? "Dự án chuyên môn" : "Department Project",
-      tags: ["STEM", "KHKT", "STIC Lab", "GEN 1.0"],
-      githubLink: "https://github.com/CrashCrystalVN/stic-web",
-      liveLink: "#",
-      status: "upcoming" as const,
-      image: "",
-      metrics: "GEN 1.0",
-    };
-    setActiveModalProject(match);
+    const match = PROJECTS.find((p) => p.team.toLowerCase().includes(targetName.toLowerCase()));
+    if (match) {
+      setActiveModalProject({
+        ...match,
+        title: lang === "en" ? (match.titleEn || match.title) : (match.titleVi || match.title),
+        tagline: lang === "en" ? (match.taglineEn || match.tagline) : (match.taglineVi || match.tagline),
+        description: lang === "en" ? (match.descriptionEn || match.description) : (match.descriptionVi || match.description),
+        team: lang === "en" ? (match.teamEn || match.team) : (match.teamVi || match.team),
+        category: lang === "en" ? (match.categoryEn || match.category) : (match.categoryVi || match.category),
+        metrics: lang === "en" ? (match.metricsEn || match.metrics) : (match.metricsVi || match.metrics),
+      });
+    } else {
+      setActiveModalProject({
+        id: "incubation-preview",
+        title: `${targetName} // GEN 1.0 Incubation Project`,
+        tagline: lang === "vi" ? "Dự án nghiên cứu & phát triển chuyên sâu do GEN 1.0 thực hiện" : "Advanced R&D project initiated by GEN 1.0 cohort",
+        description: lang === "vi" ? "Dự án KHKT đang ươm mầm cho GEN 1.0" : "Flagship STEM project under incubation for GEN 1.0",
+        team: targetName,
+        category: lang === "vi" ? "Dự án chuyên môn" : "Department Project",
+        tags: lang === "vi" ? ["STEM", "KHKT", "STIC Lab", "GEN 1.0"] : ["STEM", "Robotics & AI", "STIC Lab", "GEN 1.0"],
+        githubLink: "https://github.com/CrashCrystalVN/stic-web",
+        liveLink: "#",
+        status: "upcoming" as const,
+        image: "",
+        metrics: "GEN 1.0",
+      });
+    }
     setIsModalOpen(true);
   };
 
@@ -63,13 +76,13 @@ export function ProjectsSection() {
             </p>
           </div>
 
-          <button
-            onClick={() => smoothScrollTo("join")}
+          <Link
+            href="/join"
             className="self-start md:self-auto shrink-0 inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-all cursor-pointer shadow-lg shadow-blue-600/20 group"
           >
             <span>{t(T.projects.cta)}</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </button>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
         </div>
 
         {/* 1. Department Tabs Filter */}
@@ -158,13 +171,13 @@ export function ProjectsSection() {
               <ExternalLink className="w-3.5 h-3.5 text-blue-500" />
             </button>
 
-            <button
-              onClick={() => smoothScrollTo("join")}
+            <Link
+              href="/join"
               className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.03] transition-all cursor-pointer"
             >
               <span>{lang === "vi" ? "Nộp đơn để cùng xây dựng dự án GEN 1.0" : "Apply to Build GEN 1.0 Projects"}</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
+            </Link>
           </div>
         </div>
 

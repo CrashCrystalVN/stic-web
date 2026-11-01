@@ -4,7 +4,7 @@ export const translations = {
   // ── NAVBAR ──────────────────────────────────────────────────────────────────
   nav: {
     home:       { vi: "Trang chủ",         en: "Home" },
-    about:      { vi: "Về CLB",            en: "About" },
+    about:      { vi: "Về chúng tôi",      en: "About Us" },
     teams:      { vi: "Mảng hoạt động",    en: "Departments" },
     projects:   { vi: "Dự án GEN 1.0",    en: "GEN 1.0 Projects" },
     join:       { vi: "Đăng ký thành viên", en: "Join Us" },
@@ -16,8 +16,8 @@ export const translations = {
   // ── HERO ────────────────────────────────────────────────────────────────────
   hero: {
     badge:      { vi: "Đang mở đơn · GEN 1.0",                   en: "Now Open · GEN 1.0" },
-    heading1:   { vi: "CLB Khoa học",                              en: "Science &" },
-    heading2:   { vi: "Kỹ thuật",                                 en: "Technology" },
+    heading1:   { vi: "CLB Khoa học",                              en: "Empowering" },
+    heading2:   { vi: "Kỹ thuật",                                 en: "The Future with" },
     tagline:    { vi: "Science · Technology · Innovation Club",    en: "Science · Technology · Innovation Club" },
     desc:       { vi: "Không gian sáng tạo dành riêng cho",       en: "A creative space built for" },
     descBold:   { vi: "học sinh THPT Đà Nẵng",                    en: "high school students in Da Nang" },
@@ -36,7 +36,7 @@ export const translations = {
 
   // ── ABOUT ───────────────────────────────────────────────────────────────────
   about: {
-    label:      { vi: "Về CLB STIC",      en: "About STIC" },
+    label:      { vi: "Về chúng tôi",     en: "About Us" },
     h2a:        { vi: "Sân chơi STEM",    en: "A Real STEM" },
     h2b:        { vi: "thực chiến",       en: "Playground" },
     h2c:        { vi: "cho",              en: "for" },
@@ -48,6 +48,9 @@ export const translations = {
     item2d:     { vi: "Gặp gỡ những người bạn cùng đam mê từ các trường THPT toàn Đà Nẵng.", en: "Meet fellow passionate students from high schools across Da Nang." },
     item3t:     { vi: "Đồng hành từ bước đầu",       en: "Guided from Day One" },
     item3d:     { vi: "Ban chủ nhiệm luôn sẵn sàng hướng dẫn — dù bạn chưa có kinh nghiệm.", en: "Our leadership team is always ready to guide you — even if you have zero experience." },
+    leadersBadge: { vi: "Đội ngũ dẫn dắt · GEN 1.0", en: "Leadership Team · GEN 1.0" },
+    leadersTitle: { vi: "Ban Chủ Nhiệm CLB", en: "Club Leadership" },
+    leadersDesc:  { vi: "Những người khởi xướng và đồng hành cùng các bạn trong suốt hành trình GEN 1.0.", en: "The pioneers walking alongside you throughout the GEN 1.0 journey." },
     infoTitle:  { vi: "Thông tin tổ chức",   en: "Organization Info" },
     infoSub:    { vi: "Đợt tuyển thành viên đầu tiên · GEN 1.0", en: "First recruitment · GEN 1.0" },
     r1l: { vi: "Đối tượng",       en: "Target" },        r1v: { vi: "Học sinh THPT TP. Đà Nẵng", en: "High school students in Da Nang" },
@@ -205,7 +208,7 @@ export const translations = {
     applyCta: { vi: "Nộp đơn ứng tuyển", en: "Apply Now" },
     items: [
       { id: "hero",     vi: "Trang chủ",         en: "Home",         dvi: "Khởi đầu & Đăng ký GEN 1.0",   den: "Start & GEN 1.0 Registration" },
-      { id: "about",    vi: "Về CLB STIC",        en: "About STIC",   dvi: "Sứ mệnh & Ban chủ nhiệm",       den: "Mission & Leadership" },
+      { id: "about",    vi: "Về chúng tôi",       en: "About Us",     dvi: "Sứ mệnh & Ban chủ nhiệm",       den: "Mission & Leadership" },
       { id: "teams",    vi: "Mảng hoạt động",     en: "Departments",  dvi: "AI, Robotics, Design, STEM...", den: "AI, Robotics, Design, STEM..." },
       { id: "projects", vi: "Dự án GEN 1.0",      en: "GEN 1.0 Projects", dvi: "Ươm mầm ý tưởng thực tế", den: "Incubating real ideas" },
       { id: "events",   vi: "Sự kiện",            en: "Events",       dvi: "Lịch tuyển quân & Hoạt động",  den: "Recruitment & Activities" },

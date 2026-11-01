@@ -115,3 +115,66 @@ body {
 .dark .accent-glow {
   box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.18), 0 4px 32px rgba(59, 130, 246, 0.12);
 }
+
+/* ========================================================
+   MODERN HIGH-TECH PRISM & CHROMATIC GLITCH (Zero-Lag 120fps)
+   ======================================================== */
+@keyframes modern-glitch {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  15% {
+    transform: translate3d(5px, -3px, 0);
+    opacity: 0.9;
+    filter: drop-shadow(-3px 0 0 rgba(239, 68, 68, 0.85)) drop-shadow(3px 0 0 rgba(56, 189, 248, 0.85));
+    clip-path: polygon(0 14%, 100% 10%, 100% 36%, 0 40%);
+  }
+  30% {
+    transform: translate3d(-4px, 2px, 0);
+    opacity: 0.95;
+    clip-path: polygon(0 54%, 100% 50%, 100% 78%, 0 82%);
+  }
+  50% {
+    transform: translate3d(3px, -1px, 0);
+    opacity: 0.75;
+    clip-path: polygon(0 28%, 100% 30%, 100% 62%, 0 60%);
+  }
+  75% {
+    transform: translate3d(-1px, 1px, 0);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes modern-prism-sweep {
+  0% {
+    transform: translate3d(-120%, -120%, 0) rotate(45deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.85;
+  }
+  70% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate3d(220%, 220%, 0) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+.modern-glitch-layer {
+  animation: modern-glitch 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  will-change: transform, opacity, clip-path;
+}
+
+.modern-prism-sweep {
+  animation: modern-prism-sweep 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+

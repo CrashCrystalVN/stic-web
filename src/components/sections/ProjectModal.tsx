@@ -7,7 +7,7 @@ import { X, ArrowRight, Layers, Tag, Rocket, CheckCircle2, Sparkles, Compass } f
 import { smoothScrollTo } from "@/lib/utils";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
-import type { ProjectItem } from "@/lib/data";
+import { type ProjectItem, CLUB_INFO } from "@/lib/data";
 
 interface ProjectModalProps {
   project: ProjectItem | null;
@@ -76,9 +76,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
 
   const handleJoinProject = () => {
     onClose();
-    setTimeout(() => {
-      smoothScrollTo("join");
-    }, 150);
+    window.location.href = "/join";
   };
 
   if (!mounted || !isOpen || !project) return null;
@@ -170,11 +168,11 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-100 dark:border-blue-900/60 text-blue-600 dark:text-blue-400 text-xs font-semibold">
                 <Layers className="w-3.5 h-3.5" />
-                <span>{project.team}</span>
+                <span>{lang === "en" ? (project.teamEn || project.team) : (project.teamVi || project.team)}</span>
               </span>
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium">
                 <Tag className="w-3 h-3" />
-                <span>{project.category}</span>
+                <span>{lang === "en" ? (project.categoryEn || project.category) : (project.categoryVi || project.category)}</span>
               </span>
             </div>
 
@@ -184,10 +182,10 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                 id="modal-title"
                 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight"
               >
-                {project.title}
+                {lang === "en" ? (project.titleEn || project.title) : (project.titleVi || project.title)}
               </h2>
               <p className="mt-1.5 text-sm font-medium text-slate-600 dark:text-slate-400 leading-relaxed">
-                {project.tagline}
+                {lang === "en" ? (project.taglineEn || project.tagline) : (project.taglineVi || project.tagline)}
               </p>
             </div>
 

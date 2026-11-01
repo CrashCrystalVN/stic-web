@@ -1,11 +1,12 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Clock, ArrowRight, Sparkles } from "lucide-react";
-import { smoothScrollTo } from "@/lib/utils";
+import { Clock, ExternalLink, ArrowRight, Sparkles } from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
+import { CLUB_INFO } from "@/lib/data";
 
 interface CountdownTimerProps {
   className?: string;
@@ -44,14 +45,14 @@ export function CountdownTimer({ className = "" }: CountdownTimerProps) {
           </p>
         </div>
 
-        {/* Action Button */}
-        <button
-          onClick={() => smoothScrollTo("join")}
+        {/* Action Button (Navigates to /join subpage) */}
+        <Link
+          href="/join"
           className="group shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-md shadow-blue-600/20 hover:shadow-blue-600/35 hover:scale-[1.03] transition-all cursor-pointer"
         >
           <span>{t(T.countdown.cta)}</span>
-          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-        </button>
+          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+        </Link>
       </div>
 
       {/* 4 Countdown Blocks (Displaying "SOON!" per user specification) */}
@@ -90,4 +91,3 @@ export function CountdownTimer({ className = "" }: CountdownTimerProps) {
     </div>
   );
 }
-

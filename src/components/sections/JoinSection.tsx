@@ -56,6 +56,11 @@ const COMMITMENT_OPTIONS = [
   { value: "Chưa chắc về thời gian", labelVi: "Chưa chắc về thời gian", labelEn: "Not sure about time availability yet" },
 ];
 
+const EXPERIENCE_OPTIONS = [
+  { value: "Đã từng", labelVi: "Đã từng", labelEn: "Yes, I have" },
+  { value: "Chưa từng", labelVi: "Chưa từng", labelEn: "Not yet" },
+];
+
 type FieldErrors = Partial<Record<keyof STICApplicationData, string>>;
 
 const inputBase =
@@ -128,10 +133,24 @@ function ConfirmModal({
               {lang === "vi" ? "Sở thích & Mảng đăng ký" : "Selected Interests"}
             </p>
             <p className="text-slate-700 dark:text-slate-200 font-medium text-[11px]">
-              {form.interests.length > 0 ? form.interests.join(", ") : "—"}
+              {form.interests.length > 0
+                ? form.interests
+                    .map((id) => {
+                      const opt = INTEREST_OPTIONS.find((o) => o.id === id);
+                      return opt ? (lang === "vi" ? opt.labelVi : opt.labelEn) : id;
+                    })
+                    .join(", ")
+                : "—"}
             </p>
           </div>
-          <Row label={lang === "vi" ? "Cam kết" : "Commitment"} value={form.commitment} />
+          <Row
+            label={lang === "vi" ? "Cam kết" : "Commitment"}
+            value={
+              COMMITMENT_OPTIONS.find((o) => o.value === form.commitment)?.[
+                lang === "vi" ? "labelVi" : "labelEn"
+              ] || form.commitment
+            }
+          />
         </div>
 
         <div className="flex gap-2">
@@ -285,10 +304,12 @@ export function JoinSection() {
             </span>
 
             <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              CLB KHOA HỌC KĨ THUẬT STIC
+              {lang === "vi" ? "CLB KHOA HỌC KĨ THUẬT STIC" : "STIC SCIENCE & TECHNOLOGY CLUB"}
             </h2>
             <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">
-              Science, Technology & Innovation Club — THPT Nguyễn Thượng Hiền (Đà Nẵng)
+              {lang === "vi"
+                ? "Science, Technology & Innovation Club — THPT Nguyễn Thượng Hiền (Đà Nẵng)"
+                : "Science, Technology & Innovation Club — Nguyen Thuong Hien High School (Da Nang)"}
             </p>
           </div>
 
@@ -429,7 +450,9 @@ export function JoinSection() {
                   {lang === "vi" ? "Ban Chủ Nhiệm STIC:" : "STIC Leadership Board:"}
                 </p>
                 <p className="text-[11px] mt-0.5">
-                  Chủ nhiệm: <strong>Lương Phú Hưng</strong> · Phó chủ nhiệm: <strong>Lê Hoài An</strong> · Điều phối viên: <strong>Trương Văn Đăng Huy</strong>
+                  {lang === "vi"
+                    ? <>Chủ nhiệm: <strong>Lương Phú Hưng</strong> · Phó chủ nhiệm: <strong>Lê Hoài An</strong> · Điều phối viên: <strong>Trương Văn Đăng Huy</strong></>
+                    : <>President: <strong>Luong Phu Hung</strong> · Vice President: <strong>Le Hoai An</strong> · Coordinator: <strong>Truong Van Dang Huy</strong></>}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -718,18 +741,18 @@ export function JoinSection() {
                             : "Have you ever joined any club / project / competition?"}
                         </label>
                         <div className="grid grid-cols-2 gap-2">
-                          {["Đã từng", "Chưa từng"].map((val) => (
+                          {EXPERIENCE_OPTIONS.map((opt) => (
                             <button
-                              key={val}
+                              key={opt.value}
                               type="button"
-                              onClick={() => setForm((p) => ({ ...p, pastClubExperience: val }))}
+                              onClick={() => setForm((p) => ({ ...p, pastClubExperience: opt.value }))}
                               className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center ${
-                                form.pastClubExperience === val
+                                form.pastClubExperience === opt.value
                                   ? "bg-blue-600 text-white border-blue-600 shadow-sm"
                                   : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-slate-300"
                               }`}
                             >
-                              {val}
+                              {lang === "vi" ? opt.labelVi : opt.labelEn}
                             </button>
                           ))}
                         </div>
@@ -743,18 +766,18 @@ export function JoinSection() {
                             : "Have you ever built a STEM / science project?"}
                         </label>
                         <div className="grid grid-cols-2 gap-2">
-                          {["Đã từng", "Chưa từng"].map((val) => (
+                          {EXPERIENCE_OPTIONS.map((opt) => (
                             <button
-                              key={val}
+                              key={opt.value}
                               type="button"
-                              onClick={() => setForm((p) => ({ ...p, pastStemExperience: val }))}
+                              onClick={() => setForm((p) => ({ ...p, pastStemExperience: opt.value }))}
                               className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center ${
-                                form.pastStemExperience === val
+                                form.pastStemExperience === opt.value
                                   ? "bg-blue-600 text-white border-blue-600 shadow-sm"
                                   : "bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-slate-300"
                               }`}
                             >
-                              {val}
+                              {lang === "vi" ? opt.labelVi : opt.labelEn}
                             </button>
                           ))}
                         </div>

@@ -3,8 +3,11 @@
 import React from "react";
 import { Calendar, MapPin, Clock, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { useLang } from "@/context/LangContext";
 
 export default function EventsPage() {
+  const { lang } = useLang();
+
   return (
     <div className="min-h-screen pt-32 pb-24 bg-gradient-to-b from-[#edf4fe] via-[#f4f9ff] to-[#e4effd] dark:from-[#050914] dark:via-[#090e1e] dark:to-[#070b17] transition-colors">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -12,15 +15,17 @@ export default function EventsPage() {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-800 border border-blue-200 dark:border-slate-700 text-blue-700 dark:text-blue-400 text-xs font-semibold uppercase mb-4 shadow-xs">
             <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            <span>Sự Kiện & Lịch Hoạt Động</span>
+            <span>{lang === "vi" ? "Sự Kiện & Lịch Hoạt Động" : "Events & Schedule"}</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Lịch Hoạt Động STIC
+            {lang === "vi" ? "Lịch Hoạt Động STIC" : "STIC Activity Calendar"}
           </h1>
 
           <p className="mt-4 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-            Theo dõi các hoạt động, đợt tuyển quân và sự kiện học thuật của CLB Khoa học Kỹ thuật STIC.
+            {lang === "vi"
+              ? "Theo dõi các hoạt động, đợt tuyển quân và sự kiện học thuật của CLB Khoa học Kỹ thuật STIC."
+              : "Track upcoming events, recruitment waves, and technical workshops hosted by STIC Club."}
           </p>
         </div>
 
@@ -29,31 +34,33 @@ export default function EventsPage() {
           <div className="flex items-center justify-between mb-4">
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold">
               <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-              ĐANG MỞ ĐƠN
+              {lang === "vi" ? "ĐANG MỞ ĐƠN" : "APPLICATIONS OPEN"}
             </span>
             <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">STIC GEN 1.0</span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-            Tuyển Thành Viên Thế Hệ GEN 1.0
+            {lang === "vi" ? "Tuyển Thành Viên Thế Hệ GEN 1.0" : "Recruiting GEN 1.0 Founding Members"}
           </h2>
 
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-3 leading-relaxed">
-            Đợt tuyển chọn thành viên chính thức đầu tiên dành cho học sinh THPT trên địa bàn TP. Đà Nẵng. Hãy cùng nhau đặt những viên gạch đầu tiên cho CLB Khoa học Kỹ thuật STIC.
+            {lang === "vi"
+              ? "Đợt tuyển chọn thành viên chính thức đầu tiên dành cho học sinh THPT trên địa bàn TP. Đà Nẵng. Hãy cùng nhau đặt những viên gạch đầu tiên cho CLB Khoa học Kỹ thuật STIC."
+              : "The inaugural official recruitment wave for Da Nang high school students. Join us in laying the foundational bricks of STIC Club."}
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-6 text-xs text-slate-700 dark:text-slate-300">
             <div className="p-3.5 rounded-2xl bg-blue-50/60 dark:bg-slate-800/60 border border-blue-100 dark:border-slate-700 flex items-center gap-2.5">
               <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span>Thời gian: Đang mở đơn</span>
+              <span>{lang === "vi" ? "Thời gian: Đang mở đơn" : "Status: Open Now"}</span>
             </div>
             <div className="p-3.5 rounded-2xl bg-blue-50/60 dark:bg-slate-800/60 border border-blue-100 dark:border-slate-700 flex items-center gap-2.5">
               <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span>Địa điểm: Đăng ký online</span>
+              <span>{lang === "vi" ? "Địa điểm: Đăng ký online" : "Format: Online Registration"}</span>
             </div>
             <div className="p-3.5 rounded-2xl bg-blue-50/60 dark:bg-slate-800/60 border border-blue-100 dark:border-slate-700 flex items-center gap-2.5">
               <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <span>Kết quả: Qua email cá nhân</span>
+              <span>{lang === "vi" ? "Kết quả: Qua email cá nhân" : "Results: Via Email"}</span>
             </div>
           </div>
 
@@ -64,7 +71,7 @@ export default function EventsPage() {
               rel="noreferrer"
             >
               <Button variant="primary" size="md" className="rounded-full px-6">
-                <span>Điền đơn ứng tuyển Google Form</span>
+                <span>{lang === "vi" ? "Điền đơn ứng tuyển Google Form" : "Open Google Form Application"}</span>
                 <ExternalLink className="w-4 h-4 ml-2" />
               </Button>
             </a>
@@ -74,15 +81,27 @@ export default function EventsPage() {
         {/* Upcoming Activities Notice */}
         <div className="p-6 rounded-3xl bg-blue-50/50 dark:bg-slate-800/50 border border-dashed border-blue-200 dark:border-slate-700 text-center space-y-2">
           <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-            Các Hoạt Động Tiếp Theo Sau Khi Tuyển Quân
+            {lang === "vi" ? "Các Hoạt Động Tiếp Theo Sau Khi Tuyển Quân" : "Post-Recruitment Roadmap"}
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-lg mx-auto">
-            1. Buổi gặp mặt Tân thành viên GEN 1.0 (Orientation Day)<br />
-            2. Phân ban & Chia nhóm dự án chuyên môn<br />
-            3. Workshop kỹ năng kỹ thuật & phương pháp nghiên cứu KHKT
+          <p className="text-xs text-slate-500 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
+            {lang === "vi" ? (
+              <>
+                1. Buổi gặp mặt Tân thành viên GEN 1.0 (Orientation Day)<br />
+                2. Phân ban & Chia nhóm dự án chuyên môn<br />
+                3. Workshop kỹ năng kỹ thuật & phương pháp nghiên cứu KHKT
+              </>
+            ) : (
+              <>
+                1. GEN 1.0 New Member Orientation Day<br />
+                2. Department Onboarding & Project Team Allocation<br />
+                3. Engineering Skills & Scientific Research Methodology Workshops
+              </>
+            )}
           </p>
           <p className="text-[11px] text-blue-600 dark:text-blue-400 font-medium pt-1">
-            *Lịch trình chi tiết sẽ được gửi trực tiếp qua email cho các bạn thành viên trúng tuyển.
+            {lang === "vi"
+              ? "*Lịch trình chi tiết sẽ được gửi trực tiếp qua email cho các bạn thành viên trúng tuyển."
+              : "*Detailed schedule will be emailed directly to accepted members."}
           </p>
         </div>
       </div>

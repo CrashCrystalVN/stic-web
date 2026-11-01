@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/common/SectionWrapper";
-import { smoothScrollTo } from "@/lib/utils";
 import { Calendar, MapPin, Clock, ArrowRight } from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
+import { CLUB_INFO } from "@/lib/data";
 
 export function EventsSection() {
   const { t } = useLang();
@@ -56,13 +57,13 @@ export function EventsSection() {
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <button
-              onClick={() => smoothScrollTo("join")}
+            <Link
+              href="/join"
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all cursor-pointer shadow-lg shadow-blue-600/20 group"
             >
-              {t(T.events.cta)}
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+              <span>{t(T.events.cta)}</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
             <span className="text-xs text-slate-400 dark:text-slate-500 italic">{t(T.events.hint)}</span>
           </div>
         </motion.div>

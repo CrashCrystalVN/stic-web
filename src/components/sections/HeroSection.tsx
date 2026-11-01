@@ -1,11 +1,13 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { smoothScrollTo } from "@/lib/utils";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
+import { CLUB_INFO } from "@/lib/data";
 import { ScrollScaleBanner } from "./ScrollScaleBanner";
 
 const fade = (delay = 0) => ({
@@ -69,15 +71,15 @@ export function HeroSection() {
 
         {/* Google Gemini Style Liquid Glass CTA Buttons */}
         <motion.div {...fade(0.24)} className="mt-8 flex flex-col sm:flex-row items-center gap-3.5">
-          {/* Primary Gemini Gradient Button */}
-          <button
-            onClick={() => smoothScrollTo("application-form")}
+          {/* Primary Gemini Gradient Button (Navigates to /join subpage) */}
+          <Link
+            href="/join"
             className="group relative inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-sm font-semibold transition-all duration-300 cursor-pointer shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.03] active:scale-[0.98]"
           >
             <span className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <span>{t(T.hero.cta1)}</span>
-            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </button>
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+          </Link>
 
           {/* Secondary Liquid Glass Pill Button */}
           <button
@@ -118,21 +120,19 @@ export function HeroSection() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
           className="mt-8 inline-flex items-center justify-center w-9 h-9 rounded-full liquid-glass text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors cursor-pointer hover:scale-110"
-          aria-label="Cuộn xuống khám phá"
+          aria-label="Scroll to showcase"
         >
-          <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}>
-            <ChevronDown className="w-4 h-4" />
-          </motion.div>
+          <ArrowRight className="w-4 h-4 rotate-90" />
         </motion.button>
       </div>
 
       {/* ========================================================
-          SCREEN 2: GOOGLE ANTIGRAVITY SHOWCASE BANNER
+          SCREEN 2: SCROLL-SCALE BANNER (Antigravity GSAP/Framer Effect)
           ======================================================== */}
-      <div id="showcase" className="relative z-10 w-full pb-16 md:pb-24">
+      <div id="showcase" className="relative z-10 pt-2 pb-24 sm:pb-32">
         <ScrollScaleBanner
           imageSrc="/banner.png"
-          title="STIC — Science, Technology & Innovation Club"
+          title={t(T.hero.bannerAlt)}
         />
       </div>
     </section>

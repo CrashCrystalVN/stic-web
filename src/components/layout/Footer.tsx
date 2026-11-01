@@ -7,17 +7,18 @@ import { Mail, Heart } from "lucide-react";
 import { smoothScrollTo } from "@/lib/utils";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
+import { CLUB_INFO } from "@/lib/data";
 
 export function Footer() {
   const { t } = useLang();
   const currentYear = new Date().getFullYear();
 
   const NAV_LINKS = [
-    { id: "hero",     label: t(T.nav.home) },
-    { id: "about",    label: t(T.nav.about) },
-    { id: "teams",    label: t(T.nav.teams) },
-    { id: "projects", label: t(T.nav.projects) },
-    { id: "join",     label: t(T.nav.join) },
+    { id: "hero",     label: t(T.nav.home),     href: "/#hero" },
+    { id: "about",    label: t(T.nav.about),    href: "/#about" },
+    { id: "teams",    label: t(T.nav.teams),    href: "/#teams" },
+    { id: "projects", label: t(T.nav.projects), href: "/#projects" },
+    { id: "join",     label: t(T.nav.join),     href: "/join" },
   ];
 
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
@@ -43,7 +44,9 @@ export function Footer() {
                   className="w-full h-full object-contain rounded-md"
                 />
               </div>
-              <span className="text-sm font-bold text-slate-900 dark:text-white">CLB KHKT STIC</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-white">
+                {t({ vi: "CLB KHKT STIC", en: "STIC S&T Club" })}
+              </span>
             </div>
             <p className="text-xs text-slate-400 dark:text-slate-500 max-w-xs leading-relaxed whitespace-pre-line">
               {t(T.footer.sub)}
@@ -62,8 +65,8 @@ export function Footer() {
             {NAV_LINKS.map((link) => (
               <div key={link.id}>
                 <Link
-                  href={`/#${link.id}`}
-                  onClick={(e) => handleNav(e, link.id)}
+                  href={link.href}
+                  onClick={(e) => link.id !== "join" && handleNav(e, link.id)}
                   className="text-xs text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
                   {link.label}
@@ -78,9 +81,9 @@ export function Footer() {
               {t(T.footer.bcn)}
             </p>
             {[
-              { role: t(T.footer.r1), name: "Lương Phú Hưng" },
-              { role: t(T.footer.r2), name: "Lê Hoài An" },
-              { role: t(T.footer.r3), name: "Trương Văn Đăng Huy" },
+              { role: t(T.footer.r1), name: t({ vi: "Lương Phú Hưng", en: "Luong Phu Hung" }) },
+              { role: t(T.footer.r2), name: t({ vi: "Lê Hoài An", en: "Le Hoai An" }) },
+              { role: t(T.footer.r3), name: t({ vi: "Trương Văn Đăng Huy", en: "Truong Van Dang Huy" }) },
             ].map((p) => (
               <div key={p.role}>
                 <span className="text-[10px] text-slate-400 dark:text-slate-600">{p.role} · </span>
@@ -92,7 +95,7 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="mt-10 pt-6 border-t border-slate-100 dark:border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400 dark:text-slate-600">
-          <p>© {currentYear} CLB KHKT STIC · {t(T.footer.copy)}</p>
+          <p>© {currentYear} {t({ vi: "CLB KHKT STIC", en: "STIC S&T Club" })} · {t(T.footer.copy)}</p>
           <p className="flex items-center gap-1">
             Made with <Heart className="w-3 h-3 text-rose-400 fill-rose-400" /> {t(T.footer.made)}
           </p>
