@@ -62,7 +62,7 @@ export default function JoinPage() {
         {/* Banner Dang Ky Tuyen Quan GEN 1.0 */}
         <div className="relative w-full aspect-[2.55/1] rounded-3xl overflow-hidden border border-blue-100 dark:border-white/10 shadow-xl shadow-blue-500/10 mb-10">
           <Image
-            src="/banner.png"
+            src="/banner.jpg"
             alt="STIC GEN 1.0 Recruitment Banner"
             fill
             className="object-cover"

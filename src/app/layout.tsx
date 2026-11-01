@@ -55,11 +55,11 @@ export const metadata: Metadata = {
     description: "Sân chơi STEM thực chiến THPT Đà Nẵng. Đăng ký GEN 1.0 ngay!",
     images: [
       {
-        url: `${siteUrl}/banner.png`,
-        secureUrl: `${siteUrl}/banner.png`,
+        url: `${siteUrl}/banner.jpg`,
+        secureUrl: `${siteUrl}/banner.jpg`,
         width: 1024,
         height: 402,
-        type: "image/png",
+        type: "image/jpeg",
         alt: "STIC — CLB Khoa học Kỹ thuật Đà Nẵng",
       },
     ],
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "STIC — CLB Khoa học Kỹ thuật Đà Nẵng",
     description: "Sân chơi STEM thực chiến THPT Đà Nẵng. Đăng ký GEN 1.0 ngay!",
-    images: [`${siteUrl}/banner.png`],
+    images: [`${siteUrl}/banner.jpg`],
   },
 
   // Icons (Favicon tròn dạng circular avatar trên tab trình duyệt Cốc Cốc / Chrome)
@@ -111,7 +111,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://docs.google.com" />
         <link rel="preconnect" href="https://docs.google.com" crossOrigin="anonymous" />
         <link rel="preload" as="image" href="/logo.png" fetchPriority="high" />
-        <link rel="preload" as="image" href="/banner.png" fetchPriority="high" />
+        <link rel="preload" as="image" href="/banner.jpg" fetchPriority="high" />
       </head>
       <body
         className={`${font.variable} font-sans min-h-screen antialiased flex flex-col relative`}
