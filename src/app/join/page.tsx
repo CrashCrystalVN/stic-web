@@ -65,7 +65,7 @@ export default function JoinPage() {
         {/* ========================================================
             GOOGLE FORM NHÚNG TRỰC TIẾP (MAIN APPLICATION FORM)
             ======================================================== */}
-        <div className="mb-20">
+        <div id="application-form" className="mb-20 scroll-mt-28">
           <div className="rounded-3xl liquid-glass border border-blue-400/40 dark:border-blue-500/30 shadow-2xl p-4 sm:p-7 relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl">
             {/* Embed Bar Header */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 mb-4 border-b border-slate-200/80 dark:border-slate-800">

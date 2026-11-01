@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { LangProvider } from "@/context/LangContext";
 import { MainWrapper } from "@/components/common/MainWrapper";
+import { FormPreloader } from "@/components/common/FormPreloader";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
@@ -103,6 +104,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
+      <head>
+        {/* Tối ưu kết nối sớm tới máy chủ Google Form để hiển thị siêu tốc */}
+        <link rel="preconnect" href="https://docs.google.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://docs.google.com" />
+        <link rel="preconnect" href="https://lh3.googleusercontent.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body
         className={`${font.variable} font-sans min-h-screen antialiased flex flex-col`}
       >
@@ -115,6 +123,8 @@ export default function RootLayout({
             <Navbar />
             <MainWrapper>{children}</MainWrapper>
             <Footer />
+            {/* Tự động tải trước Google Form ngầm trong thời gian rảnh của máy */}
+            <FormPreloader />
           </LangProvider>
         </ThemeProvider>
       </body>
