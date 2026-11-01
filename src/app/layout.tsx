@@ -112,6 +112,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://docs.google.com" crossOrigin="anonymous" />
         <link rel="preload" as="image" href="/logo.png" fetchPriority="high" />
         <link rel="preload" as="image" href="/banner.jpg" fetchPriority="high" />
+
+        {/* Zalo & In-App Browser Specific OpenGraph Fallbacks */}
+        <meta property="og:image:secure_url" content={`${siteUrl}/banner.jpg`} />
+        <link rel="image_src" href={`${siteUrl}/banner.jpg`} />
       </head>
       <body
         className={`${font.variable} font-sans min-h-screen antialiased flex flex-col relative`}
