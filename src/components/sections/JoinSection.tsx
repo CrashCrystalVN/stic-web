@@ -345,8 +345,24 @@ export function JoinSection() {
       }
       gformData.append("entry.1623231100", form.ideaExecution || "");
       gformData.append("entry.1860646974", form.commitment || "Có thể tham gia thường xuyên");
+      gformData.append("fvv", "1");
+      gformData.append("pageHistory", "0");
 
-      // 1. Gửi ngầm qua hidden iframe chuẩn native để vượt mọi rào cản CORS của trình duyệt
+      // 1. Gửi ngầm qua fetch mode no-cors
+      try {
+        fetch(GOOGLE_FORM_ACTION, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: gformData.toString(),
+        }).catch(() => {});
+      } catch {
+        // ignore fetch error
+      }
+
+      // 2. Gửi ngầm qua hidden iframe chuẩn native để đảm bảo 100% không bị chặn
       const iframeName = `gform_target_${Date.now()}`;
       const iframe = document.createElement("iframe");
       iframe.name = iframeName;
