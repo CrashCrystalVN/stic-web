@@ -137,7 +137,6 @@ export function HeroSection() {
           ======================================================== */}
       <div id="showcase" className="relative z-10 pt-2 pb-24 sm:pb-32">
         <ScrollScaleBanner
-          imageSrc="/banner.jpg"
           title={t(T.hero.bannerAlt)}
         />
       </div>
