@@ -46,3 +46,7 @@ dataconnect/.dataconnect/pgliteData/
 .agents/
 .claude/
 skills-lock.json
+
+# Office temporary files
+~$*
+*.tmp
