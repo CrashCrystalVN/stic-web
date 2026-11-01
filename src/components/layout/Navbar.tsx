@@ -11,7 +11,7 @@ import { LangToggle } from "@/components/common/LangToggle";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
 import { CLUB_INFO } from "@/lib/data";
-import { ExternalLink, ArrowRight, ArrowDown } from "lucide-react";
+import { ExternalLink, ArrowRight, ArrowDown, Sparkles } from "lucide-react";
 
 export function Navbar() {
   const { t, lang } = useLang();
@@ -195,20 +195,20 @@ export function Navbar() {
               <button
                 onClick={() => scrollToSection("application-form")}
                 title={lang === "vi" ? "Cuộn nhanh xuống đơn ứng tuyển" : "Jump to application form"}
-                className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-bold leading-none shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer select-none"
               >
-                <span>✦</span>
-                <span>{lang === "vi" ? "Điền đơn ngay" : "Apply Now"}</span>
-                <ArrowDown className="w-3 h-3 opacity-80" />
+                <Sparkles className="w-3.5 h-3.5 shrink-0 text-white" />
+                <span className="leading-none pt-px">{lang === "vi" ? "Điền đơn ngay" : "Apply Now"}</span>
+                <ArrowDown className="w-3.5 h-3.5 shrink-0 text-white/90" />
               </button>
             ) : (
               <Link
                 href="/join"
-                className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-semibold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer"
+                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-bold leading-none shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer select-none"
               >
-                <span>✦</span>
-                <span>{t(T.nav.apply)}</span>
-                <ArrowRight className="w-3 h-3 opacity-80" />
+                <Sparkles className="w-3.5 h-3.5 shrink-0 text-white" />
+                <span className="leading-none pt-px">{t(T.nav.apply)}</span>
+                <ArrowRight className="w-3.5 h-3.5 shrink-0 text-white/90" />
               </Link>
             )}
           </div>

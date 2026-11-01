@@ -4,7 +4,7 @@ export const translations = {
   // ── NAVBAR ──────────────────────────────────────────────────────────────────
   nav: {
     home:       { vi: "Trang chủ",         en: "Home" },
-    about:      { vi: "Về chúng tôi",      en: "About Us" },
+    about:      { vi: "Về chúng tôi",      en: "About" },
     teams:      { vi: "Mảng hoạt động",    en: "Departments" },
     projects:   { vi: "Dự án GEN 1.0",    en: "GEN 1.0 Projects" },
     join:       { vi: "Đăng ký thành viên", en: "Join Us" },
@@ -16,8 +16,8 @@ export const translations = {
   // ── HERO ────────────────────────────────────────────────────────────────────
   hero: {
     badge:      { vi: "Đang mở đơn · GEN 1.0",                   en: "Now Open · GEN 1.0" },
-    heading1:   { vi: "CLB Khoa học",                              en: "Empowering" },
-    heading2:   { vi: "Kỹ thuật",                                 en: "The Future with" },
+    heading1:   { vi: "Empowering",                              en: "Empowering" },
+    heading2:   { vi: "The Future with",                         en: "The Future with" },
     tagline:    { vi: "Science · Technology · Innovation Club",    en: "Science · Technology · Innovation Club" },
     desc:       { vi: "Không gian sáng tạo dành riêng cho",       en: "A creative space built for" },
     descBold:   { vi: "học sinh THPT Đà Nẵng",                    en: "high school students in Da Nang" },
@@ -36,7 +36,7 @@ export const translations = {
 
   // ── ABOUT ───────────────────────────────────────────────────────────────────
   about: {
-    label:      { vi: "Về chúng tôi",     en: "About Us" },
+    label:      { vi: "Về chúng tôi",     en: "About" },
     h2a:        { vi: "Sân chơi STEM",    en: "A Real STEM" },
     h2b:        { vi: "thực chiến",       en: "Playground" },
     h2c:        { vi: "cho",              en: "for" },
@@ -208,7 +208,7 @@ export const translations = {
     applyCta: { vi: "Nộp đơn ứng tuyển", en: "Apply Now" },
     items: [
       { id: "hero",     vi: "Trang chủ",         en: "Home",         dvi: "Khởi đầu & Đăng ký GEN 1.0",   den: "Start & GEN 1.0 Registration" },
-      { id: "about",    vi: "Về chúng tôi",       en: "About Us",     dvi: "Sứ mệnh & Ban chủ nhiệm",       den: "Mission & Leadership" },
+      { id: "about",    vi: "Về chúng tôi",       en: "About",        dvi: "Sứ mệnh & Ban chủ nhiệm",       den: "Mission & Leadership" },
       { id: "teams",    vi: "Mảng hoạt động",     en: "Departments",  dvi: "AI, Robotics, Design, STEM...", den: "AI, Robotics, Design, STEM..." },
       { id: "projects", vi: "Dự án GEN 1.0",      en: "GEN 1.0 Projects", dvi: "Ươm mầm ý tưởng thực tế", den: "Incubating real ideas" },
       { id: "events",   vi: "Sự kiện",            en: "Events",       dvi: "Lịch tuyển quân & Hoạt động",  den: "Recruitment & Activities" },
