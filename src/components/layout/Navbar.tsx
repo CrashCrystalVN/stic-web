@@ -197,7 +197,7 @@ export function Navbar() {
               <button
                 onClick={() => scrollToSection("application-form")}
                 title={lang === "vi" ? "Cuộn nhanh xuống đơn ứng tuyển" : "Jump to application form"}
-                className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4.5 py-2 rounded-full text-white text-xs font-bold leading-none shadow-md shadow-indigo-500/20 hover:scale-[1.03] transition-all cursor-pointer select-none gradient-btn-join"
+                className="hidden sm:inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4.5 py-2 rounded-full text-white text-xs font-bold leading-none shadow-md shadow-indigo-500/20 hover:scale-[1.03] transition-all cursor-pointer select-none gradient-btn-join"
               >
                 <Sparkles className="w-3.5 h-3.5 shrink-0 text-white" />
                 <span className="leading-none pt-px">{lang === "vi" ? "Điền đơn" : "Apply"}</span>
@@ -206,7 +206,7 @@ export function Navbar() {
             ) : (
               <Link
                 href="/join"
-                className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4.5 py-2 rounded-full text-white text-xs font-bold leading-none shadow-md shadow-indigo-500/20 hover:scale-[1.03] transition-all cursor-pointer select-none gradient-btn-home"
+                className="hidden sm:inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4.5 py-2 rounded-full text-white text-xs font-bold leading-none shadow-md shadow-indigo-500/20 hover:scale-[1.03] transition-all cursor-pointer select-none gradient-btn-home"
               >
                 <Sparkles className="w-3.5 h-3.5 shrink-0 text-white" />
                 <span className="leading-none pt-px">{t(T.nav.apply)}</span>

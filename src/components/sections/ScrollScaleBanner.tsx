@@ -74,7 +74,7 @@ export function ScrollScaleBanner({
         className="relative z-10 w-full max-w-[1400px] 2xl:max-w-[1560px] mx-auto"
       >
         {/* Antigravity Video/Banner Wrapper Container */}
-        <div className="relative w-full aspect-[16/9] max-h-[calc(100vh-140px)] min-h-[300px] rounded-[24px] sm:rounded-[30px] md:rounded-[36px] overflow-hidden bg-[#0d121f]/90 dark:bg-[#070a12]/95 backdrop-blur-2xl border border-slate-700/40 dark:border-white/10 shadow-2xl shadow-blue-500/10 group cursor-pointer transition-shadow duration-500 hover:shadow-blue-500/20">
+        <div className="relative w-full aspect-[16/9] max-h-[calc(100vh-140px)] min-h-[190px] sm:min-h-[280px] rounded-[18px] sm:rounded-[30px] md:rounded-[36px] overflow-hidden bg-[#0d121f]/90 dark:bg-[#070a12]/95 backdrop-blur-2xl border border-slate-700/40 dark:border-white/10 shadow-2xl shadow-blue-500/10 group cursor-pointer transition-shadow duration-500 hover:shadow-blue-500/20">
           {/* Top specular edge reflection */}
           <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none z-20" />
           <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] via-transparent to-transparent pointer-events-none z-10" />

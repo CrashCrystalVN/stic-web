@@ -447,6 +447,16 @@ body {
     -webkit-backdrop-filter: blur(4px) !important;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
   }
+
+  /* Chống iOS Safari tự động phóng to màn hình khi chạm vào ô input/select/textarea (font-size >= 16px) */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Khử khung xám tap highlight mặc định trên mobile browser */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 /* Subtle accent glow */

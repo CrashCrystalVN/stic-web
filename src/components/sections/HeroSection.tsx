@@ -57,30 +57,30 @@ export function HeroSection() {
         {/* Heading with Google Gemini Aurora Gradient */}
         <motion.h1
           {...fade(0.1)}
-          className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.1] max-w-4xl drop-shadow-sm"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.12] max-w-4xl drop-shadow-sm px-2"
         >
           {t(T.hero.heading1)}<br />{t(T.hero.heading2)}{" "}
           <span className="gradient-text gradient-text-home">STIC</span>
         </motion.h1>
 
         {/* Subtitle Tagline */}
-        <motion.p {...fade(0.14)} className="mt-4 text-[11px] sm:text-xs text-slate-600 dark:text-slate-400 tracking-[0.25em] uppercase font-semibold">
+        <motion.p {...fade(0.14)} className="mt-3 sm:mt-4 text-[10px] sm:text-xs text-slate-600 dark:text-slate-400 tracking-[0.2em] sm:tracking-[0.25em] uppercase font-semibold">
           {t(T.hero.tagline)}
         </motion.p>
 
         {/* Description */}
-        <motion.p {...fade(0.18)} className="mt-6 text-base sm:text-lg text-slate-700 dark:text-slate-300 max-w-xl leading-relaxed font-normal">
+        <motion.p {...fade(0.18)} className="mt-5 sm:mt-6 text-sm sm:text-lg text-slate-700 dark:text-slate-300 max-w-xl leading-relaxed font-normal px-2">
           {t(T.hero.desc)}{" "}
           <span className="text-slate-900 dark:text-white font-semibold">{t(T.hero.descBold)}</span>
           {t(T.hero.descEnd)}
         </motion.p>
 
         {/* Google Gemini Style Liquid Glass CTA Buttons */}
-        <motion.div {...fade(0.24)} className="mt-8 flex flex-col sm:flex-row items-center gap-3.5">
+        <motion.div {...fade(0.24)} className="mt-7 sm:mt-8 flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto max-w-xs sm:max-w-none">
           {/* Primary Gemini Gradient Button (Navigates to /join subpage) */}
           <Link
             href="/join"
-            className="group relative inline-flex items-center gap-2.5 px-7 py-3 rounded-full text-white text-sm font-semibold transition-all duration-300 cursor-pointer gradient-btn-home"
+            className="w-full sm:w-auto justify-center group relative inline-flex items-center gap-2.5 px-7 py-3.5 sm:py-3 rounded-full text-white text-sm font-semibold transition-all duration-300 cursor-pointer gradient-btn-home text-center"
           >
             <span className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <span>{t(T.hero.cta1)}</span>
@@ -90,16 +90,16 @@ export function HeroSection() {
           {/* Secondary Liquid Glass Pill Button */}
           <button
             onClick={() => smoothScrollTo("about")}
-            className="inline-flex items-center gap-2 px-7 py-3 rounded-full liquid-glass text-slate-800 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white text-sm font-semibold transition-all duration-300 cursor-pointer hover:scale-[1.03] active:scale-[0.98]"
+            className="w-full sm:w-auto justify-center inline-flex items-center gap-2 px-7 py-3.5 sm:py-3 rounded-full liquid-glass text-slate-800 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white text-sm font-semibold transition-all duration-300 cursor-pointer hover:scale-[1.03] active:scale-[0.98] text-center"
           >
             <span>{t(T.hero.cta2)}</span>
           </button>
         </motion.div>
 
-        {/* Quick Highlights / Stats Grid */}
+        {/* Quick Highlights / Stats Grid: 3 cột gọn gàng trên cả mobile & desktop */}
         <motion.div
           {...fade(0.3)}
-          className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-3 gap-3 mt-10"
+          className="w-full max-w-lg sm:max-w-2xl grid grid-cols-3 gap-2 sm:gap-3 mt-8 sm:mt-10 px-2"
         >
           {[
             { value: t(T.hero.stat1v), label: t(T.hero.stat1l), icon: "✦" },
@@ -108,13 +108,13 @@ export function HeroSection() {
           ].map((s) => (
             <div
               key={s.label}
-              className="liquid-glass rounded-2xl py-3 px-4 transition-transform duration-300 hover:scale-[1.02] text-center"
+              className="liquid-glass rounded-2xl py-2.5 sm:py-3 px-2 sm:px-4 transition-transform duration-300 hover:scale-[1.02] text-center"
             >
-              <div className="flex items-center justify-center gap-1.5">
-                <span className="text-blue-500 text-xs font-bold">{s.icon}</span>
-                <p className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{s.value}</p>
+              <div className="flex items-center justify-center gap-1 sm:gap-1.5">
+                <span className="text-blue-500 text-[10px] sm:text-xs font-bold">{s.icon}</span>
+                <p className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">{s.value}</p>
               </div>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 font-medium">{s.label}</p>
+              <p className="text-[10px] sm:text-[11px] text-slate-600 dark:text-slate-400 mt-0.5 font-medium truncate">{s.label}</p>
             </div>
           ))}
         </motion.div>
