@@ -236,7 +236,7 @@ function ConfirmModal({
             target="_blank"
             rel="noopener noreferrer"
             onClick={onConfirm}
-            className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/20 text-center animate-gradient-flow"
+            className="flex-1 py-2.5 rounded-xl gradient-btn-join text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/20 text-center"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             <span>{lang === "vi" ? "Tiếp tục đến Google Form" : "Continue to Google Form"}</span>
@@ -695,7 +695,7 @@ export function JoinSection() {
                       href={prefillUrl || "https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/viewform"}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-lg shadow-indigo-500/25 hover:scale-[1.02] transition-all cursor-pointer animate-gradient-flow"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full gradient-btn-join text-white text-xs font-bold shadow-lg shadow-indigo-500/25 hover:scale-[1.02] transition-all cursor-pointer"
                     >
                       <span>✦</span>
                       <span>{lang === "vi" ? "Mở Lại Google Form Đã Điền Sẵn" : "Open Pre-filled Google Form"}</span>
@@ -1065,7 +1065,7 @@ export function JoinSection() {
 
                     <button
                       type="submit"
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.02] transition-all cursor-pointer animate-gradient-flow"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full text-white text-xs font-bold transition-all cursor-pointer gradient-btn-join"
                     >
                       <Send className="w-3.5 h-3.5" />
                       <span>{lang === "vi" ? "Nộp Đơn Ứng Tuyển GEN 1.0" : "Submit GEN 1.0 Application"}</span>

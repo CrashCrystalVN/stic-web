@@ -43,7 +43,7 @@ export default function AboutPage() {
           {lang === "vi" ? (
             <>
               Sân chơi Khoa học Kỹ thuật{" "}
-              <span className="text-blue-600 dark:text-blue-400">
+              <span className="gradient-text-about font-black">
                 Thực Chiến
               </span>{" "}
               cho học sinh Đà Nẵng
@@ -51,7 +51,7 @@ export default function AboutPage() {
           ) : (
             <>
               A Real-World STEM{" "}
-              <span className="text-blue-600 dark:text-blue-400">
+              <span className="gradient-text-about font-black">
                 Playground
               </span>{" "}
               for Da Nang Students
@@ -201,7 +201,7 @@ export default function AboutPage() {
               target="_blank"
               rel="noreferrer"
             >
-              <Button variant="secondary" size="md" className="rounded-full px-6 font-bold text-blue-700 dark:text-blue-400">
+              <Button variant="primary" size="md" className="rounded-full px-7 py-3 font-bold gradient-btn-about border-none shadow-lg shadow-cyan-500/20">
                 <span>{lang === "vi" ? "Nộp đơn ứng tuyển Google Form" : "Apply via Google Form"}</span>
                 <ExternalLink className="w-4 h-4 ml-2" />
               </Button>

@@ -41,7 +41,15 @@ export default function JoinPage() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
-            {lang === "vi" ? "Gia Nhập CLB KHKT STIC" : "Join STIC Club"}
+            {lang === "vi" ? (
+              <>
+                Gia Nhập <span className="gradient-text-join font-black">CLB KHKT STIC</span>
+              </>
+            ) : (
+              <>
+                Join <span className="gradient-text-join font-black">STIC Club</span>
+              </>
+            )}
           </h1>
 
           <p className="mt-4 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">

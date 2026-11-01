@@ -36,7 +36,7 @@ export function EventsSection() {
 
           <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
             {t(T.events.h3a)}<br />
-            <span className="gradient-text">{t(T.events.h3b)}</span>
+            <span className="gradient-text gradient-text-events font-black">{t(T.events.h3b)}</span>
           </h3>
 
           <p className="mt-4 text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-2xl">
@@ -59,7 +59,7 @@ export function EventsSection() {
           <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <Link
               href="/join"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-sm font-semibold transition-all cursor-pointer shadow-lg shadow-blue-600/20 group animate-gradient-flow"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-sm font-semibold transition-all cursor-pointer group gradient-btn-events"
             >
               <span>{t(T.events.cta)}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />

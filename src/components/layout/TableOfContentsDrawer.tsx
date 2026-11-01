@@ -119,7 +119,7 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
               <Link
                 href="/join"
                 onClick={onClose}
-                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 animate-gradient-flow"
+                className="w-full py-2.5 rounded-xl gradient-btn-join text-white text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-blue-500/20"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{t(T.toc.applyCta)}</span>

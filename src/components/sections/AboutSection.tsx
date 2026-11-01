@@ -47,7 +47,7 @@ export function AboutSection() {
           <div className="lg:col-span-7">
             <h2 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white leading-[1.15] tracking-tight">
               {t(T.about.h2a)}<br />
-              <span className="gradient-text">{t(T.about.h2b)}</span> {t(T.about.h2c)}<br />
+              <span className="gradient-text gradient-text-about">{t(T.about.h2b)}</span> {t(T.about.h2c)}<br />
               {t(T.about.h2d)}
             </h2>
             <p className="mt-5 text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base font-normal">
@@ -65,7 +65,7 @@ export function AboutSection() {
                   transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   className="flex gap-3.5 p-3.5 rounded-2xl transition-colors hover:bg-slate-50 dark:hover:bg-slate-900/50"
                 >
-                  <div className="mt-0.5 w-5 h-5 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 shrink-0 flex items-center justify-center shadow-sm shadow-blue-500/20 animate-gradient-flow">
+                  <div className="mt-0.5 w-5 h-5 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 shrink-0 flex items-center justify-center shadow-sm shadow-blue-500/20">
                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>

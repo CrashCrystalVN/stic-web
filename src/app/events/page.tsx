@@ -40,7 +40,17 @@ export default function EventsPage() {
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-            {lang === "vi" ? "Tuyển Thành Viên Thế Hệ GEN 1.0" : "Recruiting GEN 1.0 Founding Members"}
+            {lang === "vi" ? (
+              <>
+                Tuyển Thành Viên Thế Hệ{" "}
+                <span className="gradient-text-events font-black">GEN 1.0</span>
+              </>
+            ) : (
+              <>
+                Recruiting{" "}
+                <span className="gradient-text-events font-black">GEN 1.0</span> Founding Members
+              </>
+            )}
           </h2>
 
           <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-3 leading-relaxed">
@@ -70,7 +80,7 @@ export default function EventsPage() {
               target="_blank"
               rel="noreferrer"
             >
-              <Button variant="primary" size="md" className="rounded-full px-6">
+              <Button variant="primary" size="md" className="rounded-full px-7 py-3 font-bold gradient-btn-events border-none shadow-lg shadow-rose-500/25">
                 <span>{lang === "vi" ? "Điền đơn ứng tuyển Google Form" : "Open Google Form Application"}</span>
                 <ExternalLink className="w-4 h-4 ml-2" />
               </Button>

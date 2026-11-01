@@ -64,7 +64,17 @@ export default function ProjectsPage() {
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            {lang === "vi" ? "Nơi Biến Ý Tưởng Thành Sản Phẩm" : "Where Ideas Turn Into Working Products"}
+            {lang === "vi" ? (
+              <>
+                Nơi Biến Ý Tưởng Thành{" "}
+                <span className="gradient-text-projects font-black">Sản Phẩm Thực Tế</span>
+              </>
+            ) : (
+              <>
+                Where Ideas Turn Into{" "}
+                <span className="gradient-text-projects font-black">Working Products</span>
+              </>
+            )}
           </h1>
 
           <p className="mt-4 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -100,7 +110,7 @@ export default function ProjectsPage() {
               target="_blank"
               rel="noreferrer"
             >
-              <Button variant="primary" size="md" className="rounded-full px-7">
+              <Button variant="primary" size="md" className="rounded-full px-7 py-3 font-bold gradient-btn-projects border-none shadow-lg shadow-purple-500/25">
                 <span>{lang === "vi" ? "Nộp đơn ứng tuyển & Chia sẻ ý tưởng của bạn" : "Apply & Share Your Ideas"}</span>
                 <ExternalLink className="w-4 h-4 ml-2" />
               </Button>
