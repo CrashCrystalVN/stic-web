@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import {
   CheckCircle2, Send, Sparkles, User, Phone, Lightbulb,
   ExternalLink, RotateCcw, Check, AlertCircle, X, ShieldAlert,
@@ -86,19 +87,27 @@ function ConfirmModal({
   onCancel: () => void;
   isSubmitting: boolean;
 }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-    >
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
+  if (!mounted || typeof document === "undefined") return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/75 backdrop-blur-md overflow-y-auto">
       <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 20 }}
+        initial={{ opacity: 0, scale: 0.94, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.92, y: 20 }}
-        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-        className="bg-white dark:bg-[#111827] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-7 w-full max-w-md max-h-[90vh] overflow-y-auto"
+        exit={{ opacity: 0, scale: 0.94, y: 16 }}
+        transition={{ type: "spring", stiffness: 450, damping: 32 }}
+        className="relative my-auto bg-white dark:bg-[#111827] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-7 w-full max-w-md max-h-[88vh] overflow-y-auto"
       >
         <div className="flex items-start justify-between mb-4">
           <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center text-blue-600 dark:text-blue-400">
@@ -175,7 +184,8 @@ function ConfirmModal({
           </button>
         </div>
       </motion.div>
-    </motion.div>
+    </div>,
+    document.body
   );
 }
 
@@ -317,6 +327,12 @@ export function JoinSection() {
       setGoogleSynced(true);
       setShowConfirm(false);
       setIsSuccess(true);
+      setTimeout(() => {
+        const el = document.getElementById("application-form");
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }, 120);
     } catch (err: unknown) {
       setShowConfirm(false);
       setServerError(err instanceof Error ? err.message : "Lỗi gửi đơn, vui lòng thử lại hoặc điền trực tiếp qua Google Form.");
