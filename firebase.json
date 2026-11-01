@@ -8,6 +8,7 @@
     "source": "dataconnect"
   },
   "hosting": {
+    "site": "sticdanang",
     "public": "out",
     "cleanUrls": true,
     "ignore": [
