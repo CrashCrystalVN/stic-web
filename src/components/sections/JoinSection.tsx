@@ -172,13 +172,22 @@ function ConfirmModal({
         </div>
 
         <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
-          {lang === "vi" ? "Xác nhận nộp đơn tuyển GEN 1.0?" : "Confirm GEN 1.0 Application?"}
+          {lang === "vi" ? "Xác nhận & Mở Google Form" : "Confirm & Open Google Form"}
         </h3>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 leading-relaxed">
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
           {lang === "vi"
-            ? "Đơn của bạn sẽ được lưu trữ an toàn và đồng bộ trực tiếp vào hệ thống Google Form của Ban chủ nhiệm CLB STIC."
-            : "Your application will be stored securely and synchronized directly with the STIC Club Board's Google Form."}
+            ? "Toàn bộ thông tin của bạn sẽ được tự động điền sẵn vào mẫu đơn chính thức của CLB STIC trên Google Form."
+            : "All your details will be pre-filled into the official STIC Club Google Form."}
         </p>
+
+        <div className="rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 p-3 mb-4 text-xs text-blue-700 dark:text-blue-300 flex items-start gap-2">
+          <Sparkles className="w-4 h-4 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+          <p className="leading-relaxed text-[11px]">
+            {lang === "vi"
+              ? "Sau khi bấm tiếp tục, Google Form sẽ mở ra với toàn bộ thông tin đã có sẵn trong từng ô. Bạn chỉ cần bấm nút \"Gửi\" màu tím trên Google Form để hoàn tất!"
+              : "After continuing, Google Form will open with all fields pre-filled. Simply click the purple \"Submit\" button on Google Form to finish!"}
+          </p>
+        </div>
 
         {/* Summary Table */}
         <div className="rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 p-3.5 space-y-2 mb-5 text-xs">
@@ -223,14 +232,14 @@ function ConfirmModal({
           <button
             onClick={onConfirm}
             disabled={isSubmitting}
-            className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all cursor-pointer disabled:opacity-60 flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/20"
+            className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold transition-all cursor-pointer disabled:opacity-60 flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/20"
           >
             {isSubmitting ? (
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
-              <Send className="w-3.5 h-3.5" />
+              <ExternalLink className="w-3.5 h-3.5" />
             )}
-            {lang === "vi" ? "Xác nhận nộp đơn" : "Confirm & Submit"}
+            {lang === "vi" ? "Tiếp tục đến Google Form" : "Continue to Google Form"}
           </button>
         </div>
       </motion.div>
@@ -260,6 +269,7 @@ export function JoinSection() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [serverError, setServerError] = useState("");
   const [googleSynced, setGoogleSynced] = useState<boolean | null>(null);
+  const [prefillUrl, setPrefillUrl] = useState("");
 
   // Toggle Interest Checkbox
   const toggleInterest = (interestId: string) => {
@@ -317,82 +327,64 @@ export function JoinSection() {
     }
   };
 
-  const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/formResponse";
+  const generatePrefilledUrl = (data: STICApplicationData) => {
+    const params = new URLSearchParams();
+    params.append("usp", "pp_url");
 
-  const handleConfirm = async () => {
+    // 1. Họ và tên
+    params.append("entry.2005620554", data.fullName.trim());
+
+    // 2. Lớp
+    params.append("entry.1065046570", data.grade.trim());
+
+    // 3. Email
+    params.append("entry.1045781291", data.email.trim());
+
+    // 4. Link facebook
+    params.append("entry.1166974658", data.facebook.trim());
+
+    // 5. Số điện thoại
+    params.append("entry.839337160", data.phone.trim());
+
+    // 6. Lý do tham gia
+    params.append("entry.25400531", data.reason.trim());
+
+    // 7. Sở thích & Kỹ năng
+    if (Array.isArray(data.interests) && data.interests.length > 0) {
+      for (const item of data.interests) {
+        params.append("entry.352066020", item);
+      }
+    } else {
+      params.append("entry.352066020", "💡 Innovation & Creative Projects");
+    }
+
+    // 8. Đã từng tham gia CLB
+    params.append("entry.655844835", data.pastClubExperience || "Chưa từng");
+
+    // 9. Đã từng làm project STEM
+    params.append("entry.1094832172", data.pastStemExperience || "Chưa từng");
+
+    // 10. Mô tả dự án
+    if (data.projectDescription && data.projectDescription.trim()) {
+      params.append("entry.1786574990", data.projectDescription.trim());
+    }
+
+    // 11. Ý tưởng thực hiện
+    params.append("entry.1623231100", data.ideaExecution.trim());
+
+    // 12. Cam kết tham gia
+    params.append("entry.1860646974", data.commitment || "Có thể tham gia thường xuyên");
+
+    return `https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/viewform?${params.toString()}`;
+  };
+
+  const handleConfirm = () => {
     setIsSubmitting(true);
     try {
-      const gformData = new URLSearchParams();
-      gformData.append("entry.2005620554", form.fullName || "");
-      gformData.append("entry.1065046570", form.grade || "");
-      gformData.append("entry.1045781291", form.email || "");
-      gformData.append("entry.1166974658", form.facebook || "");
-      gformData.append("entry.839337160", form.phone || "");
-      gformData.append("entry.25400531", form.reason || "");
+      const url = generatePrefilledUrl(form);
+      setPrefillUrl(url);
 
-      if (Array.isArray(form.interests) && form.interests.length > 0) {
-        for (const item of form.interests) {
-          gformData.append("entry.352066020", item);
-        }
-      } else {
-        gformData.append("entry.352066020", "💡 Innovation & Creative Projects");
-      }
-
-      gformData.append("entry.655844835", form.pastClubExperience || "Chưa từng");
-      gformData.append("entry.1094832172", form.pastStemExperience || "Chưa từng");
-      if (form.projectDescription) {
-        gformData.append("entry.1786574990", form.projectDescription);
-      }
-      gformData.append("entry.1623231100", form.ideaExecution || "");
-      gformData.append("entry.1860646974", form.commitment || "Có thể tham gia thường xuyên");
-      gformData.append("fvv", "1");
-      gformData.append("pageHistory", "0");
-
-      // 1. Gửi ngầm qua fetch mode no-cors
-      try {
-        fetch(GOOGLE_FORM_ACTION, {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: gformData.toString(),
-        }).catch(() => {});
-      } catch {
-        // ignore fetch error
-      }
-
-      // 2. Gửi ngầm qua hidden iframe chuẩn native để đảm bảo 100% không bị chặn
-      const iframeName = `gform_target_${Date.now()}`;
-      const iframe = document.createElement("iframe");
-      iframe.name = iframeName;
-      iframe.style.display = "none";
-      document.body.appendChild(iframe);
-
-      const formElem = document.createElement("form");
-      formElem.action = GOOGLE_FORM_ACTION;
-      formElem.method = "POST";
-      formElem.target = iframeName;
-      formElem.style.display = "none";
-
-      Array.from(gformData.entries()).forEach(([key, val]) => {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = key;
-        input.value = val;
-        formElem.appendChild(input);
-      });
-
-      document.body.appendChild(formElem);
-      formElem.submit();
-
-      // Dọn dẹp DOM sau khi submit
-      setTimeout(() => {
-        if (document.body.contains(formElem)) document.body.removeChild(formElem);
-        if (document.body.contains(iframe)) document.body.removeChild(iframe);
-      }, 3000);
-
-      // 2. Lưu bản sao vào LocalStorage máy người dùng để tra cứu
+      // Lưu bản sao vào LocalStorage máy người dùng để tra cứu
       try {
         localStorage.setItem("stic_last_registration", JSON.stringify({
           submittedAt: new Date().toISOString(),
@@ -402,7 +394,11 @@ export function JoinSection() {
         // ignore storage errors
       }
 
-      setGoogleSynced(true);
+      // Tự động mở Google Form đã điền sẵn sang một tab mới
+      if (typeof window !== "undefined") {
+        window.open(url, "_blank");
+      }
+
       setShowConfirm(false);
       setIsSuccess(true);
       setTimeout(() => {
@@ -413,7 +409,7 @@ export function JoinSection() {
       }, 120);
     } catch (err: unknown) {
       setShowConfirm(false);
-      setServerError(err instanceof Error ? err.message : "Lỗi gửi đơn, vui lòng thử lại hoặc điền trực tiếp qua Google Form.");
+      setServerError(err instanceof Error ? err.message : "Lỗi chuẩn bị đơn, vui lòng thử lại.");
     } finally {
       setIsSubmitting(false);
     }
@@ -643,56 +639,56 @@ export function JoinSection() {
                   initial={{ opacity: 0, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  className="py-12 text-center space-y-4"
+                  className="py-12 text-center space-y-5"
                 >
                   <div className="w-16 h-16 rounded-3xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
                   <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
-                    {lang === "vi" ? "Nộp Đơn Tuyển Thành Công!" : "Application Submitted Successfully!"}
+                    {lang === "vi" ? "Đã Tự Động Điền Sẵn Vào Google Form!" : "Pre-filled to Google Form Successfully!"}
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto leading-relaxed">
                     {lang === "vi" ? (
                       <>
-                        Cảm ơn bạn <span className="font-bold text-blue-600 dark:text-blue-400">{form.fullName}</span>! Đơn của bạn đã được lưu vào hệ thống CLB STIC và đồng bộ tự động với Google Form. Ban chủ nhiệm sẽ liên hệ với bạn qua email sớm nhất.
+                        Toàn bộ thông tin của bạn (<span className="font-bold text-blue-600 dark:text-blue-400">{form.fullName}</span>) đã được chuẩn bị đầy đủ vào mẫu đơn chính thức. Bạn chỉ cần nhấn nút <strong>&quot;Gửi&quot;</strong> (Submit) trên trang Google Form vừa mở để hoàn tất!
                       </>
                     ) : (
                       <>
-                        Thank you <span className="font-bold text-blue-600 dark:text-blue-400">{form.fullName}</span>! Your application has been recorded and synchronized with the STIC Google Form. We will reach out to you via email soon.
+                        All your details (<span className="font-bold text-blue-600 dark:text-blue-400">{form.fullName}</span>) have been prepared in the official Google Form. Please click <strong>&quot;Submit&quot;</strong> on the opened Google Form tab to finish!
                       </>
                     )}
                   </p>
 
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900 text-xs text-blue-600 dark:text-blue-400 font-medium">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-600 dark:text-blue-400 font-medium">
                     <span>✓</span>
                     <span>
-                      {googleSynced
-                        ? lang === "vi" ? "Đã đồng bộ Google Form thành công" : "Synced with Google Form"
-                        : lang === "vi" ? "Đã lưu vào danh sách chờ duyệt" : "Saved to queue"}
+                      {lang === "vi" ? "100% dữ liệu đã được gán sẵn vào từng ô" : "100% fields pre-filled"}
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-center gap-3 pt-3">
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
+                    <a
+                      href={prefillUrl || "https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/viewform"}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-bold shadow-lg shadow-indigo-500/25 hover:scale-[1.02] transition-all cursor-pointer"
+                    >
+                      <span>✦</span>
+                      <span>{lang === "vi" ? "Mở Lại Google Form Đã Điền Sẵn" : "Open Pre-filled Google Form"}</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+
                     <button
                       onClick={() => {
                         setForm(INITIAL_FORM);
                         setIsSuccess(false);
                         setErrors({});
                       }}
-                      className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-5 py-3 rounded-full border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
-                      <span>{lang === "vi" ? "Gửi đơn khác" : "Submit another response"}</span>
+                      <span>{lang === "vi" ? "Điền đơn mới / Sửa thông tin" : "Edit / Submit Another"}</span>
                     </button>
-                    <a
-                      href="https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/viewform"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 text-xs font-semibold hover:bg-blue-100 transition-all"
-                    >
-                      <span>{lang === "vi" ? "Xem Google Form gốc" : "Open Google Form"}</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
                   </div>
                 </motion.div>
               ) : (
