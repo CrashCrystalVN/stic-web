@@ -8,6 +8,7 @@ import { smoothScrollTo } from "@/lib/utils";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
 import { CLUB_INFO } from "@/lib/data";
+import { ParticleBackground } from "@/components/common/ParticleBackground";
 import { ScrollScaleBanner } from "./ScrollScaleBanner";
 
 const fade = (delay = 0) => ({
@@ -24,6 +25,11 @@ export function HeroSection() {
       id="hero"
       className="relative bg-[#fafbfc] dark:bg-[#080c14] overflow-hidden"
     >
+      {/* Ethereal Sparkling Cosmic Starfield Background (Hiệu ứng sao lấp lánh nền trang bìa) */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        <ParticleBackground />
+      </div>
+
       {/* Google Antigravity Ambient Background Atmosphere */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
         <div className="absolute -top-[10%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] rounded-full bg-gradient-to-b from-blue-500/15 via-indigo-500/10 to-transparent blur-[130px]" />

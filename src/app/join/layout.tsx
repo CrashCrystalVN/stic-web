@@ -4,16 +4,14 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sticdanang.web.app"
 
 export const metadata: Metadata = {
   title: "Đơn Tuyển Thành Viên GEN 1.0",
-  description:
-    "Đơn ứng tuyển CLB Khoa học Kỹ thuật STIC GEN 1.0. Dành cho học sinh THPT trên địa bàn TP. Đà Nẵng đam mê STEM, Robotics, AI, Lập trình, Thiết kế.",
+  description: "Đăng ký tuyển thành viên GEN 1.0 — CLB KHKT STIC Đà Nẵng!",
   openGraph: {
     type: "website",
     locale: "vi_VN",
     url: `${siteUrl}/join`,
     siteName: "CLB KHKT STIC",
     title: "Đơn Tuyển Thành Viên GEN 1.0 — CLB STIC",
-    description:
-      "Đơn ứng tuyển CLB Khoa học Kỹ thuật STIC GEN 1.0. Dành cho học sinh THPT trên địa bàn TP. Đà Nẵng.",
+    description: "Đăng ký tuyển thành viên GEN 1.0 — CLB KHKT STIC Đà Nẵng!",
     images: [
       {
         url: `${siteUrl}/banner.png`,
@@ -28,8 +26,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Đơn Tuyển Thành Viên GEN 1.0 — CLB STIC",
-    description:
-      "Đơn ứng tuyển CLB Khoa học Kỹ thuật STIC GEN 1.0. Dành cho học sinh THPT trên địa bàn TP. Đà Nẵng.",
+    description: "Đăng ký tuyển thành viên GEN 1.0 — CLB KHKT STIC Đà Nẵng!",
     images: [`${siteUrl}/banner.png`],
   },
 };

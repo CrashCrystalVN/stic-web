@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s | STIC Club",
   },
   description:
-    "CLB Khoa học Kỹ thuật STIC — Sân chơi STEM thực chiến dành cho học sinh THPT TP. Đà Nẵng. Đang tuyển thành viên GEN 1.0.",
+    "Sân chơi STEM thực chiến THPT Đà Nẵng. Đăng ký GEN 1.0 ngay!",
   keywords: [
     "STIC",
     "CLB Khoa học kỹ thuật",
@@ -52,8 +52,7 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: "CLB KHKT STIC",
     title: "STIC — CLB Khoa học Kỹ thuật Đà Nẵng",
-    description:
-      "Sân chơi STEM thực chiến cho học sinh THPT TP. Đà Nẵng. 7 ban chuyên môn — Nộp đơn tuyển GEN 1.0 ngay!",
+    description: "Sân chơi STEM thực chiến THPT Đà Nẵng. Đăng ký GEN 1.0 ngay!",
     images: [
       {
         url: `${siteUrl}/banner.png`,
@@ -70,8 +69,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "STIC — CLB Khoa học Kỹ thuật Đà Nẵng",
-    description:
-      "Sân chơi STEM thực chiến cho học sinh THPT TP. Đà Nẵng. Đang tuyển thành viên GEN 1.0!",
+    description: "Sân chơi STEM thực chiến THPT Đà Nẵng. Đăng ký GEN 1.0 ngay!",
     images: [`${siteUrl}/banner.png`],
   },
 
