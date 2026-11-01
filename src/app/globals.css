@@ -1,11 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-sans: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --accent: #2563eb;
   --accent-light: #3b82f6;
 }
@@ -51,21 +49,78 @@ body {
 ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
 .dark ::-webkit-scrollbar-thumb { background: #1e293b; }
 
-/* Gradient text utility — Google Gemini Aurora style */
-.gradient-text {
-  background: linear-gradient(135deg, #1a73e8 0%, #8e24aa 50%, #ea4335 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.dark .gradient-text {
-  background: linear-gradient(135deg, #60a5fa 0%, #c084fc 50%, #f472b6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ========================================================
+   ANIMATED FLOWING GRADIENTS (Liquid Aurora / Gemini style)
+   ======================================================== */
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-/* === GOOGLE GEMINI LIQUID GLASS UTILITIES === */
+@keyframes gradient-rotate {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(25deg);
+  }
+  100% {
+    filter: hue-rotate(0deg);
+  }
+}
+
+/* Gradient text utility — Animated Google Gemini Aurora style */
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    #1a73e8 0%,
+    #7c3aed 25%,
+    #ec4899 50%,
+    #7c3aed 75%,
+    #1a73e8 100%
+  );
+  background-size: 280% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-flow 6s ease-in-out infinite;
+  will-change: background-position;
+  display: inline-block;
+}
+
+.dark .gradient-text {
+  background: linear-gradient(
+    135deg,
+    #60a5fa 0%,
+    #c084fc 25%,
+    #f472b6 50%,
+    #c084fc 75%,
+    #60a5fa 100%
+  );
+  background-size: 280% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-flow 6s ease-in-out infinite;
+  will-change: background-position;
+  display: inline-block;
+}
+
+/* Utility to animate any gradient button, badge, or container */
+.animate-gradient-flow {
+  background-size: 240% 240% !important;
+  animation: gradient-flow 5s ease infinite !important;
+  will-change: background-position;
+}
+
+/* === GOOGLE GEMINI LIQUID GLASS UTILITIES (PC Full Fidelity) === */
 .liquid-glass {
   background: rgba(255, 255, 255, 0.55);
   backdrop-filter: blur(28px) saturate(180%);
@@ -106,6 +161,41 @@ body {
   box-shadow: 
     0 4px 20px rgba(0, 0, 0, 0.35),
     inset 0 1px 1px rgba(255, 255, 255, 0.18);
+}
+
+/* ========================================================
+   DUAL EXPERIENCE: LIGHTWEIGHT MOBILE VERSION (< 768px)
+   Strips heavy GPU backdrop-blur passes on mobile devices
+   to guarantee silky-smooth 60-120fps scrolling & low power
+   ======================================================== */
+@media (max-width: 767px) {
+  .liquid-glass {
+    background: rgba(255, 255, 255, 0.94) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05) !important;
+  }
+
+  .dark .liquid-glass {
+    background: rgba(15, 23, 42, 0.92) !important;
+    backdrop-filter: blur(6px) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .liquid-glass-pill {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+  }
+
+  .dark .liquid-glass-pill {
+    background: rgba(15, 23, 42, 0.92) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+  }
 }
 
 /* Subtle accent glow */

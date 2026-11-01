@@ -11,7 +11,8 @@ import { LangToggle } from "@/components/common/LangToggle";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
 import { CLUB_INFO } from "@/lib/data";
-import { ExternalLink, ArrowRight, ArrowDown, Sparkles } from "lucide-react";
+import { ExternalLink, ArrowRight, ArrowDown, Sparkles, Menu } from "lucide-react";
+import { TableOfContentsDrawer } from "./TableOfContentsDrawer";
 
 export function Navbar() {
   const { t, lang } = useLang();
@@ -20,6 +21,7 @@ export function Navbar() {
 
   const [activeSection, setActiveSection] = useState(isJoin ? "join" : "hero");
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   // Define nav items based on whether user is on the home page or the /join page
   const NAV_ITEMS = useMemo(() => {
@@ -92,12 +94,12 @@ export function Navbar() {
       {/* High-Contrast Liquid Glass Pill: Nền kính mờ khúc xạ sang trọng + chữ đen tương phản cao */}
       <div
         className={cn(
-          "max-w-6xl mx-auto px-4 sm:px-6 transition-all duration-300 rounded-full",
-          "bg-white/80 dark:bg-[#0c121e]/80 backdrop-blur-2xl backdrop-saturate-[190%]",
+          "max-w-6xl mx-auto px-3 sm:px-6 transition-all duration-300 rounded-full",
+          "bg-white/90 dark:bg-[#0c121e]/90 max-md:backdrop-blur-sm md:backdrop-blur-2xl md:backdrop-saturate-[190%]",
           "border border-white/90 dark:border-white/15",
-          "shadow-[0_8px_30px_rgba(15,23,42,0.08),inset_0_1px_1.5px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.03)]",
-          "dark:shadow-[0_16px_40px_rgba(0,0,0,0.6),inset_0_1px_1.5px_rgba(255,255,255,0.2)]",
-          isScrolled ? "py-2" : "py-2.5"
+          "shadow-[0_4px_16px_rgba(15,23,42,0.06),inset_0_1px_1.5px_rgba(255,255,255,0.95)] md:shadow-[0_8px_30px_rgba(15,23,42,0.08),inset_0_1px_1.5px_rgba(255,255,255,0.95),inset_0_-1px_1px_rgba(0,0,0,0.03)]",
+          "dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)] md:dark:shadow-[0_16px_40px_rgba(0,0,0,0.6),inset_0_1px_1.5px_rgba(255,255,255,0.2)]",
+          isScrolled ? "py-1.5 sm:py-2" : "py-2 sm:py-2.5"
         )}
       >
         <div className="flex items-center justify-between">
@@ -187,33 +189,52 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Right: lang + theme + CTA */}
-          <div className="flex items-center gap-2 shrink-0">
+          {/* Right: lang + theme + CTA + Mobile Menu Button */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <LangToggle />
             <ThemeToggle />
             {isJoin ? (
               <button
                 onClick={() => scrollToSection("application-form")}
                 title={lang === "vi" ? "Cuộn nhanh xuống đơn ứng tuyển" : "Jump to application form"}
-                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-bold leading-none shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer select-none"
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-bold leading-none shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer select-none animate-gradient-flow"
               >
                 <Sparkles className="w-3.5 h-3.5 shrink-0 text-white" />
-                <span className="leading-none pt-px">{lang === "vi" ? "Điền đơn ngay" : "Apply Now"}</span>
+                <span className="leading-none pt-px">{lang === "vi" ? "Điền đơn" : "Apply"}</span>
                 <ArrowDown className="w-3.5 h-3.5 shrink-0 text-white/90" />
               </button>
             ) : (
               <Link
                 href="/join"
-                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-bold leading-none shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer select-none"
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4.5 py-2 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-bold leading-none shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:scale-[1.03] transition-all cursor-pointer select-none animate-gradient-flow"
               >
                 <Sparkles className="w-3.5 h-3.5 shrink-0 text-white" />
                 <span className="leading-none pt-px">{t(T.nav.apply)}</span>
                 <ArrowRight className="w-3.5 h-3.5 shrink-0 text-white/90" />
               </Link>
             )}
+
+            {/* Mobile Drawer Menu Toggle (Version Điện thoại nhẹ & tiện lợi) */}
+            <button
+              onClick={() => setIsMobileDrawerOpen(true)}
+              className="md:hidden inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100/80 dark:bg-white/10 text-slate-800 dark:text-slate-200 hover:bg-slate-200/80 dark:hover:bg-white/20 transition-colors cursor-pointer select-none"
+              aria-label="Mở menu danh mục"
+            >
+              <Menu className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Lightweight Drawer dành riêng cho Mobile */}
+      <TableOfContentsDrawer
+        isOpen={isMobileDrawerOpen}
+        onClose={() => setIsMobileDrawerOpen(false)}
+        onNavigate={(id) => {
+          setIsMobileDrawerOpen(false);
+          scrollToSection(id);
+        }}
+      />
     </motion.header>
   );
 }

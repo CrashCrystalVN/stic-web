@@ -173,7 +173,7 @@ export function ProjectsSection() {
 
             <Link
               href="/join"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.03] transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.03] transition-all cursor-pointer animate-gradient-flow"
             >
               <span>{lang === "vi" ? "Nộp đơn để cùng xây dựng dự án GEN 1.0" : "Apply to Build GEN 1.0 Projects"}</span>
               <ArrowRight className="w-4 h-4" />

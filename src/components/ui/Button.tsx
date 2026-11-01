@@ -30,7 +30,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary:
-        "bg-gradient-to-r from-blue-600 to-sky-500 text-white font-semibold shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/35 hover:brightness-105",
+        "bg-gradient-to-r from-blue-600 to-sky-500 text-white font-semibold shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/35 hover:brightness-105 animate-gradient-flow",
       secondary:
         "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-blue-100 dark:border-slate-700 hover:bg-blue-50/60 dark:hover:bg-slate-700/60 shadow-2xs",
       outline:
@@ -38,7 +38,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ghost:
         "text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/60 dark:hover:bg-slate-800/60",
       accent:
-        "bg-gradient-to-r from-sky-400 to-indigo-500 text-white font-semibold shadow-md shadow-sky-400/25 hover:shadow-sky-400/35 hover:brightness-105",
+        "bg-gradient-to-r from-sky-400 to-indigo-500 text-white font-semibold shadow-md shadow-sky-400/25 hover:shadow-sky-400/35 hover:brightness-105 animate-gradient-flow",
     };
 
     const sizes = {

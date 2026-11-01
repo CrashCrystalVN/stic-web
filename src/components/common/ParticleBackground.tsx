@@ -18,6 +18,10 @@ export function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
+    // Tối ưu Mobile: Không chạy loop trên màn hình nhỏ hoặc máy bật reduce-motion
+    if (typeof window === "undefined" || window.innerWidth < 768) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -65,7 +69,6 @@ export function ParticleBackground() {
       ctx.shadowColor = color;
 
       ctx.beginPath();
-      // 4-point star sparkle
       for (let i = 0; i < 4; i++) {
         ctx.lineTo(Math.cos((i * Math.PI) / 2) * (r * 2.4), Math.sin((i * Math.PI) / 2) * (r * 2.4));
         ctx.lineTo(Math.cos((i * Math.PI) / 2 + Math.PI / 4) * (r * 0.6), Math.sin((i * Math.PI) / 2 + Math.PI / 4) * (r * 0.6));

@@ -48,7 +48,7 @@ export function CountdownTimer({ className = "" }: CountdownTimerProps) {
         {/* Action Button (Navigates to /join subpage) */}
         <Link
           href="/join"
-          className="group shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-md shadow-blue-600/20 hover:shadow-blue-600/35 hover:scale-[1.03] transition-all cursor-pointer"
+          className="group shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-xs font-semibold shadow-md shadow-blue-600/20 hover:shadow-blue-600/35 hover:scale-[1.03] transition-all cursor-pointer animate-gradient-flow"
         >
           <span>{t(T.countdown.cta)}</span>
           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -70,7 +70,7 @@ export function CountdownTimer({ className = "" }: CountdownTimerProps) {
 
             {/* Glowing Soon text */}
             <div className="relative">
-              <span className="text-2xl sm:text-3xl font-extrabold tracking-wider bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 dark:from-blue-400 dark:via-sky-300 dark:to-indigo-400 bg-clip-text text-transparent uppercase select-none animate-pulse">
+              <span className="text-2xl sm:text-3xl font-extrabold tracking-wider bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600 dark:from-blue-400 dark:via-sky-300 dark:to-indigo-400 bg-clip-text text-transparent uppercase select-none animate-gradient-flow">
                 {t(T.countdown.soon)}
               </span>
             </div>

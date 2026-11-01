@@ -43,7 +43,7 @@ export function HeroSection() {
             </span>
             <span className="relative flex h-2 w-2 ml-0.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-60" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-gradient-to-r from-blue-500 to-purple-500" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-gradient-to-r from-blue-500 to-purple-500 animate-gradient-flow" />
             </span>
           </div>
         </motion.div>
@@ -74,7 +74,7 @@ export function HeroSection() {
           {/* Primary Gemini Gradient Button (Navigates to /join subpage) */}
           <Link
             href="/join"
-            className="group relative inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-sm font-semibold transition-all duration-300 cursor-pointer shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.03] active:scale-[0.98]"
+            className="group relative inline-flex items-center gap-2.5 px-7 py-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 text-white text-sm font-semibold transition-all duration-300 cursor-pointer shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:scale-[1.03] active:scale-[0.98] animate-gradient-flow"
           >
             <span className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <span>{t(T.hero.cta1)}</span>

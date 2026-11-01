@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { LangProvider } from "@/context/LangContext";
 import { MainWrapper } from "@/components/common/MainWrapper";
 import { FormPreloader } from "@/components/common/FormPreloader";
+import { ParticleBackground } from "@/components/common/ParticleBackground";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
@@ -13,6 +14,7 @@ const font = Plus_Jakarta_Sans({
   weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-sans",
   display: "swap",
+  preload: true,
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sticdanang.web.app";
@@ -105,14 +107,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <head>
-        {/* Tối ưu kết nối sớm tới máy chủ Google Form để hiển thị siêu tốc */}
-        <link rel="preconnect" href="https://docs.google.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://docs.google.com" />
-        <link rel="preconnect" href="https://lh3.googleusercontent.com" />
+        {/* Packet Prioritization: Nạp tài nguyên quan trọng LCP và DNS sớm nhất */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://docs.google.com" />
+        <link rel="preconnect" href="https://docs.google.com" crossOrigin="anonymous" />
+        <link rel="preload" as="image" href="/logo.png" fetchPriority="high" />
+        <link rel="preload" as="image" href="/banner.png" fetchPriority="high" />
       </head>
       <body
-        className={`${font.variable} font-sans min-h-screen antialiased flex flex-col`}
+        className={`${font.variable} font-sans min-h-screen antialiased flex flex-col relative`}
       >
         <ThemeProvider
           attribute="class"
@@ -120,6 +124,10 @@ export default function RootLayout({
           enableSystem={false}
         >
           <LangProvider>
+            {/* Version PC: Ethereal Star Particle Canvas (Ẩn hoàn toàn trên Mobile để tối ưu 100% pin & 120fps) */}
+            <div className="hidden md:block pointer-events-none fixed inset-0 z-0 overflow-hidden">
+              <ParticleBackground />
+            </div>
             <Navbar />
             <MainWrapper>{children}</MainWrapper>
             <Footer />
