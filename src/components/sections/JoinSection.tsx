@@ -225,26 +225,48 @@ export function JoinSection() {
   // Validation
   const validate = (): boolean => {
     const errs: FieldErrors = {};
-    const req = lang === "vi" ? "Trường này là bắt buộc." : "This field is required.";
 
-    if (!form.fullName.trim()) errs.fullName = req;
-    if (!form.grade.trim()) errs.grade = req;
+    if (!form.fullName.trim()) {
+      errs.fullName = lang === "vi" ? "Vui lòng nhập họ và tên của bạn." : "Please enter your full name.";
+    }
+    if (!form.grade.trim()) {
+      errs.grade = lang === "vi" ? "Vui lòng nhập khối lớp và trường THPT đang theo học." : "Please enter your grade and high school.";
+    }
     if (!form.phone.trim()) {
-      errs.phone = req;
+      errs.phone = lang === "vi" ? "Vui lòng nhập số điện thoại hoặc Zalo để liên hệ." : "Please enter your phone or Zalo number.";
     } else if (!/^[0-9]{10}$/.test(form.phone)) {
-      errs.phone = lang === "vi" ? "Số điện thoại phải đúng 10 chữ số." : "Phone must be exactly 10 digits.";
+      errs.phone = lang === "vi" ? "Số điện thoại phải đủ 10 chữ số (ví dụ: 0912345678)." : "Phone number must be exactly 10 digits.";
     }
     if (!form.email.trim()) {
-      errs.email = req;
+      errs.email = lang === "vi" ? "Vui lòng nhập email nhận kết quả tuyển chọn." : "Please enter your email address.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      errs.email = lang === "vi" ? "Vui lòng nhập email hợp lệ (ví dụ: ten@gmail.com)." : "Please enter a valid email address.";
+      errs.email = lang === "vi" ? "Email chưa đúng định dạng (ví dụ: ten@gmail.com)." : "Please enter a valid email address (e.g. name@gmail.com).";
     }
-    if (!form.facebook.trim()) errs.facebook = req;
-    if (!form.reason.trim()) errs.reason = req;
-    if (!form.ideaExecution.trim()) errs.ideaExecution = req;
+    if (!form.facebook.trim()) {
+      errs.facebook = lang === "vi" ? "Vui lòng dán link Facebook cá nhân để Ban chủ nhiệm liên lạc." : "Please enter your Facebook profile link.";
+    }
+    if (!form.reason.trim()) {
+      errs.reason = lang === "vi" ? "Hãy chia sẻ ngắn gọn lý do hoặc mục tiêu khi bạn gia nhập STIC." : "Please share why you want to join STIC Club.";
+    }
+    if (!form.ideaExecution.trim()) {
+      errs.ideaExecution = lang === "vi" ? "Hãy chia sẻ góc nhìn hoặc cách bạn sẽ tìm giải pháp thực hiện." : "Please share how you would approach this project idea.";
+    }
 
     setErrors(errs);
-    return Object.keys(errs).length === 0;
+
+    const firstKey = Object.keys(errs)[0];
+    if (firstKey) {
+      setTimeout(() => {
+        const el = document.querySelector(`[name="${firstKey}"]`) as HTMLElement;
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
+          el.focus();
+        }
+      }, 100);
+      return false;
+    }
+
+    return true;
   };
 
   const handleSubmitClick = (e: React.FormEvent) => {
