@@ -8,14 +8,12 @@
     "source": "dataconnect"
   },
   "hosting": {
-    "source": ".",
+    "public": "out",
+    "cleanUrls": true,
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "frameworksBackend": {
-      "region": "asia-east1"
-    }
+    ]
   }
 }

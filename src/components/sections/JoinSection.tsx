@@ -245,23 +245,48 @@ export function JoinSection() {
     }
   };
 
+  const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/formResponse";
+
   const handleConfirm = async () => {
     setIsSubmitting(true);
     try {
-      const res = await fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Lỗi không xác định.");
+      const gformData = new URLSearchParams();
+      gformData.append("entry.2005620554", form.fullName || "");
+      gformData.append("entry.1065046570", form.grade || "");
+      gformData.append("entry.1045781291", form.email || "");
+      gformData.append("entry.1166974658", form.facebook || "");
+      gformData.append("entry.839337160", form.phone || "");
+      gformData.append("entry.25400531", form.reason || "");
 
-      setGoogleSynced(data.googleSynced ?? true);
+      if (Array.isArray(form.interests) && form.interests.length > 0) {
+        for (const item of form.interests) {
+          gformData.append("entry.352066020", item);
+        }
+      } else {
+        gformData.append("entry.352066020", "💡 Innovation & Creative Projects");
+      }
+
+      gformData.append("entry.655844835", form.pastClubExperience || "Chưa từng");
+      gformData.append("entry.1094832172", form.pastStemExperience || "Chưa từng");
+      if (form.projectDescription) {
+        gformData.append("entry.1786574990", form.projectDescription);
+      }
+      gformData.append("entry.1623231100", form.ideaExecution || "");
+      gformData.append("entry.1860646974", form.commitment || "Có thể tham gia thường xuyên");
+
+      await fetch(GOOGLE_FORM_ACTION, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: gformData.toString(),
+      });
+
+      setGoogleSynced(true);
       setShowConfirm(false);
       setIsSuccess(true);
     } catch (err: unknown) {
       setShowConfirm(false);
-      setServerError(err instanceof Error ? err.message : "Lỗi máy chủ, vui lòng thử lại.");
+      setServerError(err instanceof Error ? err.message : "Lỗi gửi đơn, vui lòng thử lại hoặc điền trực tiếp qua Google Form.");
     } finally {
       setIsSubmitting(false);
     }
