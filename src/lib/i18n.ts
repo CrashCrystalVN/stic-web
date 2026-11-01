@@ -16,8 +16,8 @@ export const translations = {
   // ── HERO ────────────────────────────────────────────────────────────────────
   hero: {
     badge:      { vi: "Đang mở đơn · GEN 1.0",                   en: "Now Open · GEN 1.0" },
-    heading1:   { vi: "Empowering",                              en: "Empowering" },
-    heading2:   { vi: "The Future with",                         en: "The Future with" },
+    heading1:   { vi: "Kiến tạo",                                en: "Empowering" },
+    heading2:   { vi: "Tương lai cùng",                          en: "The Future with" },
     tagline:    { vi: "Science · Technology · Innovation Club",    en: "Science · Technology · Innovation Club" },
     desc:       { vi: "Không gian sáng tạo dành riêng cho",       en: "A creative space built for" },
     descBold:   { vi: "học sinh THPT Đà Nẵng",                    en: "high school students in Da Nang" },
