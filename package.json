@@ -13,6 +13,7 @@
     "db:seed": "node prisma/seed.js"
   },
   "dependencies": {
+    "@dataconnect/generated": "file:src/dataconnect-generated",
     "@prisma/client": "^6.19.3",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-navigation-menu": "^1.2.0",

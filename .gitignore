@@ -39,3 +39,6 @@ prisma/*.db-journal
 
 # firebase
 .firebase
+
+firebase-debug.log*
+dataconnect/.dataconnect/pgliteData/

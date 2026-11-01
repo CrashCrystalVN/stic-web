@@ -1,0 +1,65 @@
+# ========================================================
+# STIC CLUB - QUERIES (FIREBASE SQL CONNECT)
+# ========================================================
+
+# 1. Danh sách đơn nộp tuyển sinh (Public hoặc Admin)
+query ListRegistrations @auth(level: PUBLIC, insecureReason: "Publicly accessible registration list for dashboard.") {
+  registrations(orderBy: [{ createdAt: DESC }]) {
+    id
+    fullName
+    grade
+    phone
+    email
+    facebook
+    reason
+    interests
+    pastClubExperience
+    pastStemExperience
+    projectDescription
+    ideaExecution
+    commitment
+    status
+    createdAt
+  }
+}
+
+# 2. Chi tiết 1 đơn nộp theo ID
+query GetRegistrationById($id: UUID!) @auth(level: PUBLIC, insecureReason: "Lookup registration by ID.") {
+  registration(id: $id) {
+    id
+    fullName
+    grade
+    phone
+    email
+    facebook
+    reason
+    interests
+    status
+    createdAt
+  }
+}
+
+# 3. Lấy danh sách 7 mảng hoạt động
+query ListDepartments @auth(level: PUBLIC, insecureReason: "Public list of departments.") {
+  departments(orderBy: [{ order: ASC }]) {
+    id
+    name
+    code
+    description
+    tags
+    order
+  }
+}
+
+# 4. Lấy danh sách dự án GEN 1.0
+query ListClubProjects @auth(level: PUBLIC, insecureReason: "Public list of club projects.") {
+  clubProjects(orderBy: [{ createdAt: DESC }]) {
+    id
+    title
+    category
+    description
+    stage
+    progress
+    createdAt
+  }
+}

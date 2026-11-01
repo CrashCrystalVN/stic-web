@@ -1,0 +1,87 @@
+# ========================================================
+# STIC CLUB - LOCAL SEED DATA (FIREBASE SQL CONNECT)
+# ========================================================
+
+mutation @transaction {
+  department_insertMany(
+    data: [
+      {
+        id: "700e8400-e29b-41d4-a716-446655440001"
+        name: "AI & Coding"
+        code: "AI_CODING"
+        description: "Khám phá Machine Learning, lập trình Python/C++ và xây dựng ứng dụng AI thực tế."
+        tags: "Python, AI/ML, C++"
+        order: 1
+      },
+      {
+        id: "700e8400-e29b-41d4-a716-446655440002"
+        name: "Robotics & Engineering"
+        code: "ROBOTICS"
+        description: "Thiết kế và chế tạo robot, mạch điện tử, Arduino/ESP32 từ xe tự hành đến tay máy."
+        tags: "Arduino, ESP32, PCB Design"
+        order: 2
+      },
+      {
+        id: "700e8400-e29b-41d4-a716-446655440003"
+        name: "Khoa học Tự nhiên"
+        code: "NATURAL_SCI"
+        description: "Thực hiện các thí nghiệm Vật lý, Hóa học, Sinh học ứng dụng trong đời sống."
+        tags: "Thí nghiệm, STEM, Sinh hóa"
+        order: 3
+      },
+      {
+        id: "700e8400-e29b-41d4-a716-446655440004"
+        name: "Môi trường & Năng lượng"
+        code: "ENVIRONMENT"
+        description: "Nghiên cứu năng lượng tái tạo, xử lý nước, rác thải và giải pháp xanh bền vững."
+        tags: "Năng lượng xanh, Tái chế"
+        order: 4
+      },
+      {
+        id: "700e8400-e29b-41d4-a716-446655440005"
+        name: "Sáng tạo & Đổi mới (Makerspace)"
+        code: "MAKERSPACE"
+        description: "In 3D, thiết kế CAD, gia công mô hình và biến mọi ý tưởng phác thảo thành sản phẩm."
+        tags: "In 3D, CAD/CAM, Prototyping"
+        order: 5
+      },
+      {
+        id: "700e8400-e29b-41d4-a716-446655440006"
+        name: "Truyền thông & Sự kiện"
+        code: "MEDIA_EVENTS"
+        description: "Quản lý hình ảnh, fanpage, chụp ảnh/quay phim và tổ chức các workshop STEM."
+        tags: "Content, Design, Video, Event"
+        order: 6
+      },
+      {
+        id: "700e8400-e29b-41d4-a716-446655440007"
+        name: "Hậu cần & Tài chính"
+        code: "LOGISTICS"
+        description: "Quản lý ngân sách, mua sắm linh kiện, điều phối thiết bị phòng lab và hậu cần sự kiện."
+        tags: "Tài chính, Mua sắm, Quản lý kho"
+        order: 7
+      }
+    ]
+  )
+
+  clubProject_insertMany(
+    data: [
+      {
+        id: "800e8400-e29b-41d4-a716-446655440001"
+        title: "Hệ thống Phân loại Rác Thông minh dùng AI"
+        category: "AI & Robotics"
+        description: "Camera AI nhận diện rác thải tự động và phân luồng vào ngăn rác tương ứng."
+        stage: "INCUBATING"
+        progress: 25
+      },
+      {
+        id: "800e8400-e29b-41d4-a716-446655440002"
+        title: "Trạm Quan trắc Chất lượng Không khí IoT"
+        category: "IoT & Môi trường"
+        description: "Cảm biến đo bụi mịn PM2.5, nhiệt độ, độ ẩm và cập nhật dữ liệu trực tuyến qua Dashboard."
+        stage: "PROTOTYPING"
+        progress: 60
+      }
+    ]
+  )
+}

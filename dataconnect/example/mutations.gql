@@ -1,0 +1,65 @@
+# ========================================================
+# STIC CLUB - MUTATIONS (FIREBASE SQL CONNECT)
+# ========================================================
+
+# 1. Nộp đơn đăng ký thành viên mới (GEN 1.0)
+mutation CreateRegistration(
+  $fullName: String!
+  $grade: String!
+  $phone: String!
+  $email: String!
+  $facebook: String!
+  $reason: String!
+  $interests: String
+  $pastClubExperience: String
+  $pastStemExperience: String
+  $projectDescription: String
+  $ideaExecution: String
+  $commitment: String!
+) @auth(level: PUBLIC, insecureReason: "Public application submission for high school students.") {
+  registration_insert(data: {
+    fullName: $fullName
+    grade: $grade
+    phone: $phone
+    email: $email
+    facebook: $facebook
+    reason: $reason
+    interests: $interests
+    pastClubExperience: $pastClubExperience
+    pastStemExperience: $pastStemExperience
+    projectDescription: $projectDescription
+    ideaExecution: $ideaExecution
+    commitment: $commitment
+  })
+}
+
+# 2. Cập nhật trạng thái duyệt đơn (Pending, Reviewing, Accepted, Rejected)
+mutation UpdateRegistrationStatus(
+  $id: UUID!
+  $status: String!
+) @auth(level: PUBLIC, insecureReason: "Update registration status.") {
+  registration_update(
+    id: $id
+    data: {
+      status: $status
+      updatedAt_expr: "request.time"
+    }
+  )
+}
+
+# 3. Thêm mới dự án KHKT
+mutation CreateClubProject(
+  $title: String!
+  $category: String!
+  $description: String!
+  $stage: String!
+  $progress: Int!
+) @auth(level: PUBLIC, insecureReason: "Add new project.") {
+  clubProject_insert(data: {
+    title: $title
+    category: $category
+    description: $description
+    stage: $stage
+    progress: $progress
+  })
+}

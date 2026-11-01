@@ -1,0 +1,338 @@
+extend type Mutation {
+  """
+  ✨ Insert a single `ClubProject` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  clubProject_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: ClubProject_Data!
+  ): ClubProject_KeyOutput! @fdc_generated(from: "ClubProject", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Department` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  department_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Department_Data!
+  ): Department_KeyOutput! @fdc_generated(from: "Department", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert a single `Registration` into the table and return its key. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  registration_insert(
+    """
+    Data object to insert into the table.
+    """
+    data: Registration_Data!
+  ): Registration_KeyOutput! @fdc_generated(from: "Registration", purpose: INSERT_SINGLE)
+  """
+  ✨ Insert `ClubProject` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  clubProject_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [ClubProject_Data!]!
+  ): [ClubProject_KeyOutput!]! @fdc_generated(from: "ClubProject", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Department` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  department_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Department_Data!]!
+  ): [Department_KeyOutput!]! @fdc_generated(from: "Department", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert `Registration` objects into the table and return their keys. Columns not specified in `data` will receive defaults (e.g. `null`).
+  """
+  registration_insertMany(
+    """
+    List of data objects to insert into the table.
+    """
+    data: [Registration_Data!]!
+  ): [Registration_KeyOutput!]! @fdc_generated(from: "Registration", purpose: INSERT_MULTIPLE)
+  """
+  ✨ Insert or update a single `ClubProject` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ClubProject`.
+  """
+  clubProject_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: ClubProject_Data!
+  ): ClubProject_KeyOutput! @fdc_generated(from: "ClubProject", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Department` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Department`.
+  """
+  department_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Department_Data!
+  ): Department_KeyOutput! @fdc_generated(from: "Department", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update a single `Registration` into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Registration`.
+  """
+  registration_upsert(
+    """
+    Data object to insert or update if it already exists.
+    """
+    data: Registration_Data!
+  ): Registration_KeyOutput! @fdc_generated(from: "Registration", purpose: UPSERT_SINGLE)
+  """
+  ✨ Insert or update `ClubProject` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `ClubProject`.
+  """
+  clubProject_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [ClubProject_Data!]!
+  ): [ClubProject_KeyOutput!]! @fdc_generated(from: "ClubProject", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Department` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Department`.
+  """
+  department_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Department_Data!]!
+  ): [Department_KeyOutput!]! @fdc_generated(from: "Department", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Insert or update `Registration` objects into the table, based on the primary key. Returns the key of the newly inserted or existing updated `Registration`.
+  """
+  registration_upsertMany(
+    """
+    List of data objects to insert or update if it already exists.
+    """
+    data: [Registration_Data!]!
+  ): [Registration_KeyOutput!]! @fdc_generated(from: "Registration", purpose: UPSERT_MULTIPLE)
+  """
+  ✨ Update a single `ClubProject` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `ClubProject` or `null` if not found.
+  """
+  clubProject_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ClubProject_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ClubProject_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: ClubProject_Data!
+  ): ClubProject_KeyOutput @fdc_generated(from: "ClubProject", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Department` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Department` or `null` if not found.
+  """
+  department_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Department_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Department_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Department_Data!
+  ): Department_KeyOutput @fdc_generated(from: "Department", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update a single `Registration` based on `id`, `key` or `first`, setting columns specified in `data`. Returns the key of the updated `Registration` or `null` if not found.
+  """
+  registration_update(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Registration_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Registration_FirstRow
+
+    """
+    Data object containing fields to be updated.
+    """
+    data: Registration_Data!
+  ): Registration_KeyOutput @fdc_generated(from: "Registration", purpose: UPDATE_SINGLE)
+  """
+  ✨ Update `ClubProject` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  clubProject_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: ClubProject_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: ClubProject_Data!
+  ): Int! @fdc_generated(from: "ClubProject", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Department` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  department_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Department_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Department_Data!
+  ): Int! @fdc_generated(from: "Department", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Update `Registration` objects matching `where` conditions (or `all`, if true) according to `data`. Returns the number of rows updated.
+  """
+  registration_updateMany(
+    """
+    Filter condition to specify which rows to update.
+    """
+    where: Registration_Filter
+
+    """
+    Set to true to update all rows.
+    """
+    all: Boolean = false
+
+    """
+    Data object containing fields to update.
+    """
+    data: Registration_Data!
+  ): Int! @fdc_generated(from: "Registration", purpose: UPDATE_MULTIPLE)
+  """
+  ✨ Delete a single `ClubProject` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  clubProject_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: ClubProject_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: ClubProject_FirstRow
+  ): ClubProject_KeyOutput @fdc_generated(from: "ClubProject", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Department` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  department_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Department_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Department_FirstRow
+  ): Department_KeyOutput @fdc_generated(from: "Department", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete a single `Registration` based on `id`, `key` or `first` and return its key (or `null` if not found).
+  """
+  registration_delete(
+    """
+    The unique ID of the object.
+    """
+    id: UUID
+
+    """
+    The key used to identify the object.
+    """
+    key: Registration_Key
+
+    """
+    Fetch the first row based on the filters and ordering.
+    """
+    first: Registration_FirstRow
+  ): Registration_KeyOutput @fdc_generated(from: "Registration", purpose: DELETE_SINGLE)
+  """
+  ✨ Delete `ClubProject` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  clubProject_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: ClubProject_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "ClubProject", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Department` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  department_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Department_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Department", purpose: DELETE_MULTIPLE)
+  """
+  ✨ Delete `Registration` objects matching `where` conditions (or `all`, if true). Returns the number of rows deleted.
+  """
+  registration_deleteMany(
+    """
+    Filter condition to specify which rows to delete.
+    """
+    where: Registration_Filter
+
+    """
+    Set to true to delete all rows.
+    """
+    all: Boolean = false
+  ): Int! @fdc_generated(from: "Registration", purpose: DELETE_MULTIPLE)
+}

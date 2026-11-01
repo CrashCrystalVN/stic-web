@@ -1,0 +1,45 @@
+# ========================================================
+# STIC CLUB - FIREBASE SQL CONNECT (DATA CONNECT) SCHEMA
+# Science · Technology · Innovation Club Database
+# ========================================================
+
+# 1. BẢNG ĐƠN ĐĂNG KÝ TUYỂN THÀNH VIÊN (GEN 1.0)
+type Registration @table {
+  id: UUID! @default(expr: "uuidV4()")
+  fullName: String!
+  grade: String!
+  phone: String!
+  email: String!
+  facebook: String!
+  reason: String!
+  interests: String
+  pastClubExperience: String
+  pastStemExperience: String
+  projectDescription: String
+  ideaExecution: String
+  commitment: String!
+  status: String! @default(value: "PENDING") # PENDING, REVIEWING, ACCEPTED, REJECTED
+  createdAt: Timestamp! @default(expr: "request.time")
+  updatedAt: Timestamp! @default(expr: "request.time")
+}
+
+# 2. BẢNG CÁC MẢNG HOẠT ĐỘNG (7 DEPARTMENTS)
+type Department @table {
+  id: UUID! @default(expr: "uuidV4()")
+  name: String!
+  code: String! @unique
+  description: String!
+  tags: String
+  order: Int! @default(value: 0)
+}
+
+# 3. BẢNG DỰ ÁN GEN 1.0 (PROJECTS)
+type ClubProject @table {
+  id: UUID! @default(expr: "uuidV4()")
+  title: String!
+  category: String!
+  description: String!
+  stage: String! @default(value: "INCUBATING") # INCUBATING, PROTOTYPING, LAUNCHED
+  progress: Int! @default(value: 0)
+  createdAt: Timestamp! @default(expr: "request.time")
+}
