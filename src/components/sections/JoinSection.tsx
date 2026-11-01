@@ -394,6 +394,35 @@ export function JoinSection() {
         // ignore storage errors
       }
 
+      // Lưu dự phòng trực tiếp vào Cloud Firestore (Dual-Sync)
+      try {
+        import("firebase/firestore").then(({ collection, addDoc, serverTimestamp }) => {
+          import("@/lib/firebase").then(({ db }) => {
+            addDoc(collection(db, "registrations"), {
+              fullName: form.fullName.trim(),
+              grade: form.grade.trim(),
+              email: form.email.trim(),
+              facebook: form.facebook.trim(),
+              phone: form.phone.trim(),
+              reason: form.reason.trim(),
+              interests: form.interests,
+              pastClubExperience: form.pastClubExperience,
+              pastStemExperience: form.pastStemExperience,
+              projectDescription: form.projectDescription?.trim() || "",
+              ideaExecution: form.ideaExecution.trim(),
+              commitment: form.commitment,
+              status: "PENDING",
+              createdAt: serverTimestamp(),
+              updatedAt: serverTimestamp(),
+            }).catch(() => {
+              // Non-blocking fallback
+            });
+          }).catch(() => {});
+        }).catch(() => {});
+      } catch {
+        // ignore background sync
+      }
+
       setShowConfirm(false);
       setIsSuccess(true);
       setTimeout(() => {
