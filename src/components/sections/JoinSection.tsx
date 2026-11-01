@@ -62,14 +62,64 @@ const EXPERIENCE_OPTIONS = [
   { value: "Chưa từng", labelVi: "Chưa từng", labelEn: "Not yet" },
 ];
 
-type FieldErrors = Partial<Record<keyof STICApplicationData, string>>;
+export type ErrorKey =
+  | "REQUIRED_NAME"
+  | "REQUIRED_GRADE"
+  | "REQUIRED_PHONE"
+  | "INVALID_PHONE"
+  | "REQUIRED_EMAIL"
+  | "INVALID_EMAIL"
+  | "REQUIRED_FACEBOOK"
+  | "REQUIRED_REASON"
+  | "REQUIRED_IDEA";
+
+type FieldErrors = Partial<Record<keyof STICApplicationData, ErrorKey>>;
+
+const ERROR_MESSAGES: Record<ErrorKey, { vi: string; en: string }> = {
+  REQUIRED_NAME: {
+    vi: "Vui lòng nhập họ và tên của bạn.",
+    en: "Please enter your full name.",
+  },
+  REQUIRED_GRADE: {
+    vi: "Vui lòng nhập khối lớp và trường THPT đang theo học.",
+    en: "Please enter your grade and high school.",
+  },
+  REQUIRED_PHONE: {
+    vi: "Vui lòng nhập số điện thoại hoặc Zalo để liên hệ.",
+    en: "Please enter your phone or Zalo number.",
+  },
+  INVALID_PHONE: {
+    vi: "Số điện thoại phải đủ 10 chữ số (ví dụ: 0912345678).",
+    en: "Phone number must be exactly 10 digits.",
+  },
+  REQUIRED_EMAIL: {
+    vi: "Vui lòng nhập email nhận kết quả tuyển chọn.",
+    en: "Please enter your email address.",
+  },
+  INVALID_EMAIL: {
+    vi: "Email chưa đúng định dạng (ví dụ: ten@gmail.com).",
+    en: "Please enter a valid email address (e.g. name@gmail.com).",
+  },
+  REQUIRED_FACEBOOK: {
+    vi: "Vui lòng dán link Facebook cá nhân để Ban chủ nhiệm liên lạc.",
+    en: "Please enter your Facebook profile link.",
+  },
+  REQUIRED_REASON: {
+    vi: "Hãy chia sẻ ngắn gọn lý do hoặc mục tiêu khi bạn gia nhập STIC.",
+    en: "Please share why you want to join STIC Club.",
+  },
+  REQUIRED_IDEA: {
+    vi: "Hãy chia sẻ góc nhìn hoặc cách bạn sẽ tìm giải pháp thực hiện.",
+    en: "Please share how you would approach this project idea.",
+  },
+};
 
 const inputBase =
   "w-full px-3.5 py-2.5 rounded-xl border bg-white dark:bg-slate-900/60 text-slate-900 dark:text-white text-xs placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all";
 const inputOk = "border-slate-200 dark:border-slate-700/80 focus:border-blue-400 dark:focus:border-blue-600";
 const inputErr = "border-rose-400 dark:border-rose-600 focus:ring-rose-400/30";
 
-function cls(err?: string) {
+function cls(err?: ErrorKey) {
   return `${inputBase} ${err ? inputErr : inputOk}`;
 }
 
@@ -226,31 +276,21 @@ export function JoinSection() {
   const validate = (): boolean => {
     const errs: FieldErrors = {};
 
-    if (!form.fullName.trim()) {
-      errs.fullName = lang === "vi" ? "Vui lòng nhập họ và tên của bạn." : "Please enter your full name.";
-    }
-    if (!form.grade.trim()) {
-      errs.grade = lang === "vi" ? "Vui lòng nhập khối lớp và trường THPT đang theo học." : "Please enter your grade and high school.";
-    }
+    if (!form.fullName.trim()) errs.fullName = "REQUIRED_NAME";
+    if (!form.grade.trim()) errs.grade = "REQUIRED_GRADE";
     if (!form.phone.trim()) {
-      errs.phone = lang === "vi" ? "Vui lòng nhập số điện thoại hoặc Zalo để liên hệ." : "Please enter your phone or Zalo number.";
+      errs.phone = "REQUIRED_PHONE";
     } else if (!/^[0-9]{10}$/.test(form.phone)) {
-      errs.phone = lang === "vi" ? "Số điện thoại phải đủ 10 chữ số (ví dụ: 0912345678)." : "Phone number must be exactly 10 digits.";
+      errs.phone = "INVALID_PHONE";
     }
     if (!form.email.trim()) {
-      errs.email = lang === "vi" ? "Vui lòng nhập email nhận kết quả tuyển chọn." : "Please enter your email address.";
+      errs.email = "REQUIRED_EMAIL";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      errs.email = lang === "vi" ? "Email chưa đúng định dạng (ví dụ: ten@gmail.com)." : "Please enter a valid email address (e.g. name@gmail.com).";
+      errs.email = "INVALID_EMAIL";
     }
-    if (!form.facebook.trim()) {
-      errs.facebook = lang === "vi" ? "Vui lòng dán link Facebook cá nhân để Ban chủ nhiệm liên lạc." : "Please enter your Facebook profile link.";
-    }
-    if (!form.reason.trim()) {
-      errs.reason = lang === "vi" ? "Hãy chia sẻ ngắn gọn lý do hoặc mục tiêu khi bạn gia nhập STIC." : "Please share why you want to join STIC Club.";
-    }
-    if (!form.ideaExecution.trim()) {
-      errs.ideaExecution = lang === "vi" ? "Hãy chia sẻ góc nhìn hoặc cách bạn sẽ tìm giải pháp thực hiện." : "Please share how you would approach this project idea.";
-    }
+    if (!form.facebook.trim()) errs.facebook = "REQUIRED_FACEBOOK";
+    if (!form.reason.trim()) errs.reason = "REQUIRED_REASON";
+    if (!form.ideaExecution.trim()) errs.ideaExecution = "REQUIRED_IDEA";
 
     setErrors(errs);
 
@@ -669,7 +709,7 @@ export function JoinSection() {
                           placeholder={lang === "vi" ? "Nguyễn Văn A" : "e.g. John Doe"}
                           className={inputClass("fullName")}
                         />
-                        {errors.fullName && <ErrMsg msg={errors.fullName} />}
+                        {errors.fullName && <ErrMsg errorKey={errors.fullName} lang={lang} />}
                       </div>
 
                       {/* Lớp */}
@@ -685,7 +725,7 @@ export function JoinSection() {
                           placeholder={lang === "vi" ? "Ví dụ: 10/1, 11A2, 10/4 THPT Nguyễn Thượng Hiền..." : "e.g. 10/1, 11A..."}
                           className={inputClass("grade")}
                         />
-                        {errors.grade && <ErrMsg msg={errors.grade} />}
+                        {errors.grade && <ErrMsg errorKey={errors.grade} lang={lang} />}
                       </div>
 
                       {/* Email */}
@@ -701,7 +741,7 @@ export function JoinSection() {
                           placeholder="example@gmail.com"
                           className={inputClass("email")}
                         />
-                        {errors.email && <ErrMsg msg={errors.email} />}
+                        {errors.email && <ErrMsg errorKey={errors.email} lang={lang} />}
                       </div>
 
                       {/* Số điện thoại */}
@@ -720,7 +760,7 @@ export function JoinSection() {
                           className={inputClass("phone")}
                         />
                         {errors.phone ? (
-                          <ErrMsg msg={errors.phone} />
+                          <ErrMsg errorKey={errors.phone} lang={lang} />
                         ) : (
                           form.phone.length > 0 && form.phone.length < 10 && (
                             <p className="text-[10px] text-amber-500 mt-1">
@@ -743,7 +783,7 @@ export function JoinSection() {
                           placeholder="https://facebook.com/your.profile"
                           className={inputClass("facebook")}
                         />
-                        {errors.facebook && <ErrMsg msg={errors.facebook} />}
+                        {errors.facebook && <ErrMsg errorKey={errors.facebook} lang={lang} />}
                       </div>
                     </div>
                   </div>
@@ -774,7 +814,7 @@ export function JoinSection() {
                         }
                         className={`${inputClass("reason")} resize-none leading-relaxed`}
                       />
-                      {errors.reason && <ErrMsg msg={errors.reason} />}
+                      {errors.reason && <ErrMsg errorKey={errors.reason} lang={lang} />}
                     </div>
                   </div>
 
@@ -934,7 +974,7 @@ export function JoinSection() {
                         }
                         className={`${inputClass("ideaExecution")} resize-none leading-relaxed`}
                       />
-                      {errors.ideaExecution && <ErrMsg msg={errors.ideaExecution} />}
+                      {errors.ideaExecution && <ErrMsg errorKey={errors.ideaExecution} lang={lang} />}
                     </div>
 
                     {/* Cam kết thời gian */}
@@ -1025,7 +1065,8 @@ export function JoinSection() {
   );
 }
 
-function ErrMsg({ msg }: { msg: string }) {
+function ErrMsg({ errorKey, lang }: { errorKey: ErrorKey; lang: string }) {
+  const msg = ERROR_MESSAGES[errorKey]?.[lang === "en" ? "en" : "vi"] || "";
   return (
     <motion.p
       initial={{ opacity: 0, y: -4 }}
