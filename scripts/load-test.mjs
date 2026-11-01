@@ -1,11 +1,11 @@
 const TARGET_HOST = process.env.TARGET_HOST || 'sticdanang.web.app';
-const CONCURRENCY = parseInt(process.env.CONCURRENCY || '800', 10);
+const CONCURRENCY = parseInt(process.env.CONCURRENCY || '900', 10);
 const PATHS = ['/', '/join', '/banner.png', '/logo.png'];
 
 console.log('='.repeat(65));
-console.log(`🚀 KHỞI ĐỘNG LOAD TEST: 800 BOTS CONCURRENT BENCHMARK`);
+console.log(`🚀 KHỞI ĐỘNG LOAD TEST: ${CONCURRENCY} USERS CONCURRENT BENCHMARK`);
 console.log(`🎯 Mục tiêu kiểm thử: https://${TARGET_HOST}`);
-console.log(`👥 Số lượng bot đồng thời (Concurrency): ${CONCURRENCY}`);
+console.log(`👥 Số lượng người dùng đồng thời (Concurrency): ${CONCURRENCY}`);
 console.log(`📄 Phân bổ tải trên các endpoint: ${PATHS.join(', ')}`);
 console.log('='.repeat(65));
 
@@ -90,7 +90,7 @@ async function runBenchmark() {
   const throughputMB = (totalBytes / (1024 * 1024)).toFixed(2);
 
   console.log('\n' + '='.repeat(65));
-  console.log('📊 KẾT QUẢ KIỂM THỬ TẢI 800 BOT CONCURRENT:');
+  console.log(`📊 KẾT QUẢ KIỂM THỬ TẢI ${CONCURRENCY} BOT CONCURRENT:`);
   console.log('='.repeat(65));
   console.log(`- Tổng số bot (requests):          ${results.length}`);
   console.log(`- Thành công (2xx/3xx):            ${successfulRequests} / ${results.length} (${((successfulRequests/results.length)*100).toFixed(1)}%)`);
