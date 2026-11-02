@@ -119,26 +119,17 @@ export function HeroSection() {
           ))}
         </motion.div>
 
-        {/* Scroll hint button inviting scroll into showcase */}
+        {/* Scroll hint button inviting scroll into about */}
         <motion.button
-          onClick={() => smoothScrollTo("showcase")}
+          onClick={() => smoothScrollTo("about")}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
           className="mt-8 inline-flex items-center justify-center w-9 h-9 rounded-full liquid-glass text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors cursor-pointer hover:scale-110"
-          aria-label="Scroll to showcase"
+          aria-label="Scroll to about"
         >
           <ArrowRight className="w-4 h-4 rotate-90" />
         </motion.button>
-      </div>
-
-      {/* ========================================================
-          SCREEN 2: SCROLL-SCALE BANNER (Antigravity GSAP/Framer Effect)
-          ======================================================== */}
-      <div id="showcase" className="relative z-10 pt-2 pb-24 sm:pb-32">
-        <ScrollScaleBanner
-          title={t(T.hero.bannerAlt)}
-        />
       </div>
     </section>
   );
