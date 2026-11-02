@@ -6,7 +6,6 @@ import { LangProvider } from "@/context/LangContext";
 import { MainWrapper } from "@/components/common/MainWrapper";
 import { FormPreloader } from "@/components/common/FormPreloader";
 import { ParticleBackground } from "@/components/common/ParticleBackground";
-import { WorkInProgressView } from "@/components/common/WorkInProgressView";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 
@@ -131,8 +130,11 @@ export default function RootLayout({
             <div className="hidden md:block pointer-events-none fixed inset-0 z-0 overflow-hidden">
               <ParticleBackground />
             </div>
-            {/* Chế độ Work In Progress toàn trang: Thay thế toàn bộ navigation & nội dung */}
-            <WorkInProgressView />
+            <Navbar />
+            <MainWrapper>{children}</MainWrapper>
+            <Footer />
+            {/* Tự động tải trước Google Form ngầm trong thời gian rảnh của máy */}
+            <FormPreloader />
           </LangProvider>
         </ThemeProvider>
       </body>
