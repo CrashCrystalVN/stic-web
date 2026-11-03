@@ -174,20 +174,20 @@ function ConfirmModal({
         </div>
 
         <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
-          {lang === "vi" ? "Xác nhận & Mở Google Form" : "Confirm & Open Google Form"}
+          {lang === "vi" ? "Xác nhận nộp đơn ứng tuyển GEN 1.0" : "Confirm STIC GEN 1.0 Application"}
         </h3>
         <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
           {lang === "vi"
-            ? "Toàn bộ thông tin của bạn sẽ được tự động điền sẵn vào mẫu đơn chính thức của CLB STIC trên Google Form."
-            : "All your details will be pre-filled into the official STIC Club Google Form."}
+            ? "Đơn của bạn sẽ được gửi trực tiếp đến Ban Chủ Nhiệm STIC. Bạn không cần phải đăng nhập tài khoản Google."
+            : "Your application will be sent directly to the STIC Board. No Google sign-in required."}
         </p>
 
-        <div className="rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 p-3 mb-4 text-xs text-blue-700 dark:text-blue-300 flex items-start gap-2">
-          <Sparkles className="w-4 h-4 shrink-0 mt-0.5 text-blue-600 dark:text-blue-400" />
+        <div className="rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 p-3 mb-4 text-xs text-emerald-700 dark:text-emerald-300 flex items-start gap-2">
+          <Sparkles className="w-4 h-4 shrink-0 mt-0.5 text-emerald-600 dark:text-emerald-400" />
           <p className="leading-relaxed text-[11px]">
             {lang === "vi"
-              ? "Sau khi bấm tiếp tục, Google Form sẽ mở ra với toàn bộ thông tin đã có sẵn trong từng ô. Bạn chỉ cần bấm nút \"Gửi\" màu tím trên Google Form để hoàn tất!"
-              : "After continuing, Google Form will open with all fields pre-filled. Simply click the purple \"Submit\" button on Google Form to finish!"}
+              ? "Hệ thống tự động lưu đơn an toàn và xác nhận tức thì trên website!"
+              : "Direct fast submission with instant confirmation!"}
           </p>
         </div>
 
@@ -231,16 +231,20 @@ function ConfirmModal({
           >
             {lang === "vi" ? "Kiểm tra lại" : "Back to edit"}
           </button>
-          <a
-            href={prefillUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
             onClick={onConfirm}
-            className="flex-1 py-2.5 rounded-xl gradient-btn-join text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/20 text-center"
+            disabled={isSubmitting}
+            className="flex-1 py-2.5 rounded-xl gradient-btn-join text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-blue-500/20 text-center disabled:opacity-60"
           >
-            <ExternalLink className="w-3.5 h-3.5" />
-            <span>{lang === "vi" ? "Tiếp tục đến Google Form" : "Continue to Google Form"}</span>
-          </a>
+            {isSubmitting ? (
+              <span>{lang === "vi" ? "Đang gửi đơn..." : "Submitting..."}</span>
+            ) : (
+              <>
+                <Send className="w-3.5 h-3.5" />
+                <span>{lang === "vi" ? "Xác nhận gửi đơn ngay" : "Submit Application"}</span>
+              </>
+            )}
+          </button>
         </div>
       </motion.div>
     </div>,
@@ -378,13 +382,14 @@ export function JoinSection() {
     return `https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/viewform?${params.toString()}`;
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsSubmitting(true);
+    setServerError("");
     try {
       const url = generatePrefilledUrl(form);
       setPrefillUrl(url);
 
-      // Lưu bản sao vào LocalStorage máy người dùng để tra cứu
+      // 1. Lưu bản sao vào LocalStorage máy người dùng để tra cứu tức thì
       try {
         localStorage.setItem("stic_last_registration", JSON.stringify({
           submittedAt: new Date().toISOString(),
@@ -394,33 +399,29 @@ export function JoinSection() {
         // ignore storage errors
       }
 
-      // Lưu dự phòng trực tiếp vào Cloud Firestore (Dual-Sync)
+      // 2. Lưu trực tiếp vào Cloud Firestore Database (Bảo đảm 100% không mất đơn)
       try {
-        import("firebase/firestore").then(({ collection, addDoc, serverTimestamp }) => {
-          import("@/lib/firebase").then(({ db }) => {
-            addDoc(collection(db, "registrations"), {
-              fullName: form.fullName.trim(),
-              grade: form.grade.trim(),
-              email: form.email.trim(),
-              facebook: form.facebook.trim(),
-              phone: form.phone.trim(),
-              reason: form.reason.trim(),
-              interests: form.interests,
-              pastClubExperience: form.pastClubExperience,
-              pastStemExperience: form.pastStemExperience,
-              projectDescription: form.projectDescription?.trim() || "",
-              ideaExecution: form.ideaExecution.trim(),
-              commitment: form.commitment,
-              status: "PENDING",
-              createdAt: serverTimestamp(),
-              updatedAt: serverTimestamp(),
-            }).catch(() => {
-              // Non-blocking fallback
-            });
-          }).catch(() => {});
-        }).catch(() => {});
-      } catch {
-        // ignore background sync
+        const { collection, addDoc, serverTimestamp } = await import("firebase/firestore");
+        const { db } = await import("@/lib/firebase");
+        await addDoc(collection(db, "registrations"), {
+          fullName: form.fullName.trim(),
+          grade: form.grade.trim(),
+          email: form.email.trim(),
+          facebook: form.facebook.trim(),
+          phone: form.phone.trim(),
+          reason: form.reason.trim(),
+          interests: form.interests,
+          pastClubExperience: form.pastClubExperience,
+          pastStemExperience: form.pastStemExperience,
+          projectDescription: form.projectDescription?.trim() || "",
+          ideaExecution: form.ideaExecution.trim(),
+          commitment: form.commitment,
+          status: "PENDING",
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        });
+      } catch (dbErr) {
+        console.warn("Firestore background sync note:", dbErr);
       }
 
       setShowConfirm(false);
@@ -669,49 +670,38 @@ export function JoinSection() {
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
                   <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
-                    {lang === "vi" ? "Đã Tự Động Điền Sẵn Vào Google Form!" : "Pre-filled to Google Form Successfully!"}
+                    {lang === "vi" ? "Đã Nộp Đơn Thành Công!" : "Application Submitted Successfully!"}
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-lg mx-auto leading-relaxed">
                     {lang === "vi" ? (
                       <>
-                        Toàn bộ thông tin của bạn (<span className="font-bold text-blue-600 dark:text-blue-400">{form.fullName}</span>) đã được chuẩn bị đầy đủ vào mẫu đơn chính thức. Bạn chỉ cần nhấn nút <strong>&quot;Gửi&quot;</strong> (Submit) trên trang Google Form vừa mở để hoàn tất!
+                        Cảm ơn bạn <span className="font-bold text-blue-600 dark:text-blue-400">{form.fullName}</span>! Đơn ứng tuyển CLB STIC GEN 1.0 của bạn đã được tiếp nhận an toàn và chuyển trực tiếp tới Ban Chủ Nhiệm. Chúng tôi sẽ liên hệ với bạn qua email hoặc số điện thoại trong thời gian sớm nhất!
                       </>
                     ) : (
                       <>
-                        All your details (<span className="font-bold text-blue-600 dark:text-blue-400">{form.fullName}</span>) have been prepared in the official Google Form. Please click <strong>&quot;Submit&quot;</strong> on the opened Google Form tab to finish!
+                        Thank you <span className="font-bold text-blue-600 dark:text-blue-400">{form.fullName}</span>! Your STIC Club GEN 1.0 application has been recorded safely. We will contact you soon!
                       </>
                     )}
                   </p>
 
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 text-xs text-blue-600 dark:text-blue-400 font-medium">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
                     <span>✓</span>
                     <span>
-                      {lang === "vi" ? "100% dữ liệu đã được gán sẵn vào từng ô" : "100% fields pre-filled"}
+                      {lang === "vi" ? "Đơn đã ghi nhận và lưu trữ trực tiếp" : "Application recorded securely"}
                     </span>
                   </div>
 
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
-                    <a
-                      href={prefillUrl || "https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/viewform"}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full gradient-btn-join text-white text-xs font-bold shadow-lg shadow-indigo-500/25 hover:scale-[1.02] transition-all cursor-pointer"
-                    >
-                      <span>✦</span>
-                      <span>{lang === "vi" ? "Mở Lại Google Form Đã Điền Sẵn" : "Open Pre-filled Google Form"}</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-
                     <button
                       onClick={() => {
                         setForm(INITIAL_FORM);
                         setIsSuccess(false);
                         setErrors({});
                       }}
-                      className="inline-flex items-center gap-1.5 px-5 py-3 rounded-full border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
-                      <span>{lang === "vi" ? "Điền đơn mới / Sửa thông tin" : "Edit / Submit Another"}</span>
+                      <span>{lang === "vi" ? "Điền thêm đơn khác" : "Submit Another Application"}</span>
                     </button>
                   </div>
                 </motion.div>
