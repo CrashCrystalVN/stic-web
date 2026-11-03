@@ -96,7 +96,7 @@ export default function EventsPage() {
           <p className="text-xs text-slate-500 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">
             {lang === "vi" ? (
               <>
-                1. Buổi gặp mặt Tân thành viên GEN 1.0 (Orientation Day)<br />
+                1. Buổi gặp mặt chào đón Tân thành viên GEN 1.0<br />
                 2. Phân ban & Chia nhóm dự án chuyên môn<br />
                 3. Workshop kỹ năng kỹ thuật & phương pháp nghiên cứu KHKT
               </>

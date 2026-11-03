@@ -18,7 +18,7 @@ interface Props {
 }
 
 export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const items = T.toc.items;
 
   const handleItemClick = (id: string) => {
@@ -75,7 +75,7 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
               <button
                 onClick={onClose}
                 className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all cursor-pointer"
-                aria-label="Close Drawer"
+                aria-label={lang === "vi" ? "Đóng danh mục" : "Close Drawer"}
               >
                 <X className="w-[18px] h-[18px]" />
               </button>

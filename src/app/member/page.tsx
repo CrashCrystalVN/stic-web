@@ -21,7 +21,8 @@ import { useLang } from "@/context/LangContext";
 const CORE_LEADERS = [
   {
     id: "president",
-    name: "Lương Phú Hưng",
+    nameVi: "Lương Phú Hưng",
+    nameEn: "Luong Phu Hung",
     roleVi: "Chủ nhiệm CLB",
     roleEn: "President & Founder",
     gen: "GEN 1.0",
@@ -31,7 +32,8 @@ const CORE_LEADERS = [
   },
   {
     id: "vice-president",
-    name: "Lê Hoài An",
+    nameVi: "Lê Hoài An",
+    nameEn: "Le Hoai An",
     roleVi: "Phó Chủ nhiệm",
     roleEn: "Vice President",
     gen: "GEN 1.0",
@@ -41,7 +43,8 @@ const CORE_LEADERS = [
   },
   {
     id: "coordinator",
-    name: "Trương Văn Đăng Huy",
+    nameVi: "Trương Văn Đăng Huy",
+    nameEn: "Truong Van Dang Huy",
     roleVi: "Điều phối viên",
     roleEn: "Coordinator",
     gen: "GEN 1.0",
@@ -59,7 +62,8 @@ const TRACK_LEADERS = [
     trackEn: "Technical & Innovation Lead",
     descVi: "Phụ trách định hướng công nghệ, Robotics, lập trình AI & các đề tài NCKH STEM thực chiến.",
     descEn: "Leading technology directions, Robotics, AI programming & practical STEM research.",
-    name: "— Đang cập nhật —",
+    nameVi: "— Đang cập nhật —",
+    nameEn: "— To be announced —",
     roleVi: "Trưởng ban Kỹ thuật",
     roleEn: "Head of Technical",
     gen: "GEN 1.0",
@@ -73,7 +77,8 @@ const TRACK_LEADERS = [
     trackEn: "Media & Creative Lead",
     descVi: "Phụ trách xây dựng hình ảnh, sản xuất nội dung số, thiết kế đồ họa & lan tỏa giá trị CLB.",
     descEn: "Leading brand visuals, digital media production, graphic design & club outreach.",
-    name: "— Đang cập nhật —",
+    nameVi: "— Đang cập nhật —",
+    nameEn: "— To be announced —",
     roleVi: "Trưởng ban Truyền thông",
     roleEn: "Head of Media",
     gen: "GEN 1.0",
@@ -143,7 +148,7 @@ export default function MemberPage() {
         <div className="space-y-6">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
             <ShieldCheck className="w-4 h-4 text-blue-500" />
-            <span>{lang === "vi" ? "Ban Chủ Nhiệm CLB (Leadership Board)" : "Leadership Board"}</span>
+            <span>{lang === "vi" ? "Ban Chủ Nhiệm CLB" : "Leadership Board"}</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
@@ -159,7 +164,7 @@ export default function MemberPage() {
                 <div className="relative w-full aspect-[3/4] overflow-hidden bg-slate-950">
                   <Image
                     src={leader.image}
-                    alt={leader.name}
+                    alt={lang === "vi" ? leader.nameVi : leader.nameEn}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     priority
@@ -172,7 +177,7 @@ export default function MemberPage() {
                 <div className="p-5 sm:p-6 bg-slate-900/95 border-t border-slate-800 flex items-center justify-between">
                   <div>
                     <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
-                      {leader.name}
+                      {lang === "vi" ? leader.nameVi : leader.nameEn}
                     </h3>
                     <p className="text-xs sm:text-sm font-medium text-slate-400 mt-0.5">
                       {lang === "vi" ? leader.roleVi : leader.roleEn}
@@ -193,7 +198,7 @@ export default function MemberPage() {
         <div className="space-y-6 pt-4">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500">
             <Sparkles className="w-4 h-4 text-purple-500" />
-            <span>{lang === "vi" ? "Đại Diện Các Mảng Hoạt Động (Track Leads)" : "Track Leads"}</span>
+            <span>{lang === "vi" ? "Đại Diện Các Mảng Hoạt Động" : "Track Leads"}</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
@@ -213,7 +218,7 @@ export default function MemberPage() {
                   <div className="relative w-full aspect-[16/10] sm:aspect-[3/2] overflow-hidden bg-slate-950">
                     <Image
                       src={lead.image}
-                      alt={lead.trackVi}
+                      alt={lang === "vi" ? lead.trackVi : lead.trackEn}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -241,7 +246,7 @@ export default function MemberPage() {
                     <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
                       <div>
                         <h4 className="text-base font-bold text-white tracking-tight">
-                          {lead.name}
+                          {lang === "vi" ? lead.nameVi : lead.nameEn}
                         </h4>
                         <p className="text-xs text-slate-400 mt-0.5">
                           {lang === "vi" ? lead.roleVi : lead.roleEn}

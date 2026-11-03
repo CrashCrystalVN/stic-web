@@ -107,7 +107,7 @@ export default function AboutPage() {
               <Zap className="w-6 h-6" />
             </div>
             <h3 className="text-xl font-bold text-slate-900 dark:text-white">
-              {lang === "vi" ? "Phương Châm \"Learn By Doing\"" : "Philosophy \"Learn By Doing\""}
+              {lang === "vi" ? "Phương Châm \"Học Đi Đôi Với Hành\"" : "Philosophy \"Learn By Doing\""}
             </h3>
             <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
               {lang === "vi"
@@ -145,7 +145,7 @@ export default function AboutPage() {
                     {lang === "en" ? (val.titleEn || val.englishTitle) : (val.titleVi || val.title)}
                   </h4>
                   <p className="text-xs font-medium text-blue-600 dark:text-blue-400 mt-0.5">
-                    {val.englishTitle}
+                    {lang === "vi" ? "Giá trị cốt lõi" : "Core Value"}
                   </p>
                   <p className="text-xs text-slate-600 dark:text-slate-300 mt-2.5 leading-relaxed">
                     {lang === "en" ? (val.descriptionEn || val.description) : (val.descriptionVi || val.description)}

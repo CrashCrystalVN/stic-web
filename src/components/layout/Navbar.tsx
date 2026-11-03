@@ -237,7 +237,7 @@ export function Navbar() {
             <button
               onClick={() => setIsMobileDrawerOpen(true)}
               className="md:hidden inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100/80 dark:bg-white/10 text-slate-800 dark:text-slate-200 hover:bg-slate-200/80 dark:hover:bg-white/20 transition-colors cursor-pointer select-none"
-              aria-label="Mở menu danh mục"
+              aria-label={lang === "vi" ? "Mở menu danh mục" : "Open navigation menu"}
             >
               <Menu className="w-4 h-4" />
             </button>

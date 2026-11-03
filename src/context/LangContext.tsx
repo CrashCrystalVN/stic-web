@@ -11,15 +11,15 @@ interface LangContextValue {
 }
 
 const LangContext = createContext<LangContextValue>({
-  lang: "en",
+  lang: "vi",
   toggle: () => {},
-  t: (obj) => obj.en,
+  t: (obj) => obj.vi,
   contentVisible: true,
 });
 
 export function LangProvider({ children }: { children: React.ReactNode }) {
-  // Mặc định ngôn ngữ Tiếng Anh (English)
-  const [lang, setLang] = useState<Lang>("en");
+  // Mặc định ngôn ngữ Tiếng Việt (Vietnamese)
+  const [lang, setLang] = useState<Lang>("vi");
   const [contentVisible, setContentVisible] = useState(true);
 
   useEffect(() => {
@@ -28,8 +28,8 @@ export function LangProvider({ children }: { children: React.ReactNode }) {
       if (saved === "vi" || saved === "en") {
         setLang(saved);
       } else {
-        setLang("en");
-        localStorage.setItem("stic_lang_v2", "en");
+        setLang("vi");
+        localStorage.setItem("stic_lang_v2", "vi");
       }
     } catch {
       // Ignore localStorage errors in SSR / private mode

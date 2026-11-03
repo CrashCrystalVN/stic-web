@@ -184,7 +184,7 @@ export default function JoinPage() {
               >
                 <div>
                   <div className="inline-block px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 text-xs font-bold mb-3">
-                    {s.step}
+                    {lang === "vi" ? `Bước ${s.step}` : `Step ${s.step}`}
                   </div>
                   <h4 className="text-sm font-bold text-slate-900 dark:text-white">
                     {lang === "en" ? (s.titleEn || s.title) : (s.titleVi || s.title)}
@@ -205,7 +205,7 @@ export default function JoinPage() {
         <div className="mb-12">
           <div className="text-center mb-8">
             <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-              {lang === "vi" ? "Câu Hỏi Thường Gặp (FAQ)" : "Frequently Asked Questions (FAQ)"}
+              {lang === "vi" ? "Câu Hỏi Thường Gặp" : "Frequently Asked Questions"}
             </h3>
           </div>
 
