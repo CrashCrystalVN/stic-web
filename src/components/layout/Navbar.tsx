@@ -11,7 +11,7 @@ import { LangToggle } from "@/components/common/LangToggle";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
 import { CLUB_INFO } from "@/lib/data";
-import { ExternalLink, ArrowRight, ArrowDown, Sparkles, Menu } from "lucide-react";
+import { ExternalLink, ArrowRight, ArrowDown, Sparkles, Menu, Users } from "lucide-react";
 import { TableOfContentsDrawer } from "./TableOfContentsDrawer";
 
 export function Navbar() {
@@ -21,36 +21,18 @@ export function Navbar() {
   const isMember = pathname === "/member";
   const isHome = pathname === "/";
 
-  const [activeSection, setActiveSection] = useState(
-    isJoin ? "join" : isMember ? "member" : "hero"
-  );
+  const [activeSection, setActiveSection] = useState(isHome ? "hero" : "");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
-  // Define nav items based on current page
+  // In-page section nav items (exclusive to home page scrolling)
   const NAV_ITEMS = useMemo(() => {
-    if (isJoin) {
+    if (!isHome) {
       return [
-        { id: "hero", href: "/", name: t(T.nav.home), isAnchor: false },
+        { id: "hero", href: "/#hero", name: t(T.nav.home), isAnchor: false },
         { id: "about", href: "/#about", name: t(T.nav.about), isAnchor: false },
         { id: "teams", href: "/#teams", name: t(T.nav.teams), isAnchor: false },
         { id: "projects", href: "/#projects", name: t(T.nav.projects), isAnchor: false },
-        { id: "member", href: "/member", name: t(T.nav.member), isAnchor: false },
-        {
-          id: "join",
-          href: "#application-form",
-          name: lang === "vi" ? "Đơn ứng tuyển" : "Application",
-          isAnchor: true,
-        },
-      ];
-    }
-    if (isMember) {
-      return [
-        { id: "hero", href: "/", name: t(T.nav.home), isAnchor: false },
-        { id: "about", href: "/#about", name: t(T.nav.about), isAnchor: false },
-        { id: "teams", href: "/#teams", name: t(T.nav.teams), isAnchor: false },
-        { id: "projects", href: "/#projects", name: t(T.nav.projects), isAnchor: false },
-        { id: "member", href: "/member", name: t(T.nav.member), isAnchor: false },
       ];
     }
     return [
@@ -58,21 +40,12 @@ export function Navbar() {
       { id: "about", href: "#about", name: t(T.nav.about), isAnchor: true },
       { id: "teams", href: "#teams", name: t(T.nav.teams), isAnchor: true },
       { id: "projects", href: "#projects", name: t(T.nav.projects), isAnchor: true },
-      { id: "member", href: "/member", name: t(T.nav.member), isAnchor: false },
     ];
-  }, [isJoin, isMember, t, lang]);
+  }, [isHome, t]);
 
   useEffect(() => {
-    if (isJoin) {
-      setActiveSection("join");
-      const handleScroll = () => {
-        setIsScrolled(window.scrollY > 20);
-      };
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
-    if (isMember) {
-      setActiveSection("member");
+    if (!isHome) {
+      setActiveSection("");
       const handleScroll = () => {
         setIsScrolled(window.scrollY > 20);
       };
@@ -82,7 +55,14 @@ export function Navbar() {
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
-      const scrollPosition = window.scrollY + 160;
+
+      // Bottom of page check: when scrolled to bottom, keep the last section ('projects') active
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
+        setActiveSection("projects");
+        return;
+      }
+
+      const scrollPosition = window.scrollY + 180;
       for (const item of NAV_ITEMS) {
         if (!item.isAnchor) continue;
         const el = document.getElementById(item.id);
@@ -98,7 +78,7 @@ export function Navbar() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isJoin, isMember, NAV_ITEMS]);
+  }, [isHome, NAV_ITEMS]);
 
   const scrollToSection = (sectionId: string) => {
     smoothScrollTo(sectionId);
@@ -212,10 +192,26 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Right: lang + theme + CTA + Mobile Menu Button */}
+          {/* Right: lang + theme + Thành viên + CTA + Mobile Menu Button */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             <LangToggle />
             <ThemeToggle />
+
+            {/* Thành viên (Members) Page Link - Styled as a distinct route pill, just like apply */}
+            <Link
+              href="/member"
+              title={lang === "vi" ? "Xem danh sách thành viên & Ban chủ nhiệm" : "View members & leadership"}
+              className={cn(
+                "hidden sm:inline-flex items-center justify-center gap-1.5 px-3 sm:px-3.5 py-2 rounded-full text-xs font-bold leading-none transition-all cursor-pointer select-none",
+                isMember
+                  ? "bg-blue-600 dark:bg-blue-500 text-white shadow-md shadow-blue-500/25 border border-blue-500/30"
+                  : "bg-slate-100/90 dark:bg-white/10 text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-200/90 dark:hover:bg-white/15 border border-slate-200/90 dark:border-white/10 hover:scale-[1.03]"
+              )}
+            >
+              <Users className="w-3.5 h-3.5 shrink-0" />
+              <span className="leading-none pt-px">{t(T.nav.member)}</span>
+            </Link>
+
             {isJoin ? (
               <button
                 onClick={() => scrollToSection("application-form")}
