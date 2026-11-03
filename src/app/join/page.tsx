@@ -9,10 +9,10 @@ import {
   Users, 
   Trophy, 
   GraduationCap,
+  ExternalLink
 } from "lucide-react";
 import { FAQS, BENEFITS, RECRUITMENT_STEPS, CLUB_INFO } from "@/lib/data";
 import { useLang } from "@/context/LangContext";
-import { JoinSection } from "@/components/sections/JoinSection";
 
 const BENEFIT_ICONS: Record<string, React.ElementType> = {
   Rocket,
@@ -71,10 +71,68 @@ export default function JoinPage() {
         </div>
 
         {/* ========================================================
-            NATIVE STIC APPLICATION FORM (SIÊU TỐC TRÊN ĐIỆN THOẠI)
+            GOOGLE FORM NHÚNG TRỰC TIẾP (MAIN APPLICATION FORM)
             ======================================================== */}
         <div id="application-form" className="mb-20 scroll-mt-28">
-          <JoinSection />
+          <div className="rounded-3xl liquid-glass border border-blue-400/40 dark:border-blue-500/30 shadow-2xl p-4 sm:p-7 relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl">
+            {/* Embed Bar Header */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 mb-4 border-b border-slate-200/80 dark:border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center font-extrabold text-lg">
+                  G
+                </div>
+                <div>
+                  <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+                    {lang === "vi" ? "Biểu Mẫu Đăng Ký Tuyển Thành Viên GEN 1.0" : "Official STIC GEN 1.0 Application Form"}
+                  </h2>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    {lang === "vi" ? "Điền và bấm 'Gửi' trực tiếp ngay bên dưới — dữ liệu chuyển thẳng về Google Sheets của BCN" : "Fill and submit directly below — responses are stored in Club Board's Google Sheets"}
+                  </p>
+                </div>
+              </div>
+
+              <a
+                href={CLUB_INFO.formLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors shrink-0"
+              >
+                <span>{lang === "vi" ? "Mở tab riêng" : "Open in new tab"}</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+
+            {/* Iframe Frame */}
+            <div className="relative w-full rounded-2xl overflow-hidden bg-white dark:bg-slate-950 min-h-[680px] sm:min-h-[900px] border border-slate-200/80 dark:border-slate-800 shadow-inner">
+              {isIframeLoading && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs z-10 gap-3 p-4 text-center">
+                  <div className="w-9 h-9 border-3 border-blue-600/30 border-t-blue-600 rounded-full animate-spin" />
+                  <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 font-medium">
+                    {lang === "vi" ? "Đang mở biểu mẫu ứng tuyển STIC..." : "Loading application form..."}
+                  </p>
+                  <p className="text-[11px] text-slate-400">
+                    {lang === "vi" ? "Tự động tối ưu hoá kết nối cho điện thoại" : "Optimizing connection for mobile"}
+                  </p>
+                </div>
+              )}
+              <iframe
+                src="https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/viewform?embedded=true"
+                width="100%"
+                height="1850"
+                frameBorder="0"
+                marginHeight={0}
+                marginWidth={0}
+                className="w-full min-h-[1400px] sm:min-h-[1600px] border-none"
+                loading="eager"
+                // @ts-expect-error fetchpriority is a modern web standard
+                fetchpriority="high"
+                onLoad={() => setIsIframeLoading(false)}
+                title="STIC GEN 1.0 Recruitment Application Google Form"
+              >
+                Đang tải Google Form...
+              </iframe>
+            </div>
+          </div>
         </div>
 
         {/* Benefits Grid */}
