@@ -205,7 +205,7 @@ export default function JoinPage() {
         <div className="mb-12">
           <div className="text-center mb-8">
             <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-              {lang === "vi" ? "Câu Hỏi Thường Gặp" : "Frequently Asked Questions"}
+              {lang === "vi" ? "Câu Hỏi Thường Gặp (FAQ)" : "Frequently Asked Questions (FAQ)"}
             </h3>
           </div>
 

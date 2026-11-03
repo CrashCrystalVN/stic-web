@@ -23,11 +23,11 @@ export function LangToggle() {
       title={lang === "en" ? "Switch to Vietnamese (Tiếng Việt)" : "Chuyển sang Tiếng Anh (English)"}
       aria-label="Toggle language"
     >
-      {/* Animated Sliding Pill Background: VI ở bên trái (2px), EN ở bên phải (32px) */}
+      {/* Animated Sliding Pill Background: EN ở vị trí đầu (trái 2px), VI ở vị trí sau (phải 32px) */}
       <motion.div
         className="absolute top-0.5 bottom-0.5 w-[30px] rounded-full bg-white dark:bg-slate-700 shadow-sm border border-slate-200/50 dark:border-slate-600/50"
         animate={{
-          left: lang === "vi" ? "2px" : "32px",
+          left: lang === "en" ? "2px" : "32px",
         }}
         transition={{
           type: "spring",
@@ -35,19 +35,6 @@ export function LangToggle() {
           damping: 32,
         }}
       />
-
-      {/* VI Label */}
-      <div className="relative z-10 flex-1 text-center">
-        <span
-          className={`text-[11px] font-bold transition-colors duration-200 ${
-            lang === "vi"
-              ? "text-blue-600 dark:text-blue-400"
-              : "text-slate-400 dark:text-slate-500 hover:text-slate-600"
-          }`}
-        >
-          VI
-        </span>
-      </div>
 
       {/* EN Label */}
       <div className="relative z-10 flex-1 text-center">
@@ -59,6 +46,19 @@ export function LangToggle() {
           }`}
         >
           EN
+        </span>
+      </div>
+
+      {/* VI Label */}
+      <div className="relative z-10 flex-1 text-center">
+        <span
+          className={`text-[11px] font-bold transition-colors duration-200 ${
+            lang === "vi"
+              ? "text-blue-600 dark:text-blue-400"
+              : "text-slate-400 dark:text-slate-500 hover:text-slate-600"
+          }`}
+        >
+          VI
         </span>
       </div>
     </button>
