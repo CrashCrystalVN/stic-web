@@ -36,6 +36,19 @@ export default function JoinLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <head>
+        {/* Kết nối cực sớm tới máy chủ Google Form để triệt tiêu độ trễ mạng trên mobile */}
+        <link rel="preconnect" href="https://docs.google.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://docs.google.com" />
+        <link rel="preconnect" href="https://lh3.googleusercontent.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://lh3.googleusercontent.com" />
+        <link rel="preconnect" href="https://ssl.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://ssl.gstatic.com" />
+      </head>
+      {children}
+    </>
+  );
 }
 

@@ -39,12 +39,13 @@ export function FormPreloader() {
       const schedulePreload = () => {
         timerId = setTimeout(() => {
           setShouldPreload(true);
-        }, 1200);
+        }, 400); // Kích hoạt nạp sớm sau 400ms thay vì 1200ms
       };
 
       if ("requestIdleCallback" in window) {
-        (window as unknown as { requestIdleCallback: (fn: () => void) => void }).requestIdleCallback(
-          schedulePreload
+        (window as unknown as { requestIdleCallback: (fn: () => void, opts?: { timeout: number }) => void }).requestIdleCallback(
+          schedulePreload,
+          { timeout: 1500 }
         );
       } else {
         schedulePreload();

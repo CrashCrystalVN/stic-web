@@ -103,12 +103,15 @@ export default function JoinPage() {
             </div>
 
             {/* Iframe Frame */}
-            <div className="relative w-full rounded-2xl overflow-hidden bg-white dark:bg-slate-950 min-h-[900px] border border-slate-200/80 dark:border-slate-800 shadow-inner">
+            <div className="relative w-full rounded-2xl overflow-hidden bg-white dark:bg-slate-950 min-h-[680px] sm:min-h-[900px] border border-slate-200/80 dark:border-slate-800 shadow-inner">
               {isIframeLoading && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 dark:bg-slate-900/90 backdrop-blur-xs z-10 gap-3">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs z-10 gap-3 p-4 text-center">
                   <div className="w-9 h-9 border-3 border-blue-600/30 border-t-blue-600 rounded-full animate-spin" />
-                  <p className="text-xs text-slate-600 dark:text-slate-300 font-medium">
-                    {lang === "vi" ? "Đang kết nối và tải Google Form..." : "Connecting & loading Google Form..."}
+                  <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 font-medium">
+                    {lang === "vi" ? "Đang mở biểu mẫu ứng tuyển STIC..." : "Loading application form..."}
+                  </p>
+                  <p className="text-[11px] text-slate-400">
+                    {lang === "vi" ? "Tự động tối ưu hoá kết nối cho điện thoại" : "Optimizing connection for mobile"}
                   </p>
                 </div>
               )}
@@ -119,7 +122,10 @@ export default function JoinPage() {
                 frameBorder="0"
                 marginHeight={0}
                 marginWidth={0}
-                className="w-full min-h-[1600px] border-none"
+                className="w-full min-h-[1400px] sm:min-h-[1600px] border-none"
+                loading="eager"
+                // @ts-expect-error fetchpriority is a modern web standard
+                fetchpriority="high"
                 onLoad={() => setIsIframeLoading(false)}
                 title="STIC GEN 1.0 Recruitment Application Google Form"
               >
