@@ -55,13 +55,13 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-2.5">
-                <div className="relative w-8 h-8 rounded-lg overflow-hidden liquid-glass-pill bg-white/95 dark:bg-white/90 flex items-center justify-center p-0.5 shadow-sm">
+                <div className="relative w-8 h-8 rounded-full overflow-hidden shadow-xs shrink-0">
                   <Image
                     src="/logo.png"
                     alt="STIC Logo"
                     width={32}
                     height={32}
-                    className="w-full h-full object-contain rounded-md"
+                    className="w-full h-full object-contain"
                   />
                 </div>
                 <div>

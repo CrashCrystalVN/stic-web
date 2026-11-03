@@ -115,14 +115,14 @@ export function Navbar() {
             className="flex items-center gap-2.5 group focus-visible:outline-none select-none shrink-0"
             title={isJoin ? (lang === "vi" ? "Về trang chủ" : "Back to Home") : "STIC"}
           >
-            {/* Official STIC Logo with glass refraction badge */}
-            <div className="relative w-9 h-9 rounded-xl overflow-hidden bg-white/90 dark:bg-white/10 border border-white/80 dark:border-white/20 flex items-center justify-center p-0.5 group-hover:scale-105 transition-transform shadow-sm backdrop-blur-md">
+            {/* Official STIC Circular Emblem */}
+            <div className="relative w-9 h-9 rounded-full overflow-hidden group-hover:scale-105 transition-transform shadow-xs">
               <Image
                 src="/logo.png"
                 alt="STIC Logo"
                 width={36}
                 height={36}
-                className="w-full h-full object-contain rounded-lg"
+                className="w-full h-full object-contain"
                 priority
               />
             </div>
