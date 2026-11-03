@@ -18,12 +18,16 @@ export function Navbar() {
   const { t, lang } = useLang();
   const pathname = usePathname();
   const isJoin = pathname === "/join";
+  const isMember = pathname === "/member";
+  const isHome = pathname === "/";
 
-  const [activeSection, setActiveSection] = useState(isJoin ? "join" : "hero");
+  const [activeSection, setActiveSection] = useState(
+    isJoin ? "join" : isMember ? "member" : "hero"
+  );
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
-  // Define nav items based on whether user is on the home page or the /join page
+  // Define nav items based on current page
   const NAV_ITEMS = useMemo(() => {
     if (isJoin) {
       return [
@@ -31,6 +35,7 @@ export function Navbar() {
         { id: "about", href: "/#about", name: t(T.nav.about), isAnchor: false },
         { id: "teams", href: "/#teams", name: t(T.nav.teams), isAnchor: false },
         { id: "projects", href: "/#projects", name: t(T.nav.projects), isAnchor: false },
+        { id: "member", href: "/member", name: t(T.nav.member), isAnchor: false },
         {
           id: "join",
           href: "#application-form",
@@ -39,17 +44,35 @@ export function Navbar() {
         },
       ];
     }
+    if (isMember) {
+      return [
+        { id: "hero", href: "/", name: t(T.nav.home), isAnchor: false },
+        { id: "about", href: "/#about", name: t(T.nav.about), isAnchor: false },
+        { id: "teams", href: "/#teams", name: t(T.nav.teams), isAnchor: false },
+        { id: "projects", href: "/#projects", name: t(T.nav.projects), isAnchor: false },
+        { id: "member", href: "/member", name: t(T.nav.member), isAnchor: false },
+      ];
+    }
     return [
       { id: "hero", href: "#hero", name: t(T.nav.home), isAnchor: true },
       { id: "about", href: "#about", name: t(T.nav.about), isAnchor: true },
       { id: "teams", href: "#teams", name: t(T.nav.teams), isAnchor: true },
       { id: "projects", href: "#projects", name: t(T.nav.projects), isAnchor: true },
+      { id: "member", href: "/member", name: t(T.nav.member), isAnchor: false },
     ];
-  }, [isJoin, t, lang]);
+  }, [isJoin, isMember, t, lang]);
 
   useEffect(() => {
     if (isJoin) {
       setActiveSection("join");
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 20);
+      };
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+    if (isMember) {
+      setActiveSection("member");
       const handleScroll = () => {
         setIsScrolled(window.scrollY > 20);
       };
@@ -75,7 +98,7 @@ export function Navbar() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isJoin, NAV_ITEMS]);
+  }, [isJoin, isMember, NAV_ITEMS]);
 
   const scrollToSection = (sectionId: string) => {
     smoothScrollTo(sectionId);
@@ -105,15 +128,15 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           {/* Left: Official STIC Logo & Name */}
           <Link
-            href={isJoin ? "/" : "#hero"}
+            href={isHome ? "#hero" : "/"}
             onClick={(e) => {
-              if (!isJoin) {
+              if (isHome) {
                 e.preventDefault();
                 scrollToSection("hero");
               }
             }}
             className="flex items-center gap-2.5 group focus-visible:outline-none select-none shrink-0"
-            title={isJoin ? (lang === "vi" ? "Về trang chủ" : "Back to Home") : "STIC"}
+            title={!isHome ? (lang === "vi" ? "Về trang chủ" : "Back to Home") : "STIC"}
           >
             {/* Official STIC Circular Emblem */}
             <div className="relative w-9 h-9 rounded-full overflow-hidden group-hover:scale-105 transition-transform shadow-xs">

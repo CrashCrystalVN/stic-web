@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800">
+  <defs>
+    <linearGradient id="bgMedia" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#190412"/>
+      <stop offset="45%" stop-color="#2d0822"/>
+      <stop offset="100%" stop-color="#0d020a"/>
+    </linearGradient>
+    <linearGradient id="mediaGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f472b6"/>
+      <stop offset="50%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#fb7185"/>
+    </linearGradient>
+    <radialGradient id="mediaAurora" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#f472b6" stop-opacity="0.38"/>
+      <stop offset="45%" stop-color="#ec4899" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="gridMedia" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(244, 114, 182, 0.08)" stroke-width="1"/>
+    </pattern>
+    <filter id="glowMedia" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgMedia)"/>
+  <rect width="600" height="800" fill="url(#mediaAurora)"/>
+  <rect width="600" height="800" fill="url(#gridMedia)"/>
+
+  <g stroke="#f472b6" stroke-width="2" opacity="0.7">
+    <path d="M 25 45 L 25 25 L 45 25" fill="none"/>
+    <path d="M 575 45 L 575 25 L 555 25" fill="none"/>
+    <path d="M 25 755 L 25 775 L 45 775" fill="none"/>
+    <path d="M 575 755 L 575 775 L 555 775" fill="none"/>
+  </g>
+
+  <g stroke="rgba(244, 114, 182, 0.25)" stroke-width="1" fill="none">
+    <path d="M 50 120 L 140 120 L 180 160"/>
+    <circle cx="50" cy="120" r="3" fill="#f472b6"/>
+    <circle cx="180" cy="160" r="2" fill="#f472b6"/>
+    <path d="M 550 120 L 460 120 L 420 160"/>
+    <circle cx="550" cy="120" r="3" fill="#f472b6"/>
+    <circle cx="420" cy="160" r="2" fill="#f472b6"/>
+    <path d="M 100 680 L 200 680 L 230 650"/>
+    <circle cx="100" cy="680" r="2.5" fill="#f472b6"/>
+    <path d="M 500 680 L 400 680 L 370 650"/>
+    <circle cx="500" cy="680" r="2.5" fill="#f472b6"/>
+  </g>
+
+  <g transform="translate(300, 370)">
+    <circle r="160" fill="none" stroke="url(#mediaGlow)" stroke-width="1.5" stroke-dasharray="6 8" opacity="0.5"/>
+    <circle r="140" fill="none" stroke="#f472b6" stroke-width="1" stroke-dasharray="3 12" opacity="0.7"/>
+    <circle r="125" fill="#190412" stroke="#f472b6" stroke-width="2.5" opacity="0.95" filter="url(#glowMedia)"/>
+    
+    <circle cx="0" cy="-30" r="50" fill="url(#mediaGlow)"/>
+    <path d="M -80 90 C -80 30, 80 30, 80 90 Z" fill="url(#mediaGlow)" opacity="0.95"/>
+    
+    <path d="M -34 -34 L 34 -34 L 26 -20 L -26 -20 Z" fill="#ffffff" filter="url(#glowMedia)"/>
+    <line x1="-44" y1="-27" x2="44" y2="-27" stroke="#f472b6" stroke-width="2.5"/>
+
+    <line x1="-180" y1="0" x2="-150" y2="0" stroke="#f472b6" stroke-width="2"/>
+    <line x1="150" y1="0" x2="180" y2="0" stroke="#f472b6" stroke-width="2"/>
+    <line x1="0" y1="-180" x2="0" y2="-150" stroke="#f472b6" stroke-width="2"/>
+    <line x1="0" y1="150" x2="0" y2="180" stroke="#f472b6" stroke-width="2"/>
+  </g>
+
+  <g transform="translate(300, 590)" fill="#f472b6" opacity="0.75">
+    <rect x="-80" y="-10" width="4" height="20" rx="2"/>
+    <rect x="-65" y="-18" width="4" height="36" rx="2"/>
+    <rect x="-50" y="-28" width="4" height="56" rx="2"/>
+    <rect x="-35" y="-15" width="4" height="30" rx="2"/>
+    <rect x="-20" y="-35" width="4" height="70" rx="2"/>
+    <rect x="-5" y="-22" width="4" height="44" rx="2"/>
+    <rect x="10" y="-32" width="4" height="64" rx="2"/>
+    <rect x="25" y="-18" width="4" height="36" rx="2"/>
+    <rect x="40" y="-26" width="4" height="52" rx="2"/>
+    <rect x="55" y="-12" width="4" height="24" rx="2"/>
+    <rect x="70" y="-8" width="4" height="16" rx="2"/>
+  </g>
+
+  <text x="300" y="690" text-anchor="middle" fill="#f472b6" font-family="'Plus Jakarta Sans', monospace, sans-serif" font-size="12" font-weight="bold" letter-spacing="4" opacity="0.9">STIC // MEDIA LEAD</text>
+  <text x="300" y="715" text-anchor="middle" fill="#94a3b8" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" letter-spacing="2" opacity="0.7">CREATIVE &amp; MEDIA LEAD</text>
+</svg>
+

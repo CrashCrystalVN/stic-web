@@ -4,12 +4,12 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, Send, Home, Compass, Layers, Rocket, Calendar, ExternalLink } from "lucide-react";
+import { X, ArrowRight, Send, Home, Compass, Layers, Rocket, Calendar, Users, ExternalLink } from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
 import { CLUB_INFO } from "@/lib/data";
 
-const ICONS = [Home, Compass, Layers, Rocket, Calendar, Send];
+const ICONS = [Home, Compass, Layers, Rocket, Calendar, Users, Send];
 
 interface Props {
   isOpen: boolean;
@@ -25,6 +25,9 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
     if (id === "join") {
       onClose();
       window.location.href = "/join";
+    } else if (id === "member") {
+      onClose();
+      window.location.href = "/member";
     } else {
       onNavigate(id);
     }

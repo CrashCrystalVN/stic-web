@@ -18,6 +18,7 @@ export function Footer() {
     { id: "about",    label: t(T.nav.about),    href: "/#about" },
     { id: "teams",    label: t(T.nav.teams),    href: "/#teams" },
     { id: "projects", label: t(T.nav.projects), href: "/#projects" },
+    { id: "member",   label: t(T.nav.member),   href: "/member" },
     { id: "join",     label: t(T.nav.join),     href: "/join" },
   ];
 
@@ -66,7 +67,7 @@ export function Footer() {
               <div key={link.id}>
                 <Link
                   href={link.href}
-                  onClick={(e) => link.id !== "join" && handleNav(e, link.id)}
+                  onClick={(e) => link.id !== "join" && link.id !== "member" && handleNav(e, link.id)}
                   className="text-xs text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
                   {link.label}
