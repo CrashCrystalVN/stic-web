@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion, useSpring } from "framer-motion";
 import {
@@ -279,24 +280,45 @@ export default function AnimationLabPage() {
   const [copiedCode, setCopiedCode] = useState(false);
   const [isHoveringClickable, setIsHoveringClickable] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
   // Direct ref for zero-latency, 100% physically aligned cursor tracking
   const cursorRef = useRef<HTMLDivElement>(null);
+  const mouseCoords = useRef({ x: -100, y: -100, hasMoved: false });
+
+  const isCustomCursorActive = cursorMode !== "system";
 
   useEffect(() => {
-    const handleMove = (e: MouseEvent) => {
-      // Instant transform update without transition-transform lag
+    setMounted(true);
+  }, []);
+
+  // Global cursor-none override on body to ensure default cursor is completely hidden
+  useEffect(() => {
+    if (isCustomCursorActive && hideSystemCursor) {
+      document.body.classList.add("custom-cursor-active");
+      document.documentElement.classList.add("custom-cursor-active");
+      return () => {
+        document.body.classList.remove("custom-cursor-active");
+        document.documentElement.classList.remove("custom-cursor-active");
+      };
+    }
+  }, [isCustomCursorActive, hideSystemCursor]);
+
+  useEffect(() => {
+    const updateCursorPosition = (clientX: number, clientY: number) => {
+      mouseCoords.current = { x: clientX, y: clientY, hasMoved: true };
       if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        cursorRef.current.style.transform = `translate3d(${clientX}px, ${clientY}px, 0)`;
         cursorRef.current.style.opacity = "1";
       }
     };
 
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | null;
+    const checkHover = (x: number, y: number) => {
+      if (x < 0 || y < 0) return;
+      const el = document.elementFromPoint(x, y);
       if (
-        target?.closest(
-          "a, button, input, textarea, [data-interactive], .clickable, code"
+        el?.closest(
+          "a, button, input, textarea, select, [data-interactive], .clickable, code"
         )
       ) {
         setIsHoveringClickable(true);
@@ -305,22 +327,33 @@ export default function AnimationLabPage() {
       }
     };
 
-    const handleScroll = () => {
+    const handleMove = (e: MouseEvent) => {
+      updateCursorPosition(e.clientX, e.clientY);
+      checkHover(e.clientX, e.clientY);
+    };
+
+    const handleScrollOrWheel = () => {
       const total =
         document.documentElement.scrollHeight - window.innerHeight;
       if (total > 0) {
         setScrollProgress((window.scrollY / total) * 100);
       }
+
+      // Keep cursor pinned strictly to the viewport coordinates when scrolling
+      if (mouseCoords.current.hasMoved && cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${mouseCoords.current.x}px, ${mouseCoords.current.y}px, 0)`;
+        checkHover(mouseCoords.current.x, mouseCoords.current.y);
+      }
     };
 
     window.addEventListener("mousemove", handleMove, { passive: true });
-    window.addEventListener("mouseover", handleMouseOver, { passive: true });
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScrollOrWheel, { passive: true });
+    window.addEventListener("wheel", handleScrollOrWheel, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", handleMove);
-      window.removeEventListener("mouseover", handleMouseOver);
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScrollOrWheel);
+      window.removeEventListener("wheel", handleScrollOrWheel);
     };
   }, []);
 
@@ -354,8 +387,6 @@ window.addEventListener("mousemove", (e) => {
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
   };
-
-  const isCustomCursorActive = cursorMode !== "system";
 
   return (
     <div
@@ -444,12 +475,12 @@ window.addEventListener("mousemove", (e) => {
         />
       </div>
 
-      {/* ── ZERO-LAG PHYSICALLY ALIGNED CURSOR FOLLOWER ── */}
-      {isCustomCursorActive && (
+      {/* ── ZERO-LAG PHYSICALLY ALIGNED CURSOR FOLLOWER (PORTALED TO BODY) ── */}
+      {mounted && isCustomCursorActive && typeof document !== "undefined" && createPortal(
         <div
           ref={cursorRef}
           style={{ willChange: "transform", opacity: 0 }}
-          className="fixed top-0 left-0 pointer-events-none z-[99999]"
+          className="fixed top-0 left-0 pointer-events-none z-[999999]"
         >
           {cursorMode === "difference" && (
             <div className="relative -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
@@ -493,7 +524,8 @@ window.addEventListener("mousemove", (e) => {
               <div className="w-1 h-1 bg-white rounded-full absolute" />
             </div>
           )}
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── BACKGROUND AMBIENCE ── */}

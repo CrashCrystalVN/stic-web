@@ -12,7 +12,7 @@ export function MainWrapper({ children }: { children: React.ReactNode }) {
       className="flex-1"
       animate={{
         opacity: contentVisible ? 1 : 0,
-        filter: contentVisible ? "blur(0px)" : "blur(3px)",
+        filter: contentVisible ? "none" : "blur(3px)",
       }}
       transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
     >

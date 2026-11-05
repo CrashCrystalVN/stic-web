@@ -49,6 +49,12 @@ body {
 ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
 .dark ::-webkit-scrollbar-thumb { background: #1e293b; }
 
+/* Custom cursor global override when active */
+.custom-cursor-active,
+.custom-cursor-active * {
+  cursor: none !important;
+}
+
 /* ========================================================
    ANIMATED FLOWING GRADIENTS (Unidirectional 1-Direction Flow)
    Chạy liên tục theo 1 HƯỚNG DUY NHẤT (không đảo chiều, không giật)
