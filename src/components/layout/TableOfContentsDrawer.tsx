@@ -118,7 +118,14 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
             </div>
 
             {/* Bottom CTA (Navigates to /join subpage) */}
-            <div className="px-4 py-5 border-t border-slate-100 dark:border-slate-800 space-y-2">
+            <div className="px-4 py-4 border-t border-slate-100 dark:border-slate-800 space-y-2">
+              <Link
+                href="/lab"
+                onClick={onClose}
+                className="w-full py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700"
+              >
+                <span>🧪 {lang === "vi" ? "Thử nghiệm Animation Lab" : "Animation Lab"}</span>
+              </Link>
               <Link
                 href="/join"
                 onClick={onClose}
