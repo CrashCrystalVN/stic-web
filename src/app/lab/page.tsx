@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useSpring } from "framer-motion";
+import { motion, useSpring } from "framer-motion";
 import {
   Sparkles,
   ArrowLeft,
@@ -23,12 +23,10 @@ import {
   Cpu,
   Monitor
 } from "lucide-react";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 import { useLang } from "@/context/LangContext";
 
 // ── Types ─────────────────────────────────────────────────────────────
-type CursorMode = "artru-diff" | "magnetic-ring" | "cyber-cross" | "system";
+type CursorMode = "difference" | "magnetic-ring" | "cyber-cross" | "system";
 
 // ── Cyber Text Scramble Hook ─────────────────────────────────────────
 function useTextScramble(finalText: string) {
@@ -140,7 +138,7 @@ function TiltCard({
         style={{
           transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
           transition: "transform 0.15s ease-out, filter 0.3s ease",
-          filter: useLiquidFilter ? "url(#artru-liquid-glass)" : "none",
+          filter: useLiquidFilter ? "url(#stic-liquid-glass)" : "none",
         }}
         className="relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-slate-900/90 dark:bg-[#0c121e]/90 border border-white/15 dark:border-white/10 shadow-2xl backdrop-blur-xl transition-shadow duration-300 hover:shadow-cyan-500/10 hover:border-cyan-400/40"
       >
@@ -273,19 +271,25 @@ export default function AnimationLabPage() {
   const { lang } = useLang();
 
   // State controls
-  const [cursorMode, setCursorMode] = useState<CursorMode>("artru-diff");
+  const [cursorMode, setCursorMode] = useState<CursorMode>("difference");
+  const [hideSystemCursor, setHideSystemCursor] = useState(true);
   const [tiltIntensity, setTiltIntensity] = useState(15);
   const [enableTilt, setEnableTilt] = useState(true);
   const [useLiquidFilter, setUseLiquidFilter] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
-  const [mouseCoord, setMouseCoord] = useState({ x: -100, y: -100 });
   const [isHoveringClickable, setIsHoveringClickable] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // Mouse follower listener (matches artru.net)
+  // Direct ref for zero-latency, 100% physically aligned cursor tracking
+  const cursorRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleMove = (e: MouseEvent) => {
-      setMouseCoord({ x: e.clientX, y: e.clientY });
+      // Instant transform update without transition-transform lag
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        cursorRef.current.style.opacity = "1";
+      }
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -320,33 +324,46 @@ export default function AnimationLabPage() {
     };
   }, []);
 
-  const copyArtruCss = () => {
-    const css = `.artru-mouse {
+  const copyCustomCss = () => {
+    const css = `.stic-cursor {
   opacity: 1;
   width: 16px;
   height: 16px;
   border-radius: 50%;
   background-color: #fff;
   position: fixed;
+  top: 0;
+  left: 0;
   z-index: 9999999999;
   pointer-events: none;
   mix-blend-mode: difference;
   box-shadow: 0 0 20px 0 #fff;
-  transition: transform .2s ease-out, width .3s, height .3s, opacity .5s;
   will-change: transform;
 }
-.artru-mouse.hover {
-  width: 0px;
-  height: 0px;
-}`;
+
+.stic-cursor.hover {
+  width: 36px;
+  height: 36px;
+}
+
+/* Zero-lag instant position tracking */
+window.addEventListener("mousemove", (e) => {
+  cursor.style.transform = \`translate3d(\${e.clientX}px, \${e.clientY}px, 0)\`;
+}, { passive: true });`;
     navigator.clipboard.writeText(css);
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
   };
 
+  const isCustomCursorActive = cursorMode !== "system";
+
   return (
-    <div className="min-h-screen bg-[#070b12] text-slate-100 selection:bg-blue-500/30 selection:text-blue-200 font-sans relative overflow-x-hidden">
-      {/* ── ARTRU.NET CHROMATIC DISPERSION LIQUID GLASS SVG FILTER ── */}
+    <div
+      className={`min-h-screen bg-[#070b12] text-slate-100 selection:bg-blue-500/30 selection:text-blue-200 font-sans relative overflow-x-hidden ${
+        isCustomCursorActive && hideSystemCursor ? "cursor-none" : ""
+      }`}
+    >
+      {/* ── CHROMATIC DISPERSION LIQUID GLASS SVG FILTER ── */}
       <svg
         className="hidden pointer-events-none absolute"
         xmlns="http://www.w3.org/2000/svg"
@@ -354,7 +371,7 @@ export default function AnimationLabPage() {
       >
         <defs>
           <filter
-            id="artru-liquid-glass"
+            id="stic-liquid-glass"
             colorInterpolationFilters="sRGB"
             x="-2%"
             y="-2%"
@@ -419,7 +436,7 @@ export default function AnimationLabPage() {
         </defs>
       </svg>
 
-      {/* ── ARTRU-STYLE READING PROGRESS TOP BAR ── */}
+      {/* ── READING PROGRESS TOP BAR ── */}
       <div className="fixed top-0 left-0 right-0 h-1 bg-transparent z-50 pointer-events-none">
         <div
           style={{ width: `${scrollProgress}%` }}
@@ -427,37 +444,44 @@ export default function AnimationLabPage() {
         />
       </div>
 
-      {/* ── ARTRU INTERACTIVE CURSOR FOLLOWER ── */}
-      {cursorMode !== "system" && (
+      {/* ── ZERO-LAG PHYSICALLY ALIGNED CURSOR FOLLOWER ── */}
+      {isCustomCursorActive && (
         <div
-          style={{
-            transform: `translate(${mouseCoord.x}px, ${mouseCoord.y}px)`,
-          }}
-          className="fixed top-0 left-0 pointer-events-none z-[99999] transition-transform duration-75 ease-out"
+          ref={cursorRef}
+          style={{ willChange: "transform", opacity: 0 }}
+          className="fixed top-0 left-0 pointer-events-none z-[99999]"
         >
-          {cursorMode === "artru-diff" && (
-            <div
-              style={{
-                mixBlendMode: "difference",
-                boxShadow: "0 0 24px 2px #fff",
-              }}
-              className={`-translate-x-1/2 -translate-y-1/2 rounded-full bg-white transition-all duration-300 ease-out ${
-                isHoveringClickable
-                  ? "w-10 h-10 opacity-70 scale-125"
-                  : "w-4 h-4 opacity-100"
-              }`}
-            />
+          {cursorMode === "difference" && (
+            <div className="relative -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
+              <div
+                style={{
+                  mixBlendMode: "difference",
+                  boxShadow: "0 0 20px 2px #fff",
+                }}
+                className={`rounded-full bg-white transition-all duration-200 ease-out ${
+                  isHoveringClickable
+                    ? "w-10 h-10 opacity-75 scale-110"
+                    : "w-4 h-4 opacity-100"
+                }`}
+              />
+              {/* Center physical pinpoint for 100% targeting clarity */}
+              <div
+                style={{ mixBlendMode: "difference" }}
+                className="absolute w-1 h-1 bg-black rounded-full"
+              />
+            </div>
           )}
 
           {cursorMode === "magnetic-ring" && (
-            <div
-              className={`-translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.6)] transition-all duration-200 ${
-                isHoveringClickable
-                  ? "w-12 h-12 bg-cyan-400/20 scale-110"
-                  : "w-6 h-6 bg-transparent"
-              }`}
-            >
-              <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-cyan-300" />
+            <div className="relative -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none">
+              <div
+                className={`rounded-full border-2 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.6)] transition-all duration-200 ${
+                  isHoveringClickable
+                    ? "w-12 h-12 bg-cyan-400/20 scale-110"
+                    : "w-6 h-6 bg-transparent"
+                }`}
+              />
+              <div className="absolute w-1.5 h-1.5 rounded-full bg-cyan-300 shadow-[0_0_6px_#22d3ee]" />
             </div>
           )}
 
@@ -466,13 +490,11 @@ export default function AnimationLabPage() {
               <div className="w-full h-[1px] bg-cyan-400/80 shadow-[0_0_6px_#22d3ee]" />
               <div className="h-full w-[1px] bg-cyan-400/80 shadow-[0_0_6px_#22d3ee] absolute" />
               <div className="w-3 h-3 border border-cyan-300 rounded-sm absolute" />
+              <div className="w-1 h-1 bg-white rounded-full absolute" />
             </div>
           )}
         </div>
       )}
-
-      {/* Main Navbar */}
-      <Navbar />
 
       {/* ── BACKGROUND AMBIENCE ── */}
       <div className="fixed inset-0 pointer-events-none z-0">
@@ -493,7 +515,7 @@ export default function AnimationLabPage() {
 
           <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 bg-cyan-950/60 border border-cyan-500/30 px-3.5 py-1.5 rounded-full shadow-inner">
             <Sparkles className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: "6s" }} />
-            <span>LAB ENGINE // ARTRU.NET MOTION MATRIX</span>
+            <span>LAB ENGINE // STIC MOTION MATRIX</span>
           </div>
         </div>
 
@@ -511,33 +533,37 @@ export default function AnimationLabPage() {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
-            Không gian thử nghiệm các cơ chế hoạt ảnh tiên tiến được trích xuất và tinh chỉnh từ thiết kế của{" "}
-            <a
-              href="https://artru.net"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-cyan-400 underline underline-offset-4 decoration-cyan-400/50 hover:text-cyan-300 font-semibold inline-flex items-center gap-1"
-            >
-              artru.net
-            </a>
-            : con trỏ chuột <span className="font-mono text-xs text-cyan-300">mix-blend-mode: difference</span>, thấu kính khúc xạ{" "}
-            <span className="font-mono text-xs text-cyan-300">Liquid Glass</span>, 3D Tilt phản quang và hút từ tính{" "}
+            Không gian thử nghiệm các cơ chế hoạt ảnh chuyển động hiện đại dành cho STIC: con trỏ chuột quang học{" "}
+            <span className="font-mono text-xs text-cyan-300">mix-blend-mode: difference</span>, thấu kính khúc xạ{" "}
+            <span className="font-mono text-xs text-cyan-300">Liquid Glass</span>, hiệu ứng 3D Tilt phản quang đa chiều và lực kéo từ tính{" "}
             <span className="font-mono text-xs text-cyan-300">Magnetic Physics</span>.
           </p>
         </div>
 
         {/* ── INTERACTIVE CONTROL DECK / TOOLBAR ── */}
         <div className="mb-14 p-6 sm:p-8 rounded-3xl bg-slate-900/80 border border-white/10 shadow-2xl backdrop-blur-2xl">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+          <div className="flex flex-wrap items-center justify-between border-b border-white/10 pb-4 mb-6 gap-3">
             <div className="flex items-center gap-2.5">
               <Sliders className="w-5 h-5 text-cyan-400" />
               <h2 className="text-base sm:text-lg font-bold text-white tracking-wide">
                 Bảng điều khiển thông số tương tác (Live Matrix Control)
               </h2>
             </div>
-            <span className="text-[11px] font-mono text-slate-400 bg-white/5 px-2.5 py-1 rounded-md border border-white/5">
-              REALTIME TUNING
-            </span>
+
+            {/* Toggle Hide/Show System Cursor */}
+            {isCustomCursorActive && (
+              <button
+                onClick={() => setHideSystemCursor(!hideSystemCursor)}
+                className="text-xs font-mono px-3 py-1.5 rounded-full border border-cyan-400/40 bg-cyan-950/50 text-cyan-300 hover:bg-cyan-900/50 transition-colors flex items-center gap-1.5"
+              >
+                <MousePointer2 className="w-3 h-3" />
+                <span>
+                  {hideSystemCursor
+                    ? "Đang ẩn con trỏ gốc (Khớp chuẩn 100%)"
+                    : "Đang hiện song song cả 2 con trỏ"}
+                </span>
+              </button>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -549,7 +575,7 @@ export default function AnimationLabPage() {
               </label>
               <div className="grid grid-cols-2 gap-1.5">
                 {[
-                  { id: "artru-diff", name: "Artru Diff" },
+                  { id: "difference", name: "Đảo màu Diff" },
                   { id: "magnetic-ring", name: "Cyan Ring" },
                   { id: "cyber-cross", name: "Sci-Fi Cross" },
                   { id: "system", name: "Mặc định" },
@@ -591,7 +617,7 @@ export default function AnimationLabPage() {
               />
               <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
                 <span>0° (Phẳng)</span>
-                <span>15° (Chuẩn Artru)</span>
+                <span>15° (Tiêu chuẩn)</span>
                 <span>30° (Cyber Extreme)</span>
               </div>
             </div>
@@ -614,7 +640,7 @@ export default function AnimationLabPage() {
                 <span>{useLiquidFilter ? "BẬT KÍNH LỎNG KHÚC XẠ" : "TẮT (CHUẨN SẮC NÉT)"}</span>
               </button>
               <p className="text-[10px] text-slate-400">
-                Hiệu ứng tán sắc màu RGB (Chromatic Aberration SVG Filter) của artru.net.
+                Hiệu ứng tán sắc màu RGB (Chromatic Aberration SVG Filter).
               </p>
             </div>
 
@@ -749,18 +775,18 @@ export default function AnimationLabPage() {
             </div>
           </div>
 
-          {/* Card B: Artru Rise Text Animation */}
+          {/* Card B: Bloom Glow Text Animation */}
           <div className="p-8 rounded-3xl bg-slate-900/80 border border-white/10 shadow-xl backdrop-blur-xl flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 mb-3">
                 <Wand2 className="w-3.5 h-3.5" />
-                <span>ARTRU-RISE BLOOM GLOW</span>
+                <span>CHROMA BLOOM GLOW</span>
               </div>
               <h3 className="text-xl font-bold text-white mb-2">
                 Hiệu ứng Typography Drop Shadow Bloom
               </h3>
               <p className="text-xs text-slate-400 mb-6">
-                Mô phỏng chính xác style chữ phát sáng đa tầng với drop shadow quang học của artru.net:
+                Chữ phát sáng đa tầng kết hợp độ sâu bóng đổ quang học:
               </p>
 
               <div className="p-6 rounded-2xl bg-black/60 border border-white/10 text-center">
@@ -771,10 +797,10 @@ export default function AnimationLabPage() {
                   }}
                   className="text-3xl sm:text-4xl font-black text-cyan-100 tracking-wider block"
                 >
-                  ARTRU GLOW
+                  STIC GLOW
                 </span>
                 <span className="text-xs font-mono text-cyan-400 mt-2 block">
-                  --artru-text-filter: 0px -0.25em 50px rgba(255,255,255,0.5)
+                  filter: drop-shadow(0px -0.25em 35px rgba(56,189,248,0.7))
                 </span>
               </div>
             </div>
@@ -792,12 +818,12 @@ export default function AnimationLabPage() {
             <div className="flex items-center gap-2.5">
               <Monitor className="w-5 h-5 text-cyan-400" />
               <h2 className="text-lg font-bold text-white">
-                Mã nguồn trích xuất con trỏ `.artru-mouse` từ artru.net
+                Mã nguồn con trỏ chuẩn `.stic-cursor` (Zero-latency)
               </h2>
             </div>
 
             <button
-              onClick={copyArtruCss}
+              onClick={copyCustomCss}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-bold text-white bg-cyan-600 hover:bg-cyan-500 transition-colors shadow-md shadow-cyan-500/20"
             >
               {copiedCode ? (
@@ -808,46 +834,41 @@ export default function AnimationLabPage() {
               ) : (
                 <>
                   <Copy className="w-3.5 h-3.5" />
-                  <span>COPY CSS ARTRU</span>
+                  <span>COPY CSS CON TRỎ</span>
                 </>
               )}
             </button>
           </div>
 
           <pre className="p-5 rounded-2xl bg-black/80 border border-white/10 text-xs font-mono text-cyan-300/90 overflow-x-auto leading-relaxed">
-{`.artru-mouse {
-  opacity: 0;
+{`.stic-cursor {
+  opacity: 1;
   width: 16px;
   height: 16px;
   border-radius: 50%;
   background-color: #fff;
   position: fixed;
+  top: 0;
+  left: 0;
   z-index: 9999999999;
   pointer-events: none;
   mix-blend-mode: difference;
-  transform: translate(calc(50vw - 50px), calc(50vh - 50px));
-  transition: transform .2s ease-out, width .3s, height .3s, opacity .5s;
-  left: 0;
-  top: 0;
   box-shadow: 0 0 20px 0 #fff;
   will-change: transform;
 }
 
-.artru-mouse.hover {
-  width: 0px;
-  height: 0px;
+.stic-cursor.hover {
+  width: 36px;
+  height: 36px;
 }
 
-/* JavaScript Driver Listener */
+/* Zero-lag physical instant mouse tracker */
 window.addEventListener("mousemove", (e) => {
-  cursor.style.transform = \`translate(\${e.clientX - cursor.offsetWidth/2}px, \${e.clientY - cursor.offsetHeight/2}px)\`;
-  cursor.style.opacity = "1";
+  cursor.style.transform = \`translate3d(\${e.clientX}px, \${e.clientY}px, 0)\`;
 }, { passive: true });`}
           </pre>
         </section>
       </main>
-
-      <Footer />
     </div>
   );
 }
