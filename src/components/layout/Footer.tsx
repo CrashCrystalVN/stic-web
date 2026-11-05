@@ -20,6 +20,7 @@ export function Footer() {
     { id: "projects", label: t(T.nav.projects), href: "/#projects" },
     { id: "member",   label: t(T.nav.member),   href: "/member" },
     { id: "lab",      label: t({ vi: "Animation Lab 🧪", en: "Animation Lab 🧪" }), href: "/lab" },
+    { id: "clone",    label: t({ vi: "Bản Clone Motion ✨", en: "Motion Clone ✨" }), href: "/clone" },
     { id: "join",     label: t(T.nav.join),     href: "/join" },
   ];
 
@@ -68,7 +69,7 @@ export function Footer() {
               <div key={link.id}>
                 <Link
                   href={link.href}
-                  onClick={(e) => !["join", "member", "lab"].includes(link.id) && handleNav(e, link.id)}
+                  onClick={(e) => !["join", "member", "lab", "clone"].includes(link.id) && handleNav(e, link.id)}
                   className="text-xs text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
                   {link.label}
