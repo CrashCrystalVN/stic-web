@@ -1,11 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/common/SectionWrapper";
 import { smoothScrollTo } from "@/lib/utils";
-import { ArrowRight, Sparkles, Rocket, Layers, ExternalLink } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+  Rocket,
+  Layers,
+  ExternalLink,
+  BookOpen,
+  Navigation,
+  Cpu,
+  Bot,
+  Plane,
+  Tag,
+  CheckCircle2
+} from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
 import { TEAMS, PROJECTS, CLUB_INFO, type ProjectItem } from "@/lib/data";
@@ -17,19 +30,24 @@ export function ProjectsSection() {
   const [activeModalProject, setActiveModalProject] = useState<ProjectItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleOpenSpecificProject = (proj: ProjectItem) => {
+    setActiveModalProject({
+      ...proj,
+      title: lang === "en" ? (proj.titleEn || proj.title) : (proj.titleVi || proj.title),
+      tagline: lang === "en" ? (proj.taglineEn || proj.tagline) : (proj.taglineVi || proj.tagline),
+      description: lang === "en" ? (proj.descriptionEn || proj.description) : (proj.descriptionVi || proj.description),
+      team: lang === "en" ? (proj.teamEn || proj.team) : (proj.teamVi || proj.team),
+      category: lang === "en" ? (proj.categoryEn || proj.category) : (proj.categoryVi || proj.category),
+      metrics: lang === "en" ? (proj.metricsEn || proj.metrics) : (proj.metricsVi || proj.metrics),
+    });
+    setIsModalOpen(true);
+  };
+
   const handleOpenModal = (teamName?: string) => {
     const targetName = teamName || (selectedTeam === "all" ? "AI & Coding" : selectedTeam);
     const match = PROJECTS.find((p) => p.team.toLowerCase().includes(targetName.toLowerCase()));
     if (match) {
-      setActiveModalProject({
-        ...match,
-        title: lang === "en" ? (match.titleEn || match.title) : (match.titleVi || match.title),
-        tagline: lang === "en" ? (match.taglineEn || match.tagline) : (match.taglineVi || match.tagline),
-        description: lang === "en" ? (match.descriptionEn || match.description) : (match.descriptionVi || match.description),
-        team: lang === "en" ? (match.teamEn || match.team) : (match.teamVi || match.team),
-        category: lang === "en" ? (match.categoryEn || match.category) : (match.categoryVi || match.category),
-        metrics: lang === "en" ? (match.metricsEn || match.metrics) : (match.metricsVi || match.metrics),
-      });
+      handleOpenSpecificProject(match);
     } else {
       setActiveModalProject({
         id: "incubation-preview",
@@ -45,9 +63,18 @@ export function ProjectsSection() {
         image: "",
         metrics: "GEN 1.0",
       });
+      setIsModalOpen(true);
     }
-    setIsModalOpen(true);
   };
+
+  // Filter projects according to department tabs
+  const featuredProjects = useMemo(() => {
+    const mainTwo = PROJECTS.filter((p) => ["ai-book-classifier", "ai-delivery-drone"].includes(p.id));
+    if (selectedTeam === "all") {
+      return mainTwo;
+    }
+    return PROJECTS.filter((p) => p.team.toLowerCase().includes(selectedTeam.toLowerCase()));
+  }, [selectedTeam]);
 
   const FEATURES = [
     { label: t(T.projects.f1l), desc: t(T.projects.f1d) },
@@ -113,75 +140,143 @@ export function ProjectsSection() {
           ))}
         </div>
 
-        {/* 2. Elegant "SOON!" Showcase Stage (Để trống theo yêu cầu của user) */}
-        <div className="relative rounded-3xl p-8 sm:p-12 mb-14 bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/20 dark:from-slate-900/80 dark:via-[#0c121e] dark:to-slate-900/60 border border-slate-200/80 dark:border-white/10 text-center overflow-hidden shadow-xl shadow-blue-500/5">
-          {/* Subtle Ambient Glow */}
-          <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full bg-blue-500/10 dark:bg-blue-500/15 blur-3xl pointer-events-none" />
+        {/* 2. DỰ ÁN GEN 1.0 SHOWCASE CARDS */}
+        {featuredProjects.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12">
+            {featuredProjects.map((proj) => {
+              const isBook = proj.id === "ai-book-classifier";
+              const isDrone = proj.id === "ai-delivery-drone";
+              const title = lang === "en" ? (proj.titleEn || proj.title) : (proj.titleVi || proj.title);
+              const tagline = lang === "en" ? (proj.taglineEn || proj.tagline) : (proj.taglineVi || proj.tagline);
+              const desc = lang === "en" ? (proj.descriptionEn || proj.description) : (proj.descriptionVi || proj.description);
+              const category = lang === "en" ? (proj.categoryEn || proj.category) : (proj.categoryVi || proj.category);
 
-          {/* Icon Rocket Animation */}
-          <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xl shadow-blue-500/30 mb-5">
-            <Rocket className="w-8 h-8 animate-bounce" />
+              return (
+                <div
+                  key={proj.id}
+                  className="group relative rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-white via-slate-50 to-blue-50/20 dark:from-[#0d1424] dark:via-[#090e1a] dark:to-[#070b14] border border-slate-200/90 dark:border-white/10 hover:border-blue-400/50 dark:hover:border-cyan-400/40 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/10 flex flex-col justify-between overflow-hidden"
+                >
+                  {/* Ambient Glow */}
+                  <div
+                    className={`absolute -top-16 -right-16 w-48 h-48 rounded-full blur-3xl pointer-events-none opacity-40 group-hover:opacity-80 transition-opacity ${
+                      isBook ? "bg-cyan-500/30" : "bg-blue-600/30"
+                    }`}
+                  />
+
+                  <div>
+                    {/* Top Row: Department & Status Badges */}
+                    <div className="flex items-center justify-between gap-2 mb-6">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-cyan-400 border border-blue-200 dark:border-cyan-500/30">
+                        {isBook ? <BookOpen className="w-3.5 h-3.5" /> : <Plane className="w-3.5 h-3.5" />}
+                        <span>{category}</span>
+                      </span>
+
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/40">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span>GEN 1.0 INCUBATOR</span>
+                      </span>
+                    </div>
+
+                    {/* Project Visual Visor Hologram Box */}
+                    <div className="relative w-full h-36 rounded-2xl bg-gradient-to-br from-slate-100 to-blue-100/40 dark:from-slate-900/90 dark:to-cyan-950/30 border border-slate-200/80 dark:border-white/10 flex items-center justify-center p-4 mb-6 overflow-hidden">
+                      <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px] opacity-20" />
+                      
+                      <div className="relative z-10 flex flex-col items-center text-center">
+                        <div className="w-14 h-14 rounded-2xl bg-blue-600 dark:bg-cyan-500/20 text-white dark:text-cyan-300 border border-blue-500 dark:border-cyan-400/40 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                          {isBook ? <BookOpen className="w-7 h-7" /> : <Navigation className="w-7 h-7" />}
+                        </div>
+                        <span className="mt-2 text-[11px] font-mono font-bold tracking-wider uppercase text-slate-700 dark:text-cyan-300">
+                          {isBook ? "AI COMPUTER VISION // OCR" : "AUTONOMOUS UAV // LIDAR"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Titles */}
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-2 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
+                      {title}
+                    </h3>
+                    <p className="text-xs sm:text-sm font-semibold text-blue-600 dark:text-cyan-400/90 mb-3 leading-snug">
+                      {tagline}
+                    </p>
+                    <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300/80 line-clamp-3 mb-6">
+                      {desc}
+                    </p>
+
+                    {/* Tech Stack Tags */}
+                    <div className="flex flex-wrap items-center gap-1.5 mb-6">
+                      {proj.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-white/10"
+                        >
+                          #{t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Actions Row */}
+                  <div className="pt-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between gap-3">
+                    <button
+                      onClick={() => handleOpenSpecificProject(proj)}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors cursor-pointer"
+                    >
+                      <span>{lang === "vi" ? "Xem chi tiết dự án" : "View Project Details"}</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </button>
+
+                    <Link
+                      href="/join"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 dark:bg-cyan-500 dark:hover:bg-cyan-400 dark:text-slate-950 transition-all shadow-md shadow-blue-500/20 cursor-pointer"
+                    >
+                      <span>{lang === "vi" ? "Đăng ký tham gia" : "Join Project"}</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* 3. Incubation Callout: Mở rộng ý tưởng cho GEN 1.0 */}
+        <div className="relative rounded-3xl p-8 sm:p-10 mb-14 bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/20 dark:from-slate-900/80 dark:via-[#0c121e] dark:to-slate-900/60 border border-slate-200/80 dark:border-white/10 text-center overflow-hidden shadow-xl shadow-blue-500/5">
+          <div className="relative inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xl shadow-blue-500/30 mb-4">
+            <Rocket className="w-6 h-6 animate-bounce" />
           </div>
 
-          {/* Prominent Glowing Badge */}
-          <div className="flex items-center justify-center gap-2">
-            <span className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-blue-500/10 dark:bg-blue-400/10 border border-blue-500/25 text-blue-600 dark:text-blue-400 text-xs sm:text-sm font-bold uppercase tracking-wider">
-              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              <span>
-                {selectedTeam === "all"
-                  ? lang === "vi" ? "Dự án GEN 1.0 · Soon!" : "GEN 1.0 Projects · Soon!"
-                  : `${selectedTeam} // Soon!`}
-              </span>
-            </span>
-          </div>
-
-          {/* Heading */}
-          <h3 className="mt-4 text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {lang === "vi"
-              ? "Dự án đang trong giai đoạn ươm mầm"
-              : "Projects Under Incubation Phase"}
+              ? "Cùng ươm mầm các đề tài KHKT đột phá cùng GEN 1.0"
+              : "Incubate Groundbreaking STEM Projects with GEN 1.0"}
           </h3>
 
-          {/* Detailed explanation */}
-          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed">
+          <p className="mt-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed">
             {lang === "vi"
-              ? "Chưa có dự án cố định — các bạn thành viên trúng tuyển GEN 1.0 sẽ trực tiếp đề xuất ý tưởng, thành lập nhóm và chế tạo sản phẩm thực chiến đầu tiên cho CLB STIC."
-              : "No pre-set projects — selected GEN 1.0 members will directly propose ideas, form project teams, and build the first real-world innovations for STIC Club."}
+              ? "Ngoài 2 đề tài tiêu điểm trên, các thành viên trúng tuyển GEN 1.0 sẽ tiếp tục đề xuất ý tưởng mới, thành lập nhóm liên chuyên môn và được Ban chủ nhiệm hỗ trợ tài nguyên, thiết bị và cố vấn kỹ thuật từ A-Z."
+              : "Beyond these two flagship initiatives, incoming GEN 1.0 members will propose new ideas, form interdisciplinary squads, and receive full hardware resources and engineering mentorship from day one."}
           </p>
 
-          {/* Department tags list */}
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-1.5">
-            {["AI & Machine Learning", "Robotics & Hardware", "IoT Sensors", "Green Technology", "UI/UX & Media", "Data Analytics", "STEM Experiments"].map((tag) => (
-              <span
-                key={tag}
-                className="px-3 py-1 rounded-full text-xs font-mono font-medium bg-white/80 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 text-slate-600 dark:text-slate-300 shadow-sm"
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
-
-          {/* Quick Apply CTA & Open Project Window */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <button
               onClick={() => handleOpenModal()}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 text-xs font-bold transition-all cursor-pointer border border-slate-300 dark:border-slate-700 shadow-sm hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 text-xs font-bold transition-all cursor-pointer border border-slate-300 dark:border-slate-700 shadow-sm"
             >
-              <span>{lang === "vi" ? "Mở Project Window (Soon)" : "Open Project Window (Soon)"}</span>
+              <span>{lang === "vi" ? "Mở Project Window (Xem danh mục)" : "Open Project Window"}</span>
               <ExternalLink className="w-3.5 h-3.5 text-blue-500" />
             </button>
 
             <Link
               href="/join"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-full text-white text-xs font-bold transition-all cursor-pointer gradient-btn-projects"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-xs font-bold transition-all cursor-pointer gradient-btn-projects"
             >
-              <span>{lang === "vi" ? "Nộp đơn để cùng xây dựng dự án GEN 1.0" : "Apply to Build GEN 1.0 Projects"}</span>
+              <span>{lang === "vi" ? "Nộp đơn tham gia dự án GEN 1.0" : "Apply for GEN 1.0 Projects"}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
 
-        {/* 3. Incubation Features Highlights */}
+        {/* 4. Incubation Features Highlights */}
         <div className="p-6 sm:p-8 rounded-3xl liquid-glass border border-slate-200/80 dark:border-white/10 grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
           {FEATURES.map((f, i) => (
             <div key={f.label} className="flex gap-3.5">

@@ -1,9 +1,28 @@
 "use client";
 
-import React from "react";
-import { Rocket, Lightbulb, ExternalLink, Code2, Cpu, Leaf, Palette, FlaskConical, BarChart2 } from "lucide-react";
+import React, { useState } from "react";
+import Link from "next/link";
+import {
+  Rocket,
+  Lightbulb,
+  ExternalLink,
+  Code2,
+  Cpu,
+  Leaf,
+  Palette,
+  FlaskConical,
+  BarChart2,
+  BookOpen,
+  Navigation,
+  ArrowRight,
+  Tag,
+  Sparkles,
+  Plane
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useLang } from "@/context/LangContext";
+import { PROJECTS, type ProjectItem } from "@/lib/data";
+import { ProjectModal } from "@/components/sections/ProjectModal";
 
 const PROPOSED_FIELDS = [
   {
@@ -52,6 +71,25 @@ const PROPOSED_FIELDS = [
 
 export default function ProjectsPage() {
   const { lang } = useLang();
+  const [activeModalProject, setActiveModalProject] = useState<ProjectItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const featuredProjects = PROJECTS.filter((p) =>
+    ["ai-book-classifier", "ai-delivery-drone"].includes(p.id)
+  );
+
+  const handleOpenProject = (proj: ProjectItem) => {
+    setActiveModalProject({
+      ...proj,
+      title: lang === "en" ? (proj.titleEn || proj.title) : (proj.titleVi || proj.title),
+      tagline: lang === "en" ? (proj.taglineEn || proj.tagline) : (proj.taglineVi || proj.tagline),
+      description: lang === "en" ? (proj.descriptionEn || proj.description) : (proj.descriptionVi || proj.description),
+      team: lang === "en" ? (proj.teamEn || proj.team) : (proj.teamVi || proj.team),
+      category: lang === "en" ? (proj.categoryEn || proj.category) : (proj.categoryVi || proj.category),
+      metrics: lang === "en" ? (proj.metricsEn || proj.metrics) : (proj.metricsVi || proj.metrics),
+    });
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen pt-32 pb-24 bg-gradient-to-b from-[#edf4fe] via-[#f4f9ff] to-[#e4effd] dark:from-[#050914] dark:via-[#090e1e] dark:to-[#070b17] transition-colors">
@@ -82,6 +120,119 @@ export default function ProjectsPage() {
               ? "STIC là câu lạc bộ thế hệ đầu tiên. Các dự án nghiên cứu và kỹ thuật sẽ do chính các bạn thành viên GEN 1.0 cùng nhau khởi xướng và phát triển!"
               : "STIC is a first-generation club. Flagship engineering and scientific projects will be ideated, designed, and built by GEN 1.0 members themselves!"}
           </p>
+        </div>
+
+        {/* 2 Flagship Projects Showcase */}
+        <div className="mb-16">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-blue-600 dark:text-cyan-400">
+                {lang === "vi" ? "Dự Án Trọng Điểm // GEN 1.0" : "Flagship Initiatives // GEN 1.0"}
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1">
+                {lang === "vi" ? "Đề Tài Nghiên Cứu Tiêu Biểu" : "Incubated Flagship Projects"}
+              </h2>
+            </div>
+            <Link
+              href="/join"
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-cyan-400 hover:underline"
+            >
+              <span>{lang === "vi" ? "Nộp đơn tham gia ngay" : "Apply to join"}</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            {featuredProjects.map((proj) => {
+              const isBook = proj.id === "ai-book-classifier";
+              const title = lang === "en" ? (proj.titleEn || proj.title) : (proj.titleVi || proj.title);
+              const tagline = lang === "en" ? (proj.taglineEn || proj.tagline) : (proj.taglineVi || proj.tagline);
+              const desc = lang === "en" ? (proj.descriptionEn || proj.description) : (proj.descriptionVi || proj.description);
+              const category = lang === "en" ? (proj.categoryEn || proj.category) : (proj.categoryVi || proj.category);
+
+              return (
+                <div
+                  key={proj.id}
+                  className="group relative rounded-3xl p-6 sm:p-8 bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-white/10 hover:border-blue-400/50 dark:hover:border-cyan-400/40 shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden"
+                >
+                  {/* Subtle Glow */}
+                  <div
+                    className={`absolute -top-16 -right-16 w-48 h-48 rounded-full blur-3xl pointer-events-none opacity-30 group-hover:opacity-70 transition-opacity ${
+                      isBook ? "bg-cyan-500/30" : "bg-blue-600/30"
+                    }`}
+                  />
+
+                  <div>
+                    {/* Badges */}
+                    <div className="flex items-center justify-between gap-2 mb-6">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-cyan-400 border border-blue-200 dark:border-cyan-500/30">
+                        {isBook ? <BookOpen className="w-3.5 h-3.5" /> : <Plane className="w-3.5 h-3.5" />}
+                        <span>{category}</span>
+                      </span>
+
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-800/40">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <span>GEN 1.0</span>
+                      </span>
+                    </div>
+
+                    {/* Visor Box */}
+                    <div className="relative w-full h-32 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/60 dark:from-slate-800/80 dark:to-cyan-950/30 border border-slate-200/80 dark:border-white/10 flex items-center justify-center p-4 mb-6 overflow-hidden">
+                      <div className="flex flex-col items-center text-center">
+                        <div className="w-12 h-12 rounded-2xl bg-blue-600 dark:bg-cyan-500/20 text-white dark:text-cyan-300 border border-blue-500 dark:border-cyan-400/40 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
+                          {isBook ? <BookOpen className="w-6 h-6" /> : <Navigation className="w-6 h-6" />}
+                        </div>
+                        <span className="mt-2 text-[10px] font-mono font-bold tracking-wider uppercase text-slate-700 dark:text-cyan-300">
+                          {isBook ? "AI COMPUTER VISION // OCR" : "AUTONOMOUS UAV // LIDAR"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight mb-2 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
+                      {title}
+                    </h3>
+                    <p className="text-xs font-semibold text-blue-600 dark:text-cyan-400/90 mb-3 leading-snug">
+                      {tagline}
+                    </p>
+                    <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300/80 line-clamp-3 mb-6">
+                      {desc}
+                    </p>
+
+                    {/* Tech Stack Tags */}
+                    <div className="flex flex-wrap items-center gap-1.5 mb-6">
+                      {proj.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-medium bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200/80 dark:border-white/10"
+                        >
+                          #{t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-3">
+                    <button
+                      onClick={() => handleOpenProject(proj)}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-cyan-400 transition-colors cursor-pointer"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-blue-500" />
+                      <span>{lang === "vi" ? "Xem chi tiết dự án" : "View Details"}</span>
+                    </button>
+
+                    <Link
+                      href="/join"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-white text-xs font-bold transition-all cursor-pointer gradient-btn-projects"
+                    >
+                      <span>{lang === "vi" ? "Đăng ký tham gia" : "Join Project"}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Highlight Card */}
@@ -159,6 +310,13 @@ export default function ProjectsPage() {
           </div>
         </div>
       </div>
+
+      {/* Project Detail Modal */}
+      <ProjectModal
+        project={activeModalProject}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }
