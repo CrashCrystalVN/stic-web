@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/common/ThemeProvider";
 import { LangProvider } from "@/context/LangContext";
 import { MainWrapper } from "@/components/common/MainWrapper";
 import { FormPreloader } from "@/components/common/FormPreloader";
-import { ParticleBackground } from "@/components/common/ParticleBackground";
+import { ServiceWorkerRegister } from "@/components/common/ServiceWorkerRegister";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+
+// Tách tải Canvas hoạt ảnh ra khỏi Critical Path LCP
+const ParticleBackground = dynamic(
+  () => import("@/components/common/ParticleBackground").then((mod) => mod.ParticleBackground),
+  { ssr: false }
+);
 
 const font = Plus_Jakarta_Sans({
   subsets: ["latin", "vietnamese"],
@@ -106,6 +113,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <head>
         {/* Packet Prioritization: Nạp tài nguyên quan trọng LCP và DNS sớm nhất */}
+        <meta httpEquiv="x-dns-prefetch-control" content="on" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://docs.google.com" />
@@ -135,6 +143,8 @@ export default function RootLayout({
             <Footer />
             {/* Tự động tải trước Google Form ngầm trong thời gian rảnh của máy */}
             <FormPreloader />
+            {/* Bộ tăng tốc Service Worker lưu cache cục bộ thiết bị 0ms cho 1000+ VU */}
+            <ServiceWorkerRegister />
           </LangProvider>
         </ThemeProvider>
       </body>
