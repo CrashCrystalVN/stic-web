@@ -15,15 +15,13 @@ interface SectionWrapperProps {
 
 const defaultVariants: Variants = {
   hidden: {
-    opacity: 0,
-    y: 40,
+    y: 28,
   },
   visible: {
-    opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7,
-      ease: [0.21, 0.47, 0.32, 0.98],
+      duration: 0.85,
+      ease: [0.22, 1, 0.36, 1],
     },
   },
 };
@@ -33,7 +31,7 @@ export function SectionWrapper({
   id,
   className,
   delay = 0,
-  threshold = 0.15,
+  threshold = 0.12,
 }: SectionWrapperProps) {
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -51,13 +49,13 @@ export function SectionWrapper({
         visible: {
           ...defaultVariants.visible,
           transition: {
-            duration: 0.7,
+            duration: 0.85,
             delay,
-            ease: [0.21, 0.47, 0.32, 0.98],
+            ease: [0.22, 1, 0.36, 1],
           },
         },
       }}
-      className={cn("relative py-20 md:py-28 overflow-hidden", className)}
+      className={cn("relative py-20 md:py-28 overflow-hidden section-cv-auto", className)}
     >
       {children}
     </motion.section>

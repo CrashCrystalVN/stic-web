@@ -37,11 +37,12 @@ export default function ClonePage() {
   const [enable3DTilt, setEnable3DTilt] = useState(true);
   const [enableLiquidGlass, setEnableLiquidGlass] = useState(true);
   const [isHoveringClickable, setIsHoveringClickable] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [isHudOpen, setIsHudOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const cursorRef = useRef<HTMLDivElement>(null);
+  const scrollBarRef = useRef<HTMLDivElement>(null);
+  const hoveringRef = useRef(false);
   const mouseCoords = useRef({ x: -100, y: -100, hasMoved: false });
 
   const isCustomCursorActive = cursorMode !== "system";
@@ -62,8 +63,11 @@ export default function ClonePage() {
     }
   }, [isCustomCursorActive, hideSystemCursor]);
 
-  // Zero-lag tracking + scroll stability
+  // Zero-lag tracking + rAF scroll progress bar (0 React re-renders during scroll/mousemove)
   useEffect(() => {
+    let scrollRafId: number | null = null;
+    let scrollTicking = false;
+
     const updateCursorPosition = (clientX: number, clientY: number) => {
       mouseCoords.current = { x: clientX, y: clientY, hasMoved: true };
       if (cursorRef.current) {
@@ -72,47 +76,43 @@ export default function ClonePage() {
       }
     };
 
-    const checkHover = (x: number, y: number) => {
-      if (x < 0 || y < 0) return;
-      const el = document.elementFromPoint(x, y);
-      if (
-        el?.closest(
-          "a, button, input, textarea, select, [data-interactive], .clickable, code, [role='button'], .cursor-pointer"
-        )
-      ) {
-        setIsHoveringClickable(true);
-      } else {
-        setIsHoveringClickable(false);
-      }
-    };
-
     const handleMove = (e: MouseEvent) => {
       updateCursorPosition(e.clientX, e.clientY);
-      checkHover(e.clientX, e.clientY);
-    };
-
-    const handleScrollOrWheel = () => {
-      const total =
-        document.documentElement.scrollHeight - window.innerHeight;
-      if (total > 0) {
-        setScrollProgress((window.scrollY / total) * 100);
-      }
-
-      // Re-pin cursor to current viewport coordinates on scroll
-      if (mouseCoords.current.hasMoved && cursorRef.current) {
-        cursorRef.current.style.transform = `translate3d(${mouseCoords.current.x}px, ${mouseCoords.current.y}px, 0)`;
-        checkHover(mouseCoords.current.x, mouseCoords.current.y);
+      const target = e.target as Element | null;
+      const isInteractive = Boolean(
+        target?.closest(
+          "a, button, input, textarea, select, [data-interactive], .clickable, code, [role='button'], .cursor-pointer"
+        )
+      );
+      if (isInteractive !== hoveringRef.current) {
+        hoveringRef.current = isInteractive;
+        setIsHoveringClickable(isInteractive);
       }
     };
 
+    const syncScrollBar = () => {
+      scrollTicking = false;
+      if (!scrollBarRef.current) return;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = total > 0 ? Math.min(1, Math.max(0, window.scrollY / total)) : 0;
+      scrollBarRef.current.style.transform = `scaleX(${progress})`;
+    };
+
+    const handleScroll = () => {
+      if (!scrollTicking) {
+        scrollTicking = true;
+        scrollRafId = requestAnimationFrame(syncScrollBar);
+      }
+    };
+
+    syncScrollBar();
     window.addEventListener("mousemove", handleMove, { passive: true });
-    window.addEventListener("scroll", handleScrollOrWheel, { passive: true });
-    window.addEventListener("wheel", handleScrollOrWheel, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", handleMove);
-      window.removeEventListener("scroll", handleScrollOrWheel);
-      window.removeEventListener("wheel", handleScrollOrWheel);
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollRafId !== null) cancelAnimationFrame(scrollRafId);
     };
   }, []);
 
@@ -239,8 +239,9 @@ export default function ClonePage() {
       {/* ── TOP READING SCROLL PROGRESS BAR ── */}
       <div className="fixed top-0 left-0 right-0 h-1 bg-transparent z-50 pointer-events-none">
         <div
-          style={{ width: `${scrollProgress}%` }}
-          className="h-full bg-gradient-to-r from-blue-600 via-cyan-400 to-indigo-500 shadow-[0_0_12px_#38bdf8] transition-all duration-75"
+          ref={scrollBarRef}
+          style={{ transform: "scaleX(0)", transformOrigin: "left center" }}
+          className="w-full h-full bg-gradient-to-r from-blue-600 via-cyan-400 to-indigo-500 shadow-[0_0_12px_#38bdf8] will-change-transform"
         />
       </div>
 

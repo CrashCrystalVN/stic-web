@@ -53,3 +53,4 @@ skills-lock.json
 *.xlsx
 *.xls
 stress_test_results.json
+/scratch/

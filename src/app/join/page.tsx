@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { 
-  Sparkles, 
-  ChevronDown, 
-  Rocket, 
-  Users, 
-  Trophy, 
+import {
+  Sparkles,
+  ChevronDown,
+  Rocket,
+  Users,
+  Trophy,
   GraduationCap,
   ExternalLink
 } from "lucide-react";
@@ -35,7 +35,7 @@ export default function JoinPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-800 border border-blue-200 dark:border-slate-700 text-blue-700 dark:text-blue-400 text-xs font-semibold uppercase mb-4 shadow-xs">
+          <div className="inline-flex items-center     gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-800 border border-blue-200 dark:border-slate-700 text-blue-700 dark:text-blue-400 text-xs font-semibold uppercase mb-4 shadow-xs">
             <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             <span>{lang === "vi" ? "Đơn Tuyển Thành Viên GEN 1.0" : "GEN 1.0 Recruitment Application"}</span>
           </div>
@@ -60,9 +60,9 @@ export default function JoinPage() {
         </div>
 
         {/* Banner Dang Ky Tuyen Quan GEN 1.0 */}
-        <div className="relative w-full aspect-[2.55/1] rounded-3xl overflow-hidden border border-blue-100 dark:border-white/10 shadow-xl shadow-blue-500/10 mb-10">
+        <div className="relative w-full aspect-[16/9] rounded-3xl overflow-hidden border border-blue-100 dark:border-white/10 shadow-xl shadow-blue-500/10 mb-10">
           <Image
-            src="/banner.jpg"
+            src="/banner.jpg?v=2"
             alt="STIC GEN 1.0 Recruitment Banner"
             fill
             className="object-cover"
@@ -74,7 +74,7 @@ export default function JoinPage() {
             GOOGLE FORM NHÚNG TRỰC TIẾP (MAIN APPLICATION FORM)
             ======================================================== */}
         <div id="application-form" className="mb-20 scroll-mt-28">
-          <div className="rounded-3xl liquid-glass border border-blue-400/40 dark:border-blue-500/30 shadow-2xl p-4 sm:p-7 relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl">
+          <div className="rounded-3xl border border-blue-400/40 dark:border-blue-500/30 shadow-2xl p-4 sm:p-7 relative overflow-hidden bg-white/95 dark:bg-slate-900/95">
             {/* Embed Bar Header */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 mb-4 border-b border-slate-200/80 dark:border-slate-800">
               <div className="flex items-center gap-3">
@@ -223,9 +223,8 @@ export default function JoinPage() {
                     {lang === "en" ? (faq.questionEn || faq.question) : (faq.questionVi || faq.question)}
                   </span>
                   <ChevronDown
-                    className={`w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 transition-transform duration-200 ${
-                      openFaq === idx ? "rotate-180" : ""
-                    }`}
+                    className={`w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 transition-transform duration-200 ${openFaq === idx ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 {openFaq === idx && (

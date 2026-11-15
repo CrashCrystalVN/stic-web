@@ -7,7 +7,6 @@ import { SectionWrapper } from "@/components/common/SectionWrapper";
 import { Calendar, MapPin, Clock, ArrowRight } from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
-import { CLUB_INFO } from "@/lib/data";
 
 export function EventsSection() {
   const { t } = useLang();
@@ -23,10 +22,10 @@ export function EventsSection() {
         </p>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ y: 28 }}
+          whileInView={{ y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           className="p-8 sm:p-10 rounded-2xl bg-white dark:bg-[#111827] border border-slate-100 dark:border-slate-800 accent-glow"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider mb-6">

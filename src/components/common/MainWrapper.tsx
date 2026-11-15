@@ -1,22 +1,18 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { useLang } from "@/context/LangContext";
 
 export function MainWrapper({ children }: { children: React.ReactNode }) {
   const { contentVisible } = useLang();
 
   return (
-    <motion.main
-      className="flex-1"
-      animate={{
-        opacity: contentVisible ? 1 : 0,
-        filter: contentVisible ? "none" : "blur(3px)",
-      }}
-      transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
+    <main
+      className={`flex-1 transition-opacity duration-200 ease-out ${
+        contentVisible ? "opacity-100" : "opacity-0"
+      }`}
     >
       {children}
-    </motion.main>
+    </main>
   );
 }

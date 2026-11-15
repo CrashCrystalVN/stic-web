@@ -2,27 +2,25 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { SectionWrapper } from "@/components/common/SectionWrapper";
-import { smoothScrollTo } from "@/lib/utils";
 import {
   ArrowRight,
   Sparkles,
   Rocket,
-  Layers,
   ExternalLink,
   BookOpen,
   Navigation,
-  Cpu,
-  Bot,
-  Plane,
-  Tag,
-  CheckCircle2
+  Plane
 } from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
-import { TEAMS, PROJECTS, CLUB_INFO, type ProjectItem } from "@/lib/data";
-import { ProjectModal } from "./ProjectModal";
+import { TEAMS, PROJECTS, type ProjectItem } from "@/lib/data";
+
+const ProjectModal = dynamic(
+  () => import("./ProjectModal").then((m) => m.ProjectModal),
+  { ssr: false }
+);
 
 export function ProjectsSection() {
   const { t, lang } = useLang();
@@ -293,11 +291,13 @@ export function ProjectsSection() {
       </div>
 
       {/* Project Window Modal */}
-      <ProjectModal
-        project={activeModalProject}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      {isModalOpen && (
+        <ProjectModal
+          project={activeModalProject}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </SectionWrapper>
   );
 }

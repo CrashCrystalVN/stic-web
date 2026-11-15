@@ -68,17 +68,21 @@ export function GlitchLeaderCard({ leader, index }: GlitchLeaderCardProps) {
   return (
     <motion.div
       ref={cardRef}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.6, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ y: 28 }}
+      whileInView={{ y: 0 }}
+      viewport={{ once: true, amount: 0.18 }}
+      transition={{ duration: 0.85, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
       onMouseEnter={handleMouseEnter}
       className={`group relative flex flex-col rounded-3xl p-3 sm:p-3.5 transition-all duration-300 liquid-glass hover:scale-[1.02] ${config.borderGlow} shadow-xl`}
     >
       {/* ========================================================
           KHUNG ẢNH CHÂN DUNG 3:4 HIỆN ĐẠI (ZERO-LAG, KHÔNG SỌC NGANG TV)
           ======================================================== */}
-      <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-inner select-none will-change-transform">
+      <div
+        className={`relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800/80 shadow-inner select-none ${
+          isGlitching ? "will-change-transform" : ""
+        }`}
+      >
         {/* Bức ảnh chân dung 3:4 gốc sắc nét */}
         <Image
           src={leader.avatar}
@@ -86,7 +90,6 @@ export function GlitchLeaderCard({ leader, index }: GlitchLeaderCardProps) {
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
           className="object-cover object-center filter saturate-[1.08] brightness-[1.02] transition-transform duration-500 ease-out group-hover:scale-105"
-          priority
         />
 
         {/* Lớp Glitch hiện đại quang sai (Chỉ render 1 layer khi kích hoạt, 0% CPU overhead) */}

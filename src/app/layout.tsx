@@ -9,6 +9,7 @@ import { FormPreloader } from "@/components/common/FormPreloader";
 import { ServiceWorkerRegister } from "@/components/common/ServiceWorkerRegister";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { NativeSwarmProvider } from "@/components/swarm/NativeSwarmProvider";
 
 // Tách tải Canvas hoạt ảnh ra khỏi Critical Path LCP
 const ParticleBackground = dynamic(
@@ -62,10 +63,10 @@ export const metadata: Metadata = {
     description: "Sân chơi STEM thực chiến THPT Đà Nẵng. Đăng ký GEN 1.0 ngay!",
     images: [
       {
-        url: `${siteUrl}/banner.jpg`,
-        secureUrl: `${siteUrl}/banner.jpg`,
+        url: `${siteUrl}/banner.jpg?v=2`,
+        secureUrl: `${siteUrl}/banner.jpg?v=2`,
         width: 1024,
-        height: 402,
+        height: 576,
         type: "image/jpeg",
         alt: "STIC — CLB Khoa học Kỹ thuật Đà Nẵng",
       },
@@ -77,7 +78,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "STIC — CLB Khoa học Kỹ thuật Đà Nẵng",
     description: "Sân chơi STEM thực chiến THPT Đà Nẵng. Đăng ký GEN 1.0 ngay!",
-    images: [`${siteUrl}/banner.jpg`],
+    images: [`${siteUrl}/banner.jpg?v=2`],
   },
 
   // Icons (Favicon tròn dạng circular avatar trên tab trình duyệt Cốc Cốc / Chrome)
@@ -118,16 +119,21 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://docs.google.com" />
         <link rel="preconnect" href="https://docs.google.com" crossOrigin="anonymous" />
-        <link rel="preload" as="image" href="/logo.png" fetchPriority="high" />
-        <link rel="preload" as="image" href="/banner.jpg" fetchPriority="high" />
+        <link rel="preload" as="image" href={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/logo.png`} fetchPriority="high" />
 
         {/* Zalo & In-App Browser Specific OpenGraph Fallbacks */}
-        <meta property="og:image:secure_url" content={`${siteUrl}/banner.jpg`} />
-        <link rel="image_src" href={`${siteUrl}/banner.jpg`} />
+        <meta property="og:image:secure_url" content={`${siteUrl}/banner.jpg?v=2`} />
+        <link rel="image_src" href={`${siteUrl}/banner.jpg?v=2`} />
       </head>
       <body
         className={`${font.variable} font-sans min-h-screen antialiased flex flex-col relative`}
       >
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(!location.search.includes('swarm=0')){var c=document.documentElement.classList;c.add('swarm-rebuilding','swarm-booting');}}catch(e){}",
+          }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -138,9 +144,11 @@ export default function RootLayout({
             <div className="hidden md:block pointer-events-none fixed inset-0 z-0 overflow-hidden">
               <ParticleBackground />
             </div>
-            <Navbar />
-            <MainWrapper>{children}</MainWrapper>
-            <Footer />
+            <NativeSwarmProvider>
+              <Navbar />
+              <MainWrapper>{children}</MainWrapper>
+              <Footer />
+            </NativeSwarmProvider>
             {/* Tự động tải trước Google Form ngầm trong thời gian rảnh của máy */}
             <FormPreloader />
             {/* Bộ tăng tốc Service Worker lưu cache cục bộ thiết bị 0ms cho 1000+ VU */}

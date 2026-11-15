@@ -7,7 +7,6 @@ import { Mail, Heart } from "lucide-react";
 import { smoothScrollTo } from "@/lib/utils";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
-import { CLUB_INFO } from "@/lib/data";
 
 export function Footer() {
   const { t } = useLang();
@@ -40,7 +39,7 @@ export function Footer() {
             <div className="flex items-center gap-2.5">
               <div className="relative w-8 h-8 rounded-full overflow-hidden shadow-xs shrink-0">
                 <Image
-                  src="/logo.png"
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/logo.png`}
                   alt="STIC Logo"
                   width={32}
                   height={32}

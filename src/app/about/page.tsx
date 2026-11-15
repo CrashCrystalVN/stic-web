@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { 
   Sparkles, 
   BookOpen, 
@@ -11,8 +12,7 @@ import {
   Zap,
   Target,
   Wrench,
-  ExternalLink,
-  Image as ImageIcon
+  ExternalLink
 } from "lucide-react";
 import { CORE_VALUES, LEADERS } from "@/lib/data";
 import { Button } from "@/components/ui/Button";
@@ -68,18 +68,14 @@ export default function AboutPage() {
 
       {/* 2. Khung Banner */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 mb-16">
-        <div className="relative rounded-3xl border-2 border-dashed border-blue-200/80 dark:border-slate-700 bg-white/40 dark:bg-slate-900/40 backdrop-blur-sm p-8 text-center">
-          <div className="flex flex-col items-center justify-center space-y-1.5">
-            <ImageIcon className="w-6 h-6 text-blue-500/80 dark:text-blue-400/80" />
-            <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-              {lang === "vi" ? "Khu Vực Ảnh Nền / Banner Giới Thiệu" : "Showcase Banner Area"}
-            </p>
-            <p className="text-[11px] text-slate-400 dark:text-slate-500">
-              {lang === "vi"
-                ? "(Khu vực để trống — Tự động hiển thị khi bạn cập nhật file ảnh nền sau này)"
-                : "(Reserved area — Automatically displays when showcase media is uploaded)"}
-            </p>
-          </div>
+        <div className="relative w-full aspect-[16/9] rounded-3xl overflow-hidden border border-blue-100 dark:border-white/10 shadow-xl shadow-blue-500/10">
+          <Image
+            src="/banner.jpg?v=2"
+            alt={lang === "vi" ? "CLB KHKT STIC Banner" : "STIC Club Banner"}
+            fill
+            className="object-cover"
+            priority
+          />
         </div>
       </section>
 

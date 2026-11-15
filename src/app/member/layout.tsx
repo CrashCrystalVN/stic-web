@@ -14,10 +14,10 @@ export const metadata: Metadata = {
     description: "Danh sách Ban Chủ Nhiệm, Trưởng ban Kỹ thuật, Media và các Thành viên CLB Khoa học Kỹ thuật STIC.",
     images: [
       {
-        url: `${siteUrl}/banner.jpg`,
-        secureUrl: `${siteUrl}/banner.jpg`,
+        url: `${siteUrl}/banner.jpg?v=2`,
+        secureUrl: `${siteUrl}/banner.jpg?v=2`,
         width: 1024,
-        height: 402,
+        height: 576,
         type: "image/jpeg",
         alt: "Thành Viên CLB KHKT STIC",
       },
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Đội Ngũ Thành Viên — CLB STIC",
     description: "Danh sách Ban Chủ Nhiệm và Thành viên CLB STIC.",
-    images: [`${siteUrl}/banner.jpg`],
+    images: [`${siteUrl}/banner.jpg?v=2`],
   },
 };
 

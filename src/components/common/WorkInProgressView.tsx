@@ -43,7 +43,7 @@ export function WorkInProgressView() {
           <div className="absolute inset-0 rounded-full bg-blue-500/20 blur-xl animate-pulse" />
           <div className="relative w-20 h-20 rounded-2xl overflow-hidden border border-blue-400/40 dark:border-blue-500/30 shadow-lg p-2 bg-white/80 dark:bg-slate-950/80">
             <Image
-              src="/logo.png"
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/logo.png`}
               alt="STIC Logo"
               width={80}
               height={80}

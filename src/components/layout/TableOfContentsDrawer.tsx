@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ArrowRight, Send, Home, Compass, Layers, Rocket, Calendar, Users, ExternalLink } from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
-import { CLUB_INFO } from "@/lib/data";
 
 const ICONS = [Home, Compass, Layers, Rocket, Calendar, Users, Send];
 
@@ -60,7 +59,7 @@ export function TableOfContentsDrawer({ isOpen, onClose, onNavigate }: Props) {
               <div className="flex items-center gap-2.5">
                 <div className="relative w-8 h-8 rounded-full overflow-hidden shadow-xs shrink-0">
                   <Image
-                    src="/logo.png"
+                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/logo.png`}
                     alt="STIC Logo"
                     width={32}
                     height={32}

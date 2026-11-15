@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import {
   Rocket,
   Lightbulb,
@@ -15,14 +16,17 @@ import {
   BookOpen,
   Navigation,
   ArrowRight,
-  Tag,
   Sparkles,
   Plane
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useLang } from "@/context/LangContext";
 import { PROJECTS, type ProjectItem } from "@/lib/data";
-import { ProjectModal } from "@/components/sections/ProjectModal";
+
+const ProjectModal = dynamic(
+  () => import("@/components/sections/ProjectModal").then((m) => m.ProjectModal),
+  { ssr: false }
+);
 
 const PROPOSED_FIELDS = [
   {
@@ -312,11 +316,13 @@ export default function ProjectsPage() {
       </div>
 
       {/* Project Detail Modal */}
-      <ProjectModal
-        project={activeModalProject}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      {isModalOpen && (
+        <ProjectModal
+          project={activeModalProject}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

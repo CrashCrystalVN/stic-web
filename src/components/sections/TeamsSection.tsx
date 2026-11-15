@@ -2,17 +2,21 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/common/SectionWrapper";
-import { TEAMS, PROJECTS, CLUB_INFO, type ProjectItem, type TeamItem } from "@/lib/data";
-import { smoothScrollTo } from "@/lib/utils";
+import { TEAMS, PROJECTS, type ProjectItem, type TeamItem } from "@/lib/data";
 import {
   Brain, Cpu, Lightbulb, Leaf, Palette, BarChart2, FlaskConical,
   Sparkles, ArrowRight, ExternalLink, Rocket
 } from "lucide-react";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
-import { ProjectModal } from "./ProjectModal";
+
+const ProjectModal = dynamic(
+  () => import("./ProjectModal").then((m) => m.ProjectModal),
+  { ssr: false }
+);
 
 const ICON_MAP: Record<string, React.ElementType> = {
   Brain, Cpu, Lightbulb, Leaf, Palette, BarChart2, FlaskConical,
@@ -88,10 +92,10 @@ export function TeamsSection() {
             return (
               <motion.div
                 key={team.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                initial={{ y: 26 }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ delay: index * 0.08, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ y: -4 }}
                 onClick={() => handleOpenTeamProject(team)}
                 className="group p-5 rounded-2xl bg-white dark:bg-[#111827] border border-slate-100 dark:border-slate-800 hover:border-blue-400/50 dark:hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 cursor-pointer flex flex-col justify-between"
@@ -146,11 +150,13 @@ export function TeamsSection() {
       </div>
 
       {/* Project Window Modal */}
-      <ProjectModal
-        project={activeProject}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      {isModalOpen && (
+        <ProjectModal
+          project={activeProject}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </SectionWrapper>
   );
 }

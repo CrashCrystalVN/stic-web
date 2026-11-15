@@ -14,10 +14,10 @@ export const metadata: Metadata = {
     description: "Đăng ký tuyển thành viên GEN 1.0 — CLB KHKT STIC Đà Nẵng!",
     images: [
       {
-        url: `${siteUrl}/banner.jpg`,
-        secureUrl: `${siteUrl}/banner.jpg`,
+        url: `${siteUrl}/banner.jpg?v=2`,
+        secureUrl: `${siteUrl}/banner.jpg?v=2`,
         width: 1024,
-        height: 402,
+        height: 576,
         type: "image/jpeg",
         alt: "Đơn Tuyển Thành Viên GEN 1.0 — CLB KHKT STIC",
       },
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Đơn Tuyển Thành Viên GEN 1.0 — CLB STIC",
     description: "Đăng ký tuyển thành viên GEN 1.0 — CLB KHKT STIC Đà Nẵng!",
-    images: [`${siteUrl}/banner.jpg`],
+    images: [`${siteUrl}/banner.jpg?v=2`],
   },
 };
 

@@ -1,54 +1,61 @@
-// STIC Web High-Performance Service Worker (1000+ VU Accelerator)
-const CACHE_NAME = 'stic-cache-v1';
+// STIC Web High-Performance Service Worker (Zero-Overhead Static Delivery)
+const CACHE_NAME = 'stic-cache-v5';
 const PRECACHE_URLS = [
   '/',
-  '/projects',
-  '/member',
-  '/join',
-  '/about',
   '/logo.png',
   '/favicon.png',
 ];
 
-// Install: Pre-cache primary routes
+// Install: Pre-cache lightweight core shell
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(PRECACHE_URLS).catch(() => {});
-    }).then(() => self.skipWaiting())
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => cache.addAll(PRECACHE_URLS).catch(() => {}))
+      .then(() => self.skipWaiting())
   );
 });
 
 // Activate: Clean up old cache versions
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys.map((key) => {
+            if (key !== CACHE_NAME) {
+              return caches.delete(key);
+            }
+          })
+        )
+      )
+      .then(() => self.clients.claim())
   );
 });
 
-// Fetch: Strategy depending on request type
+// Support instant activation when requested by client
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+// Fetch: Bypass immutable Next.js chunks & HTML navigations; cache static media & fonts
 self.addEventListener('fetch', (event) => {
   const request = event.request;
-  const url = new URL(request.url);
+  if (request.method !== 'GET') return;
 
-  // Only handle same-origin GET requests
-  if (request.method !== 'GET' || url.origin !== self.location.origin) {
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+
+  // Let browser HTTP disk cache handle immutable _next/static chunks directly (no SW overhead)
+  if (url.pathname.startsWith('/_next/static/')) {
     return;
   }
 
-  // Strategy 1: Cache First for static chunks, images, fonts
-  if (
-    url.pathname.startsWith('/_next/static/') ||
-    url.pathname.match(/\.(png|jpg|jpeg|svg|webp|ico|woff|woff2|ttf|css|js)$/)
-  ) {
+  // Strategy 1: Cache First for static media & fonts
+  if (url.pathname.match(/\.(png|jpg|jpeg|gif|svg|webp|ico|woff|woff2|ttf|otf)$/)) {
     event.respondWith(
       caches.match(request).then((cachedResponse) => {
         if (cachedResponse) {
@@ -65,26 +72,5 @@ self.addEventListener('fetch', (event) => {
         });
       })
     );
-    return;
   }
-
-  // Strategy 2: Stale-While-Revalidate for HTML pages (0ms instant response)
-  event.respondWith(
-    caches.match(request).then((cachedResponse) => {
-      const fetchPromise = fetch(request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, responseToCache);
-            });
-          }
-          return networkResponse;
-        })
-        .catch(() => cachedResponse);
-
-      // Return cached immediately if available, otherwise wait for network
-      return cachedResponse || fetchPromise;
-    })
-  );
 });

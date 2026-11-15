@@ -8,7 +8,7 @@ export function ServiceWorkerRegister() {
 
     const registerSW = () => {
       navigator.serviceWorker
-        .register("/sw.js")
+        .register(`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/sw.js`)
         .then((registration) => {
           registration.onupdatefound = () => {
             const installingWorker = registration.installing;

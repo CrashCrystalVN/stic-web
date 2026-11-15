@@ -59,10 +59,10 @@ export function AboutSection() {
               {ITEMS.map((item, i) => (
                 <motion.div
                   key={item.title}
-                  initial={{ opacity: 0, x: -16 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ x: -18, y: 12 }}
+                  whileInView={{ x: 0, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ delay: i * 0.12, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                   className="flex gap-3.5 p-3.5 rounded-2xl transition-colors hover:bg-slate-50 dark:hover:bg-slate-900/50"
                 >
                   <div className="mt-0.5 w-5 h-5 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 shrink-0 flex items-center justify-center shadow-sm shadow-blue-500/20">
@@ -81,10 +81,10 @@ export function AboutSection() {
 
           {/* Right Column: High-tech Info Card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ y: 28 }}
+            whileInView={{ y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
             className="lg:col-span-5 rounded-3xl overflow-hidden liquid-glass border border-white/80 dark:border-white/10 shadow-xl"
           >
             <div className="px-6 py-5 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-transparent border-b border-slate-200/80 dark:border-slate-800">

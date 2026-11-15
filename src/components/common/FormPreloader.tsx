@@ -1,90 +1,52 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-
-const GOOGLE_FORM_EMBED_URL =
-  "https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/viewform?embedded=true";
 
 /**
  * FormPreloader:
  * Khi người dùng truy cập trang chủ (/) hoặc các trang khác (ngoài /join),
- * component này sẽ:
- * 1. Tự động prefetch bundle JavaScript của trang `/join`.
- * 2. Khi trình duyệt rảnh rỗi (idle), tự động tải trước toàn bộ HTML, CSS, Font và Scripts
- *    của Google Form vào bộ nhớ đệm HTTP của trình duyệt.
- * -> Nhờ đó, khi người dùng bấm vào nút ứng tuyển hoặc chuyển sang /join,
- *    Google Form sẽ hiển thị NGAY LẬP TỨC mà không phải chờ quay vòng tải.
+ * component này chỉ tự động prefetch bundle JavaScript của trang `/join` khi trình duyệt rảnh (idle)
+ * để chuyển trang tức thì mà không tải ngầm iframe Google Form gây lag Main Thread.
  */
 export function FormPreloader() {
   const pathname = usePathname();
   const router = useRouter();
-  const [shouldPreload, setShouldPreload] = useState(false);
 
   useEffect(() => {
-    // Nếu người dùng đã ở trang /join thì trang đó đã có form chính thức, không cần prefetch nữa
-    if (pathname === "/join") return;
+    if (pathname === "/join" || typeof window === "undefined") return;
 
-    // 1. Prefetch trang /join của Next.js
-    try {
-      router.prefetch("/join");
-    } catch {
-      // ignore prefetch errors
-    }
+    let timerId: ReturnType<typeof setTimeout> | null = null;
+    let idleId: number | null = null;
 
-    // 2. Tải trước Google Form sau khi trang chủ đã tải xong và CPU rảnh rỗi (idle)
-    let timerId: NodeJS.Timeout | null = null;
+    const prefetchJoin = () => {
+      timerId = setTimeout(() => {
+        try {
+          router.prefetch("/join");
+        } catch {
+          // ignore prefetch errors
+        }
+      }, 1000);
+    };
 
-    if (typeof window !== "undefined") {
-      const schedulePreload = () => {
-        timerId = setTimeout(() => {
-          setShouldPreload(true);
-        }, 400); // Kích hoạt nạp sớm sau 400ms thay vì 1200ms
-      };
+    const win = window as unknown as {
+      requestIdleCallback?: (fn: () => void, opts?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
 
-      if ("requestIdleCallback" in window) {
-        (window as unknown as { requestIdleCallback: (fn: () => void, opts?: { timeout: number }) => void }).requestIdleCallback(
-          schedulePreload,
-          { timeout: 1500 }
-        );
-      } else {
-        schedulePreload();
-      }
+    if (typeof win.requestIdleCallback === "function") {
+      idleId = win.requestIdleCallback(prefetchJoin, { timeout: 2500 });
+    } else {
+      prefetchJoin();
     }
 
     return () => {
       if (timerId) clearTimeout(timerId);
+      if (idleId !== null && typeof win.cancelIdleCallback === "function") {
+        win.cancelIdleCallback(idleId);
+      }
     };
   }, [pathname, router]);
 
-  // Nếu đang ở /join hoặc chưa đến thời điểm idle, không render iframe ngầm
-  if (!shouldPreload || pathname === "/join") {
-    return null;
-  }
-
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        width: 1,
-        height: 1,
-        padding: 0,
-        margin: -1,
-        overflow: "hidden",
-        clip: "rect(0, 0, 0, 0)",
-        whiteSpace: "nowrap",
-        border: 0,
-        pointerEvents: "none",
-        visibility: "hidden",
-      }}
-    >
-      <iframe
-        src={GOOGLE_FORM_EMBED_URL}
-        title="Google Form Background Preloader"
-        tabIndex={-1}
-        loading="eager"
-      />
-    </div>
-  );
+  return null;
 }

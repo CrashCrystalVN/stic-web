@@ -26,7 +26,7 @@ const CORE_LEADERS = [
     roleVi: "Chủ nhiệm CLB",
     roleEn: "President & Founder",
     gen: "GEN 1.0",
-    image: "/leaders/president.svg",
+    image: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/leaders/president.svg`,
     glowColor: "from-blue-500/20 via-sky-500/10 to-transparent",
     accentBadge: "text-blue-400 bg-blue-500/10 border-blue-500/20",
   },
@@ -37,7 +37,7 @@ const CORE_LEADERS = [
     roleVi: "Phó Chủ nhiệm",
     roleEn: "Vice President",
     gen: "GEN 1.0",
-    image: "/leaders/vice-president.svg",
+    image: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/leaders/vice-president.svg`,
     glowColor: "from-emerald-500/20 via-teal-500/10 to-transparent",
     accentBadge: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
   },
@@ -48,7 +48,7 @@ const CORE_LEADERS = [
     roleVi: "Điều phối viên",
     roleEn: "Coordinator",
     gen: "GEN 1.0",
-    image: "/leaders/coordinator.svg",
+    image: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/leaders/coordinator.svg`,
     glowColor: "from-purple-500/20 via-indigo-500/10 to-transparent",
     accentBadge: "text-purple-400 bg-purple-500/10 border-purple-500/20",
   },
@@ -67,7 +67,7 @@ const TRACK_LEADERS = [
     roleVi: "Trưởng ban Kỹ thuật",
     roleEn: "Head of Technical",
     gen: "GEN 1.0",
-    image: "/leaders/tech-lead.svg",
+    image: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/leaders/tech-lead.svg`,
     icon: Cpu,
     colorTheme: "cyan",
   },
@@ -82,7 +82,7 @@ const TRACK_LEADERS = [
     roleVi: "Trưởng ban Truyền thông",
     roleEn: "Head of Media",
     gen: "GEN 1.0",
-    image: "/leaders/media-lead.svg",
+    image: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/leaders/media-lead.svg`,
     icon: Palette,
     colorTheme: "pink",
   },
@@ -110,7 +110,13 @@ export default function MemberPage() {
     <div className="min-h-screen pt-32 pb-24 bg-[#fafbfc] dark:bg-[#070a12] text-slate-900 dark:text-white transition-colors relative overflow-hidden">
       {/* Background Ambient Glow */}
       <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
-        <div className="w-[800px] h-[400px] rounded-full bg-gradient-to-tr from-blue-500/10 via-purple-500/5 to-transparent blur-[140px]" />
+        <div
+          className="w-[900px] h-[500px] rounded-full"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(59,130,246,0.12) 0%, rgba(168,85,247,0.06) 45%, transparent 72%)",
+          }}
+        />
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-16">
@@ -158,7 +164,7 @@ export default function MemberPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="group relative rounded-3xl overflow-hidden liquid-glass border border-slate-200/90 dark:border-white/10 shadow-xl bg-white/70 dark:bg-[#0c1322]/80 backdrop-blur-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+                className="group relative rounded-3xl overflow-hidden liquid-glass border border-slate-200/90 dark:border-white/10 shadow-xl bg-white/80 dark:bg-[#0c1322]/85 backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
               >
                 {/* 3:4 Hologram Cyber Canvas */}
                 <div className="relative w-full aspect-[3/4] overflow-hidden bg-slate-950">
@@ -212,7 +218,7 @@ export default function MemberPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
-                  className="group relative rounded-3xl overflow-hidden liquid-glass border border-slate-200/90 dark:border-white/10 shadow-xl bg-white/70 dark:bg-[#0c1322]/80 backdrop-blur-2xl transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl flex flex-col"
+                  className="group relative rounded-3xl overflow-hidden liquid-glass border border-slate-200/90 dark:border-white/10 shadow-xl bg-white/80 dark:bg-[#0c1322]/85 backdrop-blur-md transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl flex flex-col"
                 >
                   {/* Cyber Hologram Card */}
                   <div className="relative w-full aspect-[16/10] sm:aspect-[3/2] overflow-hidden bg-slate-950">

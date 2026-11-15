@@ -13,9 +13,9 @@ html {
   scroll-padding-top: 72px;
 }
 
-/* === SMOOTH THEME TRANSITION (Selective to prevent scroll jank) === */
+/* === SMOOTH THEME TRANSITION (Selective to prevent scroll jank & extension color lag) === */
 body, header, nav, footer, section {
-  transition-property: background-color, border-color, color;
+  transition-property: background-color, border-color;
   transition-duration: 250ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -56,8 +56,9 @@ body {
 }
 
 /* ========================================================
-   ANIMATED FLOWING GRADIENTS (Unidirectional 1-Direction Flow)
-   Chạy liên tục theo 1 HƯỚNG DUY NHẤT (không đảo chiều, không giật)
+   ANIMATED FLOWING GRADIENTS (GPU-Friendly Static + Hover Flow)
+   Tĩnh ở trạng thái nghỉ để tránh Main-Thread Paint liên tục,
+   chỉ kích hoạt gradient-flow khi người dùng :hover vào nút
    ======================================================== */
 @keyframes gradient-flow {
   0% {
@@ -70,25 +71,37 @@ body {
 
 /* Base animated text & button classes */
 .gradient-text-base {
+  color: #2563eb;
   background-size: 200% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-flow 5s linear infinite;
-  will-change: background-position;
   display: inline-block;
+}
+
+.dark .gradient-text-base {
+  color: #60a5fa;
 }
 
 .gradient-btn-base {
   background-size: 200% 100% !important;
-  animation: gradient-flow 5s linear infinite !important;
-  will-change: background-position;
+  background-position: 0% 50%;
   color: #ffffff !important;
   transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease !important;
 }
 .gradient-btn-base:hover {
   filter: brightness(1.1) !important;
   transform: translateY(-1px) scale(1.02) !important;
+  animation: gradient-flow 3s linear infinite !important;
+}
+
+.gradient-btn-home:hover,
+.gradient-btn-about:hover,
+.gradient-btn-projects:hover,
+.gradient-btn-events:hover,
+.gradient-btn-join:hover {
+  animation: gradient-flow 3s linear infinite !important;
 }
 
 /* ========================================================
@@ -96,6 +109,7 @@ body {
    ======================================================== */
 .gradient-text,
 .gradient-text-home {
+  color: #2563eb;
   background-image: linear-gradient(
     100deg,
     #1a73e8 0%,
@@ -105,16 +119,16 @@ body {
     #1a73e8 100%
   );
   background-size: 200% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-flow 5s linear infinite;
-  will-change: background-position;
   display: inline-block;
 }
 
 .dark .gradient-text,
 .dark .gradient-text-home {
+  color: #60a5fa;
   background-image: linear-gradient(
     100deg,
     #60a5fa 0%,
@@ -124,11 +138,10 @@ body {
     #60a5fa 100%
   );
   background-size: 200% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-flow 5s linear infinite;
-  will-change: background-position;
   display: inline-block;
 }
 
@@ -143,8 +156,7 @@ body {
     #2563eb 100%
   ) !important;
   background-size: 200% 100% !important;
-  animation: gradient-flow 5s linear infinite !important;
-  will-change: background-position;
+  background-position: 0% 50%;
   box-shadow: 0 10px 30px -5px rgba(79, 70, 229, 0.45) !important;
 }
 
@@ -165,6 +177,7 @@ body {
    2. TRANG GIỚI THIỆU (About): Science Sapphire & Cyan (Deep Tech Blue - Cyan - Sky)
    ======================================================== */
 .gradient-text-about {
+  color: #1d4ed8;
   background-image: linear-gradient(
     100deg,
     #1d4ed8 0%,
@@ -174,15 +187,15 @@ body {
     #1d4ed8 100%
   );
   background-size: 200% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-flow 5s linear infinite;
-  will-change: background-position;
   display: inline-block;
 }
 
 .dark .gradient-text-about {
+  color: #38bdf8;
   background-image: linear-gradient(
     100deg,
     #3b82f6 0%,
@@ -192,11 +205,10 @@ body {
     #3b82f6 100%
   );
   background-size: 200% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-flow 5s linear infinite;
-  will-change: background-position;
   display: inline-block;
 }
 
@@ -210,8 +222,7 @@ body {
     #1d4ed8 100%
   ) !important;
   background-size: 200% 100% !important;
-  animation: gradient-flow 5s linear infinite !important;
-  will-change: background-position;
+  background-position: 0% 50%;
   box-shadow: 0 10px 30px -5px rgba(6, 182, 212, 0.45) !important;
 }
 
@@ -219,6 +230,7 @@ body {
    3. TRANG DỰ ÁN (Projects): Creative Matrix & Violet (Indigo - Violet - Magenta - Electric Blue)
    ======================================================== */
 .gradient-text-projects {
+  color: #6d28d9;
   background-image: linear-gradient(
     100deg,
     #4338ca 0%,
@@ -228,15 +240,15 @@ body {
     #4338ca 100%
   );
   background-size: 200% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-flow 5s linear infinite;
-  will-change: background-position;
   display: inline-block;
 }
 
 .dark .gradient-text-projects {
+  color: #c084fc;
   background-image: linear-gradient(
     100deg,
     #818cf8 0%,
@@ -246,11 +258,10 @@ body {
     #818cf8 100%
   );
   background-size: 200% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-flow 5s linear infinite;
-  will-change: background-position;
   display: inline-block;
 }
 
@@ -264,8 +275,7 @@ body {
     #4f46e5 100%
   ) !important;
   background-size: 200% 100% !important;
-  animation: gradient-flow 5s linear infinite !important;
-  will-change: background-position;
+  background-position: 0% 50%;
   box-shadow: 0 10px 30px -5px rgba(124, 58, 237, 0.45) !important;
 }
 
@@ -273,6 +283,7 @@ body {
    4. TRANG SỰ KIỆN (Events): Crimson Pulse & Urgency (Cobalt - Violet - Crimson - Coral)
    ======================================================== */
 .gradient-text-events {
+  color: #e11d48;
   background-image: linear-gradient(
     100deg,
     #2563eb 0%,
@@ -282,15 +293,15 @@ body {
     #2563eb 100%
   );
   background-size: 200% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-flow 5s linear infinite;
-  will-change: background-position;
   display: inline-block;
 }
 
 .dark .gradient-text-events {
+  color: #fb7185;
   background-image: linear-gradient(
     100deg,
     #60a5fa 0%,
@@ -300,11 +311,10 @@ body {
     #60a5fa 100%
   );
   background-size: 200% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-flow 5s linear infinite;
-  will-change: background-position;
   display: inline-block;
 }
 
@@ -318,8 +328,7 @@ body {
     #2563eb 100%
   ) !important;
   background-size: 200% 100% !important;
-  animation: gradient-flow 5s linear infinite !important;
-  will-change: background-position;
+  background-position: 0% 50%;
   box-shadow: 0 10px 30px -5px rgba(225, 29, 72, 0.4) !important;
 }
 
@@ -327,6 +336,7 @@ body {
    5. TRANG ỨNG TUYỂN (Join): Hyper-Speed Launch (Deep Cobalt - Electric Royal - Sky - Violet)
    ======================================================== */
 .gradient-text-join {
+  color: #2563eb;
   background-image: linear-gradient(
     100deg,
     #1e40af 0%,
@@ -336,15 +346,15 @@ body {
     #1e40af 100%
   );
   background-size: 200% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-flow 5s linear infinite;
-  will-change: background-position;
   display: inline-block;
 }
 
 .dark .gradient-text-join {
+  color: #60a5fa;
   background-image: linear-gradient(
     100deg,
     #60a5fa 0%,
@@ -354,11 +364,10 @@ body {
     #60a5fa 100%
   );
   background-size: 200% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: gradient-flow 5s linear infinite;
-  will-change: background-position;
   display: inline-block;
 }
 
@@ -372,16 +381,15 @@ body {
     #1d4ed8 100%
   ) !important;
   background-size: 200% 100% !important;
-  animation: gradient-flow 5s linear infinite !important;
-  will-change: background-position;
+  background-position: 0% 50%;
   box-shadow: 0 10px 32px -4px rgba(37, 99, 235, 0.5) !important;
 }
 
-/* === GOOGLE GEMINI LIQUID GLASS UTILITIES (PC Full Fidelity) === */
+/* === GOOGLE GEMINI LIQUID GLASS UTILITIES (Balanced GPU Compositing) === */
 .liquid-glass {
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.65);
   box-shadow: 
     0 24px 60px -12px rgba(66, 133, 244, 0.12),
@@ -390,9 +398,9 @@ body {
 }
 
 .dark .liquid-glass {
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 
     0 24px 60px -12px rgba(0, 0, 0, 0.6),
@@ -401,9 +409,9 @@ body {
 }
 
 .liquid-glass-pill {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.85);
   box-shadow: 
     0 4px 16px rgba(66, 133, 244, 0.08),
@@ -411,46 +419,51 @@ body {
 }
 
 .dark .liquid-glass-pill {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 
     0 4px 20px rgba(0, 0, 0, 0.35),
     inset 0 1px 1px rgba(255, 255, 255, 0.18);
 }
 
+/* Maintain predictable DOM layout geometry for Swarm Rebuild & Chrome extensions */
+.section-cv-auto {
+  contain: layout style;
+}
+
 /* ========================================================
    DUAL EXPERIENCE: LIGHTWEIGHT MOBILE VERSION (< 768px)
-   Strips heavy GPU backdrop-blur passes on mobile devices
+   Strips GPU backdrop-blur passes on mobile devices
    to guarantee silky-smooth 60-120fps scrolling & low power
    ======================================================== */
 @media (max-width: 767px) {
   .liquid-glass {
-    background: rgba(255, 255, 255, 0.94) !important;
-    backdrop-filter: blur(6px) !important;
-    -webkit-backdrop-filter: blur(6px) !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05) !important;
   }
 
   .dark .liquid-glass {
-    background: rgba(15, 23, 42, 0.92) !important;
-    backdrop-filter: blur(6px) !important;
-    -webkit-backdrop-filter: blur(6px) !important;
+    background: rgba(15, 23, 42, 0.94) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
   }
 
   .liquid-glass-pill {
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(4px) !important;
-    -webkit-backdrop-filter: blur(4px) !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
   }
 
   .dark .liquid-glass-pill {
-    background: rgba(15, 23, 42, 0.92) !important;
-    backdrop-filter: blur(4px) !important;
-    -webkit-backdrop-filter: blur(4px) !important;
+    background: rgba(15, 23, 42, 0.94) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
   }
 
@@ -534,4 +547,88 @@ body {
   will-change: transform, opacity;
 }
 
+/* ========================================================
+   NATIVE SWARM REBUILD ENGINE (Zero-Reflow GPU Compositor Locks)
+   ======================================================== */
+html.swarm-rebuilding,
+html.swarm-live {
+  scroll-behavior: auto !important;
+}
+
+/* Pre-hydration lock prevents flash of unbuilt page before Swarm tags elements */
+html.swarm-booting #stic-swarm-root {
+  opacity: 0 !important;
+}
+
+/* Render CAD blueprint grid directly on body background (avoids z-20 full-screen alpha composite layer) */
+html.swarm-rebuilding body {
+  background-image:
+    linear-gradient(to right, rgba(37, 99, 235, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(37, 99, 235, 0.09) 1px, transparent 1px),
+    linear-gradient(to right, rgba(56, 189, 248, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.045) 1px, transparent 1px) !important;
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px !important;
+  background-attachment: fixed !important;
+}
+
+/* Lock Framer Motion whileInView transforms & heavy glitch filters during rebuild for accurate rects & 120fps */
+html.swarm-rebuilding section,
+html.swarm-rebuilding [data-swarm-wiped] {
+  transform: none !important;
+}
+
+html.swarm-rebuilding .modern-glitch-layer,
+html.swarm-rebuilding .modern-prism-sweep {
+  display: none !important;
+  animation: none !important;
+}
+
+/* Suspend heavy backdrop blur while swarm cursors animate continuously */
+html.swarm-rebuilding .liquid-glass,
+html.swarm-rebuilding .liquid-glass-pill,
+html.swarm-rebuilding [class*="backdrop-blur"] {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+html.swarm-rebuilding [data-swarm-wiped="pending"] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: none !important;
+}
+
+html.swarm-rebuilding [data-swarm-wiped="media-wiped"] {
+  opacity: 0 !important;
+  clip-path: inset(0 0 100% 0);
+  pointer-events: none !important;
+  transition: none !important;
+}
+
+html.swarm-rebuilding [data-swarm-wiped="media-sweep"] {
+  opacity: 1 !important;
+  pointer-events: none !important;
+  will-change: clip-path, opacity;
+}
+
+html.swarm-rebuilding [data-swarm-wiped="done"],
+html.swarm-live [data-swarm-wiped="done"] {
+  opacity: 1 !important;
+  clip-path: none !important;
+  will-change: auto;
+}
+
+@keyframes lab-eq-pulse {
+  0%, 100% {
+    transform: scaleY(var(--eq-min, 0.25));
+  }
+  50% {
+    transform: scaleY(var(--eq-max, 0.85));
+  }
+}
+
+.lab-eq-bar {
+  transform-origin: bottom center;
+  will-change: transform;
+  animation: lab-eq-pulse 1.6s ease-in-out infinite;
+}
 

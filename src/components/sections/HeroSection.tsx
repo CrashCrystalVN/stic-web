@@ -3,18 +3,15 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { smoothScrollTo } from "@/lib/utils";
 import { useLang } from "@/context/LangContext";
 import { translations as T } from "@/lib/i18n";
-import { CLUB_INFO } from "@/lib/data";
-import { ParticleBackground } from "@/components/common/ParticleBackground";
-import { ScrollScaleBanner } from "./ScrollScaleBanner";
 
 const fade = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] },
+  initial: { y: 12 },
+  animate: { y: 0 },
+  transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
 });
 
 export function HeroSection() {
@@ -25,15 +22,22 @@ export function HeroSection() {
       id="hero"
       className="relative bg-[#fafbfc] dark:bg-[#080c14] overflow-hidden"
     >
-      {/* Ethereal Sparkling Cosmic Starfield Background (Hiệu ứng sao lấp lánh nền trang bìa) */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <ParticleBackground />
-      </div>
-
-      {/* Google Antigravity Ambient Background Atmosphere */}
+      {/* Google Antigravity Ambient Background Atmosphere (Zero-Blur Radial Gradients) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
-        <div className="absolute -top-[10%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] rounded-full bg-gradient-to-b from-blue-500/15 via-indigo-500/10 to-transparent blur-[130px]" />
-        <div className="absolute top-[40%] right-[-10%] w-[500px] h-[500px] rounded-full bg-purple-500/5 blur-[100px]" />
+        <div
+          className="absolute -top-[18%] left-1/2 -translate-x-1/2 w-[1100px] h-[700px] rounded-full"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(59,130,246,0.14) 0%, rgba(99,102,241,0.08) 42%, transparent 72%)",
+          }}
+        />
+        <div
+          className="absolute top-[30%] right-[-15%] w-[700px] h-[700px] rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle at center, rgba(168,85,247,0.08) 0%, transparent 65%)",
+          }}
+        />
       </div>
 
       {/* ========================================================
@@ -42,7 +46,10 @@ export function HeroSection() {
       <div className="relative z-10 min-h-[85vh] lg:min-h-[92vh] flex flex-col items-center justify-center px-4 pt-28 pb-12 text-center max-w-5xl mx-auto">
         {/* Google Gemini Style Liquid Glass Live Badge */}
         <motion.div {...fade(0.04)} className="mb-6">
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full liquid-glass-pill shadow-sm hover:scale-[1.02] transition-transform">
+          <div
+            data-swarm-atomic="true"
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full liquid-glass-pill shadow-sm hover:scale-[1.02] transition-transform"
+          >
             <span className="text-blue-500 dark:text-blue-400 font-bold text-xs animate-pulse">✦</span>
             <span className="text-[11px] font-semibold text-slate-800 dark:text-slate-200 tracking-wider uppercase">
               {t(T.hero.badge)}
@@ -80,9 +87,8 @@ export function HeroSection() {
           {/* Primary Gemini Gradient Button (Navigates to /join subpage) */}
           <Link
             href="/join"
-            className="w-full sm:w-auto justify-center group relative inline-flex items-center gap-2.5 px-7 py-3.5 sm:py-3 rounded-full text-white text-sm font-semibold transition-all duration-300 cursor-pointer gradient-btn-home text-center"
+            className="w-full sm:w-auto justify-center group relative inline-flex items-center gap-2.5 px-7 py-3.5 sm:py-3 rounded-full text-white text-sm font-semibold transition-all duration-300 cursor-pointer gradient-btn-home hover:brightness-110 text-center"
           >
-            <span className="absolute inset-0 rounded-full bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <span>{t(T.hero.cta1)}</span>
             <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
@@ -101,13 +107,14 @@ export function HeroSection() {
           {...fade(0.3)}
           className="w-full max-w-lg sm:max-w-2xl grid grid-cols-3 gap-2 sm:gap-3 mt-8 sm:mt-10 px-2"
         >
-          {[
+          {([
             { value: t(T.hero.stat1v), label: t(T.hero.stat1l), icon: "✦" },
             { value: t(T.hero.stat2v), label: t(T.hero.stat2l), icon: "⚡" },
             { value: t(T.hero.stat3v), label: t(T.hero.stat3l), icon: "🚀" },
-          ].map((s) => (
+          ]).map((s) => (
             <div
               key={s.label}
+              data-swarm-atomic="true"
               className="liquid-glass rounded-2xl py-2.5 sm:py-3 px-2 sm:px-4 transition-transform duration-300 hover:scale-[1.02] text-center"
             >
               <div className="flex items-center justify-center gap-1 sm:gap-1.5">
@@ -122,9 +129,9 @@ export function HeroSection() {
         {/* Scroll hint button inviting scroll into about */}
         <motion.button
           onClick={() => smoothScrollTo("about")}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+          initial={{ y: 6 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.4 }}
           className="mt-8 inline-flex items-center justify-center w-9 h-9 rounded-full liquid-glass text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors cursor-pointer hover:scale-110"
           aria-label="Scroll to about"
         >
