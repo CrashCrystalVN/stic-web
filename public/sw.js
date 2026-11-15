@@ -1,9 +1,10 @@
 // STIC Web High-Performance Service Worker (Zero-Overhead Static Delivery)
 const CACHE_NAME = 'stic-cache-v5';
+const BASE_PATH = self.location.pathname.replace(/\/sw\.js$/, '');
 const PRECACHE_URLS = [
-  '/',
-  '/logo.png',
-  '/favicon.png',
+  `${BASE_PATH}/`,
+  `${BASE_PATH}/logo.png`,
+  `${BASE_PATH}/favicon.png`,
 ];
 
 // Install: Pre-cache lightweight core shell
@@ -50,7 +51,7 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;
 
   // Let browser HTTP disk cache handle immutable _next/static chunks directly (no SW overhead)
-  if (url.pathname.startsWith('/_next/static/')) {
+  if (url.pathname.includes('/_next/static/')) {
     return;
   }
 
