@@ -119,25 +119,27 @@ interface CursorAgent {
   scanLineEl: HTMLDivElement;
 }
 
-function attachFigmaCornerHandles(box: HTMLDivElement, color: string) {
+function attachFigmaCornerHandles(box: HTMLDivElement, color: string, isMobile = false) {
   const corners = [
-    "top:-3.5px;left:-3.5px;",
-    "top:-3.5px;right:-3.5px;",
-    "bottom:-3.5px;left:-3.5px;",
-    "bottom:-3.5px;right:-3.5px;",
+    "top:-2.5px;left:-2.5px;",
+    "top:-2.5px;right:-2.5px;",
+    "bottom:-2.5px;left:-2.5px;",
+    "bottom:-2.5px;right:-2.5px;",
   ];
+  const s = isMobile ? "4px" : "6px";
   for (let i = 0; i < corners.length; i++) {
     const h = document.createElement("span");
-    h.style.cssText = `position:absolute;${corners[i]}width:6px;height:6px;background:#ffffff;border:1.5px solid ${color};box-sizing:border-box;pointer-events:none;`;
+    h.style.cssText = `position:absolute;${corners[i]}width:${s};height:${s};background:#ffffff;border:1px solid ${color};box-sizing:border-box;pointer-events:none;`;
     box.appendChild(h);
   }
 }
 
-function createPointerSvg(color: string): SVGSVGElement {
+function createPointerSvg(color: string, isMobile = false): SVGSVGElement {
   const ns = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(ns, "svg");
-  svg.setAttribute("width", "20");
-  svg.setAttribute("height", "20");
+  const s = isMobile ? "15" : "20";
+  svg.setAttribute("width", s);
+  svg.setAttribute("height", s);
   svg.setAttribute("viewBox", "0 0 20 20");
   svg.style.display = "block";
 
@@ -148,20 +150,21 @@ function createPointerSvg(color: string): SVGSVGElement {
   );
   path.setAttribute("fill", color);
   path.setAttribute("stroke", "#ffffff");
-  path.setAttribute("stroke-width", "1.4");
+  path.setAttribute("stroke-width", isMobile ? "1.2" : "1.4");
   path.setAttribute("stroke-linejoin", "round");
   svg.appendChild(path);
   return svg;
 }
 
-function createCrosshairSvg(color: string): SVGSVGElement {
+function createCrosshairSvg(color: string, isMobile = false): SVGSVGElement {
   const ns = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(ns, "svg");
-  svg.setAttribute("width", "20");
-  svg.setAttribute("height", "20");
+  const s = isMobile ? "15" : "20";
+  svg.setAttribute("width", s);
+  svg.setAttribute("height", s);
   svg.setAttribute("viewBox", "0 0 20 20");
   svg.style.display = "none";
-  svg.style.transform = "translate(-10px, -10px)";
+  svg.style.transform = isMobile ? "translate(-7.5px, -7.5px)" : "translate(-10px, -10px)";
 
   const h = document.createElementNS(ns, "line");
   h.setAttribute("x1", "2");
@@ -875,9 +878,10 @@ export function SwarmRebuildEngine({
     }
     document.documentElement.classList.remove("swarm-booting");
 
-    // 3. Create 10 Multiplayer Cursor Agents (up to 8 base active + 2 extra scroll burst chasers)
-    const startCenterX = Math.max(120, rootRect.width * 0.5);
-    const startCenterY = Math.max(80, window.scrollY - rootRect.top + 140);
+    // 3. Create Multiplayer Cursor Agents (compact 2 agents on mobile, 4-8 on desktop)
+    const isMobile = window.innerWidth < 640;
+    const startCenterX = Math.max(80, rootRect.width * 0.5);
+    const startCenterY = Math.max(60, window.scrollY - rootRect.top + 100);
 
     const agents: CursorAgent[] = BUILDER_ROSTER.map((profile, idx) => {
       // Cursor wrapper
@@ -885,21 +889,31 @@ export function SwarmRebuildEngine({
       cursorEl.style.cssText =
         "position:absolute;top:0;left:0;z-index:60;pointer-events:none;will-change:transform;opacity:0;";
 
-      const arrowSvg = createPointerSvg(profile.color);
-      const crossSvg = createCrosshairSvg(profile.color);
+      const arrowSvg = createPointerSvg(profile.color, isMobile);
+      const crossSvg = createCrosshairSvg(profile.color, isMobile);
 
       const labelWrap = document.createElement("div");
-      labelWrap.style.cssText =
-        "display:inline-flex;align-items:center;gap:4px;margin-left:14px;margin-top:2px;padding:2px 7px;border-radius:9999px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;font-weight:700;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.28);";
+      labelWrap.style.cssText = `display:inline-flex;align-items:center;gap:3px;margin-left:${
+        isMobile ? "10px" : "14px"
+      };margin-top:2px;padding:${
+        isMobile ? "1.5px 5.5px" : "2px 7px"
+      };border-radius:9999px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:${
+        isMobile ? "8.5px" : "10px"
+      };font-weight:700;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.28);`;
       labelWrap.style.backgroundColor = profile.color;
       labelWrap.style.color = profile.textColor;
 
       const badgeEl = document.createElement("span");
-      badgeEl.textContent = profile.name;
+      badgeEl.textContent = isMobile
+        ? profile.name.split(" ").pop() || profile.name
+        : profile.name;
 
       const actionEl = document.createElement("span");
-      actionEl.style.cssText =
-        "display:none;padding:0 4px;border-radius:9999px;background:rgba(0,0,0,0.22);color:#fff;font-size:9px;letter-spacing:0.03em;";
+      actionEl.style.cssText = `display:none;padding:0 ${
+        isMobile ? "3px" : "4px"
+      };border-radius:9999px;background:rgba(0,0,0,0.22);color:#fff;font-size:${
+        isMobile ? "8px" : "9px"
+      };letter-spacing:0.03em;`;
 
       labelWrap.appendChild(badgeEl);
       labelWrap.appendChild(actionEl);
@@ -910,26 +924,38 @@ export function SwarmRebuildEngine({
 
       // Box drag wireframe with crisp Figma corner handles (CSS containment avoids page reflow)
       const boxEl = document.createElement("div");
-      boxEl.style.cssText = `display:none;position:absolute;top:0;left:0;z-index:45;pointer-events:none;border:1.5px solid ${profile.color};background:${profile.color}12;box-sizing:border-box;contain:layout style;will-change:transform,width,height;`;
-      attachFigmaCornerHandles(boxEl, profile.color);
+      boxEl.style.cssText = `display:none;position:absolute;top:0;left:0;z-index:45;pointer-events:none;border:${
+        isMobile ? "1px" : "1.5px"
+      } solid ${profile.color};background:${profile.color}12;box-sizing:border-box;contain:layout style;will-change:transform,width,height;`;
+      attachFigmaCornerHandles(boxEl, profile.color, isMobile);
       overlayEl.appendChild(boxEl);
 
       // Dimension pill (W x H) centered below selection box
       const sizePillEl = document.createElement("div");
-      sizePillEl.style.cssText = `display:none;position:absolute;top:0;left:0;z-index:55;pointer-events:none;padding:2px 7px;border-radius:5px;background:${profile.color};color:${profile.textColor};font-family:ui-monospace,monospace;font-size:10px;font-weight:700;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,0.3);transform-origin:center top;`;
+      sizePillEl.style.cssText = `display:none;position:absolute;top:0;left:0;z-index:55;pointer-events:none;padding:${
+        isMobile ? "1px 5px" : "2px 7px"
+      };border-radius:4px;background:${profile.color};color:${profile.textColor};font-family:ui-monospace,monospace;font-size:${
+        isMobile ? "8.5px" : "10px"
+      };font-weight:700;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.3);transform-origin:center top;`;
       overlayEl.appendChild(sizePillEl);
 
       // Option-Drag Duplicate Ghost + corner handles
       const dupGhostEl = document.createElement("div");
-      dupGhostEl.style.cssText = `display:none;position:absolute;top:0;left:0;z-index:46;pointer-events:none;border:1.5px dashed ${profile.color};background:${profile.color}18;box-sizing:border-box;`;
-      attachFigmaCornerHandles(dupGhostEl, profile.color);
+      dupGhostEl.style.cssText = `display:none;position:absolute;top:0;left:0;z-index:46;pointer-events:none;border:${
+        isMobile ? "1px" : "1.5px"
+      } dashed ${profile.color};background:${profile.color}18;box-sizing:border-box;`;
+      attachFigmaCornerHandles(dupGhostEl, profile.color, isMobile);
       overlayEl.appendChild(dupGhostEl);
 
       // Spacing gap measurement line
       const gapLineEl = document.createElement("div");
       gapLineEl.style.cssText = `display:none;position:absolute;top:0;left:0;height:1px;z-index:52;pointer-events:none;border-top:1px dashed ${profile.color};`;
       const gapLabelEl = document.createElement("span");
-      gapLabelEl.style.cssText = `position:absolute;left:50%;top:-10px;transform:translateX(-50%);padding:1px 5px;border-radius:4px;background:${profile.color};color:${profile.textColor};font-family:ui-monospace,monospace;font-size:9px;font-weight:700;white-space:nowrap;`;
+      gapLabelEl.style.cssText = `position:absolute;left:50%;top:-10px;transform:translateX(-50%);padding:1px ${
+        isMobile ? "4px" : "5px"
+      };border-radius:4px;background:${profile.color};color:${profile.textColor};font-family:ui-monospace,monospace;font-size:${
+        isMobile ? "8px" : "9px"
+      };font-weight:700;white-space:nowrap;`;
       gapLineEl.appendChild(gapLabelEl);
       overlayEl.appendChild(gapLineEl);
 
@@ -947,11 +973,11 @@ export function SwarmRebuildEngine({
 
       // Scanline for media sweep reveal
       const scanLineEl = document.createElement("div");
-      scanLineEl.style.cssText = `display:none;position:absolute;top:0;left:0;height:2px;z-index:49;pointer-events:none;background:linear-gradient(90deg,transparent,${profile.color},#ffffff,${profile.color},transparent);box-shadow:0 0 12px ${profile.color};`;
+      scanLineEl.style.cssText = `display:none;position:absolute;top:0;left:0;height:2px;z-index:49;pointer-events:none;background:linear-gradient(90deg,transparent,${profile.color},#ffffff,${profile.color},transparent);box-shadow:0 0 10px ${profile.color};`;
       overlayEl.appendChild(scanLineEl);
 
       const angle = (idx / BUILDER_ROSTER.length) * Math.PI * 2;
-      const radius = 55 + (idx % 3) * 28;
+      const radius = isMobile ? (32 + (idx % 2) * 20) : (55 + (idx % 3) * 28);
       const sx = startCenterX + Math.cos(angle) * radius;
       const sy = startCenterY + Math.sin(angle) * radius;
 
@@ -964,11 +990,11 @@ export function SwarmRebuildEngine({
         y: sy,
         vx: 0,
         vy: 0,
-        active: idx < 4,
+        active: idx < (isMobile ? 2 : 4),
         stage: "idle",
         task: null,
         progress: 0,
-        duration: 0.45,
+        duration: 0.35,
         cooldown: idx * 0.04,
         lastTypedLen: -1,
         startX: sx,
@@ -976,7 +1002,7 @@ export function SwarmRebuildEngine({
         targetX: sx,
         targetY: sy,
         orbitAngle: angle,
-        orbitRadius: 44 + (idx % 4) * 18,
+        orbitRadius: isMobile ? (26 + (idx % 2) * 16) : (44 + (idx % 3) * 24),
         cursorEl,
         arrowSvg,
         crossSvg,
@@ -998,14 +1024,16 @@ export function SwarmRebuildEngine({
     // Cached layout metrics (avoid forcing synchronous reflows inside RAF tick)
     let cachedScrollY = window.scrollY;
     let cachedWinH = window.innerHeight;
+    let cachedWinW = window.innerWidth;
     const initRootRect = rootEl.getBoundingClientRect();
     let cachedRootLeft = initRootRect.left;
     let cachedRootDocTop = initRootRect.top + cachedScrollY;
     let cachedRootWidth = initRootRect.width;
     let cachedMaxScrollY = Math.max(0, document.documentElement.scrollHeight - cachedWinH);
 
-    // 4. Ruler Guide Helper (Viewport-aligned flash guides)
+    // 4. Ruler Guide Helper (Viewport-aligned flash guides, desktop-only to keep mobile view clean)
     const spawnRulerGuides = (task: BuildTask, color: string) => {
+      if (cachedWinW < 640) return; // Skip full-bleed laser lines on narrow phone viewports
       const guideRoot = guideLayerRef.current;
       if (!guideRoot) return;
       const viewX = cachedRootLeft + task.x;
@@ -1043,6 +1071,7 @@ export function SwarmRebuildEngine({
     const recalcBounds = () => {
       cachedScrollY = window.scrollY;
       cachedWinH = window.innerHeight;
+      cachedWinW = window.innerWidth;
       const rRect = rootEl.getBoundingClientRect();
       cachedRootLeft = rRect.left;
       cachedRootDocTop = rRect.top + cachedScrollY;
@@ -1175,7 +1204,10 @@ export function SwarmRebuildEngine({
         agent.boxEl.style.width = "8px";
         agent.boxEl.style.height = "8px";
         agent.boxEl.style.transform = `translate3d(${task.x}px, ${task.y}px, 0)`;
-        agent.duration = Math.min(0.72, Math.max(0.48, (task.w + task.h) / 1100));
+        const isMobileView = cachedWinW < 640;
+        agent.duration = isMobileView
+          ? Math.min(0.48, Math.max(0.32, (task.w + task.h) / 1300))
+          : Math.min(0.72, Math.max(0.48, (task.w + task.h) / 1100));
         const effDurMs = Math.max(
           120,
           Math.round((agent.duration / Math.max(0.8, speedRef.current)) * 1000)
@@ -1194,6 +1226,7 @@ export function SwarmRebuildEngine({
         agent.sizePillEl.style.transform = `translate3d(${task.x + 4}px, ${task.y + 14}px, 0) translateX(-50%)`;
         swarmAudio.playDragStart();
       } else if (task.kind === "dup") {
+        const isMobileView = cachedWinW < 640;
         const src = task.dupFromIndex !== -1 ? tasks[task.dupFromIndex] : task;
         agent.arrowSvg.style.display = "block";
         agent.crossSvg.style.display = "none";
@@ -1227,9 +1260,10 @@ export function SwarmRebuildEngine({
         agent.gapLineEl.style.transform = `translate3d(${midX}px, ${midY}px, 0) rotate(${angleDeg}deg)`;
         agent.gapLabelEl.textContent = `${gap}px`;
 
-        agent.duration = 0.52;
+        agent.duration = isMobileView ? 0.36 : 0.52;
         swarmAudio.playDragStart();
       } else if (task.kind === "text") {
+        const isMobileView = cachedWinW < 640;
         agent.arrowSvg.style.display = "block";
         agent.crossSvg.style.display = "none";
         agent.actionEl.textContent = "TYPE";
@@ -1237,7 +1271,9 @@ export function SwarmRebuildEngine({
         agent.typingEl.style.display = "none";
 
         const charCount = Math.max(1, Math.min(task.rawText.length, 130));
-        agent.duration = Math.min(0.68, Math.max(0.44, charCount * 0.0075));
+        agent.duration = isMobileView
+          ? Math.min(0.44, Math.max(0.28, charCount * 0.005))
+          : Math.min(0.68, Math.max(0.44, charCount * 0.0075));
         const effDurMs = Math.max(
           120,
           Math.round((agent.duration / Math.max(0.8, speedRef.current)) * 1000)
@@ -1252,6 +1288,7 @@ export function SwarmRebuildEngine({
           }
         });
       } else if (task.kind === "media") {
+        const isMobileView = cachedWinW < 640;
         agent.arrowSvg.style.display = "none";
         agent.crossSvg.style.display = "block";
         agent.actionEl.textContent = "SCAN";
@@ -1259,7 +1296,7 @@ export function SwarmRebuildEngine({
         agent.scanLineEl.style.display = "block";
         agent.scanLineEl.style.width = `${task.w}px`;
         agent.scanLineEl.style.transform = `translate3d(${task.x}px, ${task.y}px, 0)`;
-        agent.duration = 0.54;
+        agent.duration = isMobileView ? 0.38 : 0.54;
         const effDurMs = Math.max(
           120,
           Math.round((agent.duration / Math.max(0.8, speedRef.current)) * 1000)
@@ -1275,6 +1312,7 @@ export function SwarmRebuildEngine({
         });
       } else {
         // line / pen stroke
+        const isMobileView = cachedWinW < 640;
         agent.arrowSvg.style.display = "none";
         agent.crossSvg.style.display = "block";
         agent.actionEl.textContent = "PEN";
@@ -1284,7 +1322,7 @@ export function SwarmRebuildEngine({
         agent.boxEl.style.width = "4px";
         agent.boxEl.style.height = `${task.h}px`;
         agent.boxEl.style.transform = `translate3d(${task.x}px, ${task.y}px, 0)`;
-        agent.duration = 0.38;
+        agent.duration = isMobileView ? 0.26 : 0.38;
       }
     };
 
@@ -1310,9 +1348,24 @@ export function SwarmRebuildEngine({
         introDelay -= rawDt;
       }
 
-      // Parallel builder count tuned for calm, fluid visual readability
+      // Parallel builder count tuned for mobile (clean 2 builders) and desktop (4-8 builders)
+      const isMobileView = cachedWinW < 640;
       const burstActive = ts < scrollBurstUntil;
-      const activeTargetCount = isLive ? 4 : sp >= 3 ? 8 : sp >= 2 ? 6 : burstActive ? 5 : 4;
+      const activeTargetCount = isLive
+        ? isMobileView
+          ? 2
+          : 4
+        : isMobileView
+        ? burstActive
+          ? 3
+          : 2
+        : sp >= 3
+        ? 8
+        : sp >= 2
+        ? 6
+        : burstActive
+        ? 5
+        : 4;
 
       cachedScrollY = window.scrollY;
       const rLeft = cachedRootLeft;
@@ -1399,7 +1452,9 @@ export function SwarmRebuildEngine({
                 a.startY = a.y;
                 a.progress = 0;
                 const dist = Math.hypot(a.targetX - a.startX, a.targetY - a.startY);
-                a.duration = Math.min(0.48, Math.max(0.28, dist / 1200));
+                a.duration = isMobileView
+                  ? Math.min(0.36, Math.max(0.18, dist / 1400))
+                  : Math.min(0.48, Math.max(0.28, dist / 1200));
               }
             }
           }
@@ -1625,17 +1680,21 @@ export function SwarmRebuildEngine({
             {hudHidden ? (
               <button
                 onClick={() => setHudHidden(false)}
-                className="fixed bottom-5 right-5 z-[999995] inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-slate-950/95 hover:bg-slate-900 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-bold shadow-xl backdrop-blur-md cursor-pointer transition-transform hover:scale-105"
-                title="Show Swarm HUD (H)"
+                className="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-[999995] inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full bg-slate-950/95 hover:bg-slate-900 border border-cyan-500/40 text-cyan-300 text-xs font-mono font-bold shadow-xl backdrop-blur-md cursor-pointer transition-transform hover:scale-105"
+                style={{ paddingBottom: "max(6px, env(safe-area-inset-bottom, 0px))" }}
+                title="Hiện Swarm HUD (H)"
               >
                 <Eye className="w-3.5 h-3.5" />
-                <span>SWARM HUD (H)</span>
+                <span>SWARM HUD</span>
               </button>
             ) : (
-              <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[999995] w-[calc(100%-24px)] max-w-3xl pointer-events-auto">
-                <div className="rounded-2xl bg-slate-950/95 border border-cyan-500/35 shadow-[0_20px_50px_rgba(0,0,0,0.65)] backdrop-blur-xl px-3.5 py-2.5 sm:px-4 sm:py-3 text-slate-100">
+              <div
+                className="fixed bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-[999995] w-[calc(100%-16px)] sm:w-[calc(100%-24px)] max-w-3xl pointer-events-auto"
+                style={{ marginBottom: "max(2px, env(safe-area-inset-bottom, 0px))" }}
+              >
+                <div className="rounded-xl sm:rounded-2xl bg-slate-950/95 border border-cyan-500/35 shadow-[0_16px_40px_rgba(0,0,0,0.6)] backdrop-blur-xl px-2.5 py-2 sm:px-4 sm:py-3 text-slate-100">
                   {/* Top progress track */}
-                  <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden mb-2.5">
+                  <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden mb-2">
                     <div
                       ref={hudBarRef}
                       style={{
@@ -1646,68 +1705,69 @@ export function SwarmRebuildEngine({
                     />
                   </div>
 
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    {/* Status */}
-                    <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/40 text-cyan-300 text-[11px] font-mono font-bold">
+                  <div className="flex items-center justify-between gap-1 sm:gap-2">
+                    {/* Status & percentage */}
+                    <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-cyan-500/15 border border-cyan-400/40 text-cyan-300 text-[10px] sm:text-[11px] font-mono font-bold shrink-0">
                         {phase === "building" ? (
-                          <Sparkles className="w-3 h-3 animate-spin" style={{ animationDuration: "3s" }} />
+                          <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 animate-spin" style={{ animationDuration: "3s" }} />
                         ) : (
-                          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                          <CheckCircle2 className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-emerald-400" />
                         )}
-                        <span>{phase === "building" ? "SWARM REBUILD" : "LIVE FLOCK"}</span>
+                        <span>{phase === "building" ? "REBUILD" : "LIVE"}</span>
                       </span>
 
-                      <span className="text-[11px] font-mono text-slate-300">
+                      <span className="text-[10px] sm:text-[11px] font-mono text-slate-300 whitespace-nowrap">
                         <span ref={hudPctRef} className="font-bold text-white">
                           {progressDisplay}%
                         </span>{" "}
-                        <span className="hidden sm:inline text-slate-400">
-                          · <span ref={hudAgentsRef}>4</span> agents
+                        <span className="text-slate-400">
+                          · <span ref={hudAgentsRef}>2</span> <span className="hidden sm:inline">agents</span>
                         </span>
                       </span>
 
                       <span
                         ref={hudScrollHintRef}
                         style={{ display: "none" }}
-                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[10px] font-mono font-bold animate-pulse"
+                        className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-[9px] sm:text-[10px] font-mono font-bold animate-pulse whitespace-nowrap"
                       >
-                        ↓ Cuộn chuột để dựng tiếp
+                        <span className="sm:hidden">↓ Vuốt tiếp</span>
+                        <span className="hidden sm:inline">↓ Cuộn để dựng tiếp</span>
                       </span>
                     </div>
 
                     {/* Controls */}
-                    <div className="flex flex-wrap items-center gap-1.5">
+                    <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
                       {/* Speed 1x / 2x / 3x */}
                       <div className="inline-flex items-center rounded-lg bg-white/5 border border-white/10 p-0.5">
                         {([1, 2, 3] as SwarmSpeed[]).map((s) => (
                           <button
                             key={s}
                             onClick={() => onSpeedChange(s)}
-                            className={`px-2 py-1 rounded-md text-[11px] font-mono font-bold transition-colors cursor-pointer ${
+                            className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-[10px] sm:text-[11px] font-mono font-bold transition-colors cursor-pointer ${
                               speed === s
                                 ? "bg-cyan-500 text-slate-950"
                                 : "text-slate-300 hover:text-white"
                             }`}
-                            title={`Speed ${s}x (Key ${s})`}
+                            title={`Tốc độ ${s}x`}
                           >
                             {s}×
                           </button>
                         ))}
                       </div>
 
-                      {/* Tour Mode */}
+                      {/* Tour Mode - Only on sm+ */}
                       <button
                         onClick={() => onTourModeChange(!tourMode)}
-                        className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-semibold border transition-colors cursor-pointer ${
+                        className={`hidden md:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-semibold border transition-colors cursor-pointer ${
                           tourMode
                             ? "bg-blue-500/25 border-blue-400/60 text-blue-200"
                             : "bg-white/5 border-white/10 text-slate-300 hover:bg-white/10"
                         }`}
-                        title="Auto-Scroll Tour (T)"
+                        title="Tự động cuộn theo tiến trình"
                       >
                         <Compass className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">Tour</span>
+                        <span>Tour</span>
                       </button>
 
                       {/* Sound Toggle */}
@@ -1717,12 +1777,12 @@ export function SwarmRebuildEngine({
                           if (next) swarmAudio.unlock();
                           onSoundEnabledChange(next);
                         }}
-                        className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-semibold border transition-colors cursor-pointer ${
+                        className={`p-1 sm:px-2.5 sm:py-1.5 rounded-lg text-[10px] sm:text-[11px] font-mono font-semibold border transition-colors cursor-pointer ${
                           soundEnabled
                             ? "bg-emerald-500/20 border-emerald-400/50 text-emerald-200"
                             : "bg-white/5 border-white/10 text-slate-400 hover:bg-white/10"
                         }`}
-                        title="Toggle Web Audio Sound (M)"
+                        title="Bật/Tắt âm thanh"
                       >
                         {soundEnabled ? (
                           <Volume2 className="w-3.5 h-3.5" />
@@ -1737,30 +1797,29 @@ export function SwarmRebuildEngine({
                           swarmAudio.unlock();
                           onReplay();
                         }}
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-semibold bg-white/5 hover:bg-white/15 border border-white/10 text-slate-200 transition-colors cursor-pointer"
-                        title="Replay Rebuild (R)"
+                        className="p-1 sm:px-2.5 sm:py-1.5 rounded-lg text-[10px] sm:text-[11px] font-mono font-semibold bg-white/5 hover:bg-white/15 border border-white/10 text-slate-200 transition-colors cursor-pointer"
+                        title="Chạy lại animation"
                       >
                         <RotateCcw className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">Replay</span>
                       </button>
 
                       {/* Go Live */}
                       {phase === "building" && (
                         <button
                           onClick={() => onPhaseChange("live")}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-bold bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-sm cursor-pointer hover:brightness-110"
-                          title="Finish & Go Live (L)"
+                          className="inline-flex items-center gap-1 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-[11px] font-mono font-bold bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-sm cursor-pointer hover:brightness-110 active:scale-95 transition-transform"
+                          title="Hoàn tất và xem trang ngay"
                         >
-                          <Zap className="w-3.5 h-3.5" />
-                          <span>Go Live</span>
+                          <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                          <span>Xong</span>
                         </button>
                       )}
 
                       {/* Hide HUD */}
                       <button
                         onClick={() => setHudHidden(true)}
-                        className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 cursor-pointer"
-                        title="Hide HUD for Clean Capture (H)"
+                        className="hidden sm:inline-flex p-1 sm:p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 cursor-pointer"
+                        title="Ẩn HUD (H)"
                       >
                         <EyeOff className="w-3.5 h-3.5" />
                       </button>
@@ -1768,11 +1827,10 @@ export function SwarmRebuildEngine({
                       {/* Exit */}
                       <button
                         onClick={() => onPhaseChange("idle")}
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-bold bg-rose-500/20 hover:bg-rose-500/35 border border-rose-500/40 text-rose-200 transition-colors cursor-pointer"
-                        title="Exit Swarm Rebuild (Esc)"
+                        className="p-1 sm:px-2 sm:py-1.5 rounded-lg text-[10px] sm:text-[11px] font-mono font-bold bg-rose-500/20 hover:bg-rose-500/35 border border-rose-500/40 text-rose-200 transition-colors cursor-pointer"
+                        title="Đóng Swarm"
                       >
                         <X className="w-3.5 h-3.5" />
-                        <span className="hidden md:inline">Esc</span>
                       </button>
                     </div>
                   </div>
@@ -1797,6 +1855,13 @@ export function SwarmFlockCursors({ active }: { active: boolean }) {
 
   useEffect(() => {
     if (!active || !mounted) return;
+    if (
+      typeof window !== "undefined" &&
+      (window.innerWidth < 768 ||
+        (window.matchMedia && !window.matchMedia("(hover: hover) and (pointer: fine)").matches))
+    ) {
+      return; // Skip flock cursors entirely on touch / mobile devices
+    }
     const container = containerRef.current;
     if (!container) return;
 

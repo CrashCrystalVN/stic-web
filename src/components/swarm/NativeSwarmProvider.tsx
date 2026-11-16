@@ -200,7 +200,7 @@ export function NativeSwarmProvider({
         )}
       </div>
 
-      {/* Global Swarm Flock Cursors (5 teammate Figma cursors following mouse while browsing) */}
+      {/* Global Swarm Flock Cursors (5 teammate Figma cursors following mouse while browsing, desktop-only) */}
       {mounted && (
         <SwarmFlockCursors active={flockEnabled && phase === "idle"} />
       )}
@@ -212,43 +212,42 @@ export function NativeSwarmProvider({
         createPortal(
           <div
             data-swarm-ignore="true"
-            className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-[99990] flex items-center"
+            className="fixed bottom-3 right-3 sm:bottom-5 sm:right-5 z-[99990] flex items-center"
+            style={{ paddingBottom: "max(4px, env(safe-area-inset-bottom, 0px))" }}
           >
             {dockCollapsed ? (
               <button
                 onClick={() => setDockCollapsed(false)}
-                title="Swarm Rebuild Native Dock (Alt+Shift+S)"
-                className="group inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-white/95 dark:bg-slate-950/95 text-slate-900 dark:text-slate-100 border border-slate-200/90 dark:border-cyan-500/40 shadow-xl backdrop-blur-md text-xs font-mono font-bold cursor-pointer hover:scale-105 transition-transform"
+                title="Swarm Rebuild"
+                className="group inline-flex items-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-full bg-white/95 dark:bg-slate-950/95 text-slate-900 dark:text-slate-100 border border-slate-200/90 dark:border-cyan-500/40 shadow-xl backdrop-blur-md text-xs font-mono font-bold cursor-pointer hover:scale-105 transition-transform"
               >
                 <span className="flex -space-x-1">
-                  <span className="w-2.5 h-2.5 rounded-full bg-blue-500 ring-1 ring-white dark:ring-slate-950" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 ring-1 ring-white dark:ring-slate-950" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-500 ring-1 ring-white dark:ring-slate-950" />
+                  <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-blue-500 ring-1 ring-white dark:ring-slate-950" />
+                  <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-400 ring-1 ring-white dark:ring-slate-950" />
+                  <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-purple-500 ring-1 ring-white dark:ring-slate-950" />
                 </span>
                 <span>Swarm</span>
               </button>
             ) : (
-              <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl bg-white/95 dark:bg-slate-950/95 border border-slate-200/90 dark:border-cyan-500/40 shadow-[0_12px_36px_rgba(15,23,42,0.18)] dark:shadow-[0_12px_36px_rgba(0,0,0,0.6)] backdrop-blur-xl">
+              <div className="inline-flex items-center gap-1 p-1 sm:p-1.5 rounded-2xl bg-white/95 dark:bg-slate-950/95 border border-slate-200/90 dark:border-cyan-500/40 shadow-[0_12px_36px_rgba(15,23,42,0.18)] dark:shadow-[0_12px_36px_rgba(0,0,0,0.6)] backdrop-blur-xl">
                 {/* Launch full native Swarm Rebuild on current page */}
                 <button
                   onClick={() => launchRebuild({ scrollTop: !isLab })}
                   title={
                     lang === "vi"
-                      ? "Tái dựng trang hiện tại với Swarm Rebuild (Alt+Shift+S)"
-                      : "Rebuild current page live with Native Swarm (Alt+Shift+S)"
+                      ? "Tái dựng trang hiện tại với Swarm Rebuild"
+                      : "Rebuild current page live with Native Swarm"
                   }
-                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:brightness-110 active:scale-[0.98] transition-all shadow-md shadow-blue-500/25 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 hover:brightness-110 active:scale-[0.98] transition-all shadow-md shadow-blue-500/25 cursor-pointer"
                 >
                   <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-                  <span>
-                    {lang === "vi" ? "Swarm Rebuild" : "Swarm Rebuild"}
-                  </span>
+                  <span>Swarm Rebuild</span>
                   <span className="hidden md:inline px-1.5 py-0.5 rounded bg-black/20 text-[10px] font-mono text-white/90">
                     Alt+Shift+S
                   </span>
                 </button>
 
-                {/* Toggle live multiplayer cursor flock */}
+                {/* Toggle live multiplayer cursor flock - Hidden on mobile/touch screens */}
                 <button
                   onClick={() => setFlockEnabled((prev) => !prev)}
                   title={
@@ -256,7 +255,7 @@ export function NativeSwarmProvider({
                       ? "Bật/tắt đàn con trỏ Figma theo chuột"
                       : "Toggle 5 Figma teammate cursors around pointer"
                   }
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-[11px] font-mono font-bold border transition-all cursor-pointer ${
+                  className={`hidden md:inline-flex items-center gap-1.5 px-2.5 py-2 rounded-xl text-[11px] font-mono font-bold border transition-all cursor-pointer ${
                     flockEnabled
                       ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/40"
                       : "bg-slate-100/80 dark:bg-white/5 text-slate-600 dark:text-slate-300 border-slate-200/80 dark:border-white/10 hover:bg-slate-200/80 dark:hover:bg-white/10"
@@ -267,14 +266,14 @@ export function NativeSwarmProvider({
                   ) : (
                     <MousePointer2 className="w-3.5 h-3.5" />
                   )}
-                  <span className="hidden sm:inline">Flock</span>
+                  <span>Flock</span>
                 </button>
 
                 {/* Minimize dock */}
                 <button
                   onClick={() => setDockCollapsed(true)}
                   aria-label="Minimize Swarm launcher"
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                  className="p-1 sm:p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
                 >
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
