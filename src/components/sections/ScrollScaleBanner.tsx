@@ -171,10 +171,10 @@ export function ScrollScaleBanner({
                     <text
                       x="8"
                       y="4"
-                      fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
+                      style={{ fontFamily: "var(--font-sans), system-ui, -apple-system, sans-serif" }}
                       fontSize="11"
                       fontWeight="600"
-                      letterSpacing="2.5"
+                      letterSpacing="2"
                       textAnchor="middle"
                       className="fill-slate-600 dark:fill-slate-400"
                     >
@@ -188,7 +188,7 @@ export function ScrollScaleBanner({
                     <text
                       x="0"
                       y="0"
-                      fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
+                      style={{ fontFamily: "var(--font-sans), system-ui, -apple-system, sans-serif" }}
                       fontSize="116"
                       fontWeight="800"
                       letterSpacing="18"
@@ -202,7 +202,7 @@ export function ScrollScaleBanner({
                     <text
                       x="0"
                       y="0"
-                      fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
+                      style={{ fontFamily: "var(--font-sans), system-ui, -apple-system, sans-serif" }}
                       fontSize="116"
                       fontWeight="800"
                       letterSpacing="18"
@@ -228,10 +228,10 @@ export function ScrollScaleBanner({
                   <text
                     x="800"
                     y="415"
-                    fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
+                    style={{ fontFamily: "var(--font-sans), system-ui, -apple-system, sans-serif" }}
                     fontSize="15"
                     fontWeight="600"
-                    letterSpacing="7"
+                    letterSpacing="6"
                     textAnchor="middle"
                     className="fill-slate-800 dark:fill-slate-200"
                   >
@@ -242,10 +242,10 @@ export function ScrollScaleBanner({
                   <text
                     x="800"
                     y="450"
-                    fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
+                    style={{ fontFamily: "var(--font-sans), system-ui, -apple-system, sans-serif" }}
                     fontSize="13"
-                    fontWeight="400"
-                    letterSpacing="2"
+                    fontWeight="500"
+                    letterSpacing="0.5"
                     textAnchor="middle"
                     className="fill-slate-500 dark:fill-slate-400"
                   >
@@ -256,7 +256,7 @@ export function ScrollScaleBanner({
                   <text
                     x="800"
                     y="545"
-                    fontFamily="'JetBrains Mono', monospace"
+                    style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" }}
                     fontSize="10"
                     fontWeight="500"
                     letterSpacing="3"

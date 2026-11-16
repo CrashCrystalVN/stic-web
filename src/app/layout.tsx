@@ -129,7 +129,7 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "window.addEventListener('error',function(e){if(e&&e.message&&/Loading chunk .* failed|ChunkLoadError/i.test(e.message)){var k='stic_chunk_reload_guard';var l=sessionStorage.getItem(k);var n=Date.now();if(!l||n-parseInt(l,10)>15000){sessionStorage.setItem(k,n.toString());window.location.reload();}}});",
+              "!function(){function r(){var e='stic_chunk_reload_guard',t=sessionStorage.getItem(e),n=Date.now();(!t||n-parseInt(t,10)>1e4)&&(sessionStorage.setItem(e,n.toString()),window.location.reload())}window.addEventListener('error',function(e){var t=e.target||e.srcElement;t&&'SCRIPT'===t.tagName&&t.src&&t.src.indexOf('/chunks/')!==-1?r():e&&e.message&&/Loading chunk|ChunkLoadError|failed to fetch dynamically imported module/i.test(e.message)&&r()},!0),window.addEventListener('unhandledrejection',function(e){var t=e&&e.reason,n=(t&&(t.message||t.stack))||String(t);/Loading chunk|ChunkLoadError|failed to fetch dynamically imported module/i.test(n)&&r()})}();",
           }}
         />
       </head>

@@ -897,7 +897,7 @@ export function SwarmRebuildEngine({
         isMobile ? "10px" : "14px"
       };margin-top:2px;padding:${
         isMobile ? "1.5px 5.5px" : "2px 7px"
-      };border-radius:9999px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:${
+      };border-radius:9999px;font-family:var(--font-sans),system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:${
         isMobile ? "8.5px" : "10px"
       };font-weight:700;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.28);`;
       labelWrap.style.backgroundColor = profile.color;
@@ -1189,6 +1189,31 @@ export function SwarmRebuildEngine({
       agent.stage = "act";
       agent.progress = 0;
       agent.lastTypedLen = -1;
+
+      // Dynamically re-sample live bounding rect right as the agent starts the action
+      // Guarantees 100% pixel-perfect alignment regardless of image loading, layout shifts, or scroll
+      const liveRootRect = rootEl.getBoundingClientRect();
+      const curRect = task.el.getBoundingClientRect();
+      if (curRect.width > 0 && curRect.height > 0) {
+        task.w = Math.max(12, curRect.width);
+        task.h = Math.max(12, curRect.height);
+        task.x = curRect.left - liveRootRect.left;
+        task.y = curRect.top - liveRootRect.top;
+        task.fixedLeft = curRect.left;
+        task.fixedTop = curRect.top;
+      }
+      if (task.kind === "dup" && task.dupFromIndex !== -1) {
+        const srcTask = tasks[task.dupFromIndex];
+        if (srcTask && srcTask.el) {
+          const srcRect = srcTask.el.getBoundingClientRect();
+          if (srcRect.width > 0 && srcRect.height > 0) {
+            srcTask.w = Math.max(12, srcRect.width);
+            srcTask.h = Math.max(12, srcRect.height);
+            srcTask.x = srcRect.left - liveRootRect.left;
+            srcTask.y = srcRect.top - liveRootRect.top;
+          }
+        }
+      }
 
       if (task.guide) {
         spawnRulerGuides(task, agent.profile.color);
@@ -1873,7 +1898,7 @@ export function SwarmFlockCursors({ active }: { active: boolean }) {
       const svg = createPointerSvg(profile.color);
       const pill = document.createElement("span");
       pill.textContent = profile.name;
-      pill.style.cssText = `display:inline-block;margin-left:14px;margin-top:2px;padding:1px 7px;border-radius:9999px;background:${profile.color};color:${profile.textColor};font-family:ui-monospace,monospace;font-size:10px;font-weight:700;box-shadow:0 3px 10px rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.28);`;
+      pill.style.cssText = `display:inline-block;margin-left:14px;margin-top:2px;padding:1px 7px;border-radius:9999px;background:${profile.color};color:${profile.textColor};font-family:var(--font-sans),system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:10px;font-weight:700;box-shadow:0 3px 10px rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.28);`;
       el.appendChild(svg);
       el.appendChild(pill);
       container.appendChild(el);

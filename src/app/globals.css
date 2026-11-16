@@ -571,9 +571,8 @@ html.swarm-rebuilding body {
   background-attachment: fixed !important;
 }
 
-/* Lock Framer Motion whileInView transforms & heavy glitch filters during rebuild for accurate rects & 120fps */
-html.swarm-rebuilding section,
-html.swarm-rebuilding [data-swarm-wiped] {
+/* Lock Framer Motion whileInView transforms on major sections during rebuild for accurate layout flow & 120fps */
+html.swarm-rebuilding section {
   transform: none !important;
 }
 
