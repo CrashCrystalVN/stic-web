@@ -264,7 +264,7 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 // ── Main JoinSection ──────────────────────────────────────────────────────────
-export function JoinSection() {
+export function JoinSection({ embedded = false }: { embedded?: boolean }) {
   const { lang } = useLang();
   const [form, setForm] = useState<STICApplicationData>(INITIAL_FORM);
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -461,10 +461,16 @@ export function JoinSection() {
   return (
     <>
       <section
-        id="join"
-        className="relative min-h-[calc(100vh-72px)] flex flex-col items-center justify-center py-12 px-4 sm:px-6 bg-slate-50/70 dark:bg-[#0a0f1d] border-t border-slate-100 dark:border-slate-900 transition-colors"
+        id={embedded ? undefined : "join"}
+        className={
+          embedded
+            ? "w-full"
+            : "relative min-h-[calc(100vh-72px)] flex flex-col items-center justify-center py-12 px-4 sm:px-6 bg-slate-50/70 dark:bg-[#0a0f1d] border-t border-slate-100 dark:border-slate-900 transition-colors"
+        }
       >
-        <div className="max-w-4xl w-full mx-auto space-y-10">
+        <div className={embedded ? "w-full space-y-8" : "max-w-4xl w-full mx-auto space-y-10"}>
+          {!embedded && (
+            <>
           {/* Header Banner */}
           <div className="text-center space-y-3">
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-500/10 dark:bg-blue-400/10 border border-blue-500/25 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider">
@@ -636,6 +642,8 @@ export function JoinSection() {
               </div>
             </div>
           </div>
+            </>
+          )}
 
           {/* Server Error Alert */}
           <AnimatePresence>

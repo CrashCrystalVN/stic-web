@@ -23,6 +23,13 @@ export function FormPreloader() {
       timerId = setTimeout(() => {
         try {
           router.prefetch("/join");
+          if (!document.querySelector("link[data-gform-dns]")) {
+            const link = document.createElement("link");
+            link.rel = "dns-prefetch";
+            link.href = "https://docs.google.com";
+            link.setAttribute("data-gform-dns", "true");
+            document.head.appendChild(link);
+          }
         } catch {
           // ignore prefetch errors
         }

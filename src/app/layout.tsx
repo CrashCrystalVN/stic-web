@@ -119,6 +119,10 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://docs.google.com" />
         <link rel="preconnect" href="https://docs.google.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://ssl.gstatic.com" />
+        <link rel="preconnect" href="https://ssl.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://lh3.googleusercontent.com" />
+        <link rel="preconnect" href="https://lh3.googleusercontent.com" crossOrigin="anonymous" />
         <link rel="preload" as="image" href={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/logo.png`} fetchPriority="high" />
 
         {/* Zalo & In-App Browser Specific OpenGraph Fallbacks */}

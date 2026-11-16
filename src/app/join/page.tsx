@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   Sparkles,
@@ -9,10 +9,12 @@ import {
   Users,
   Trophy,
   GraduationCap,
-  ExternalLink
+  ExternalLink,
+  Zap
 } from "lucide-react";
 import { FAQS, BENEFITS, RECRUITMENT_STEPS, CLUB_INFO } from "@/lib/data";
 import { useLang } from "@/context/LangContext";
+import { JoinSection } from "@/components/sections/JoinSection";
 
 const BENEFIT_ICONS: Record<string, React.ElementType> = {
   Rocket,
@@ -24,7 +26,19 @@ const BENEFIT_ICONS: Record<string, React.ElementType> = {
 export default function JoinPage() {
   const { lang } = useLang();
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activeTab, setActiveTab] = useState<"native" | "google">("native");
   const [isIframeLoading, setIsIframeLoading] = useState(true);
+
+  // Fallback: Tự động tắt màn hình loading iframe sau 2.2 giây để người dùng không bị kẹt khi Google beacons load chậm
+  useEffect(() => {
+    if (activeTab === "google") {
+      setIsIframeLoading(true);
+      const timer = setTimeout(() => {
+        setIsIframeLoading(false);
+      }, 2200);
+      return () => clearTimeout(timer);
+    }
+  }, [activeTab]);
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -71,68 +85,118 @@ export default function JoinPage() {
         </div>
 
         {/* ========================================================
-            GOOGLE FORM NHÚNG TRỰC TIẾP (MAIN APPLICATION FORM)
+            CHỌN PHƯƠNG THỨC ỨNG TUYỂN (NATIVE INSTANT VS GOOGLE FORM)
             ======================================================== */}
         <div id="application-form" className="mb-20 scroll-mt-28">
-          <div className="rounded-3xl border border-blue-400/40 dark:border-blue-500/30 shadow-2xl p-4 sm:p-7 relative overflow-hidden bg-white/95 dark:bg-slate-900/95">
-            {/* Embed Bar Header */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 mb-4 border-b border-slate-200/80 dark:border-slate-800">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center font-extrabold text-lg">
-                  G
+          {/* Method Switcher Tabs */}
+          <div className="flex items-center justify-center p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-sm mb-8 max-w-xl mx-auto">
+            <button
+              type="button"
+              onClick={() => setActiveTab("native")}
+              className={`flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
+                activeTab === "native"
+                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
+              <span>{lang === "vi" ? "Form Siêu Tốc (0ms)" : "Instant Form (0ms)"}</span>
+              <span className="hidden sm:inline px-1.5 py-0.5 rounded-full text-[10px] bg-white/20 text-white font-mono">
+                {lang === "vi" ? "Khuyên dùng" : "Fastest"}
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab("google")}
+              className={`flex-1 py-2.5 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer ${
+                activeTab === "google"
+                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              }`}
+            >
+              <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span>{lang === "vi" ? "Google Form Gốc" : "Google Form"}</span>
+            </button>
+          </div>
+
+          {activeTab === "native" ? (
+            /* TAB 1: FORM SIÊU TỐC NATIVE STIC (0ms, không lag, lưu trực tiếp Firestore Database) */
+            <JoinSection embedded={true} />
+          ) : (
+            /* TAB 2: GOOGLE FORM NHÚNG (Tối ưu kết nối & fallback mở tab riêng nếu mạng chậm) */
+            <div className="rounded-3xl border border-blue-400/40 dark:border-blue-500/30 shadow-2xl p-4 sm:p-7 relative overflow-hidden bg-white/95 dark:bg-slate-900/95">
+              {/* Embed Bar Header */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 mb-4 border-b border-slate-200/80 dark:border-slate-800">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center font-extrabold text-lg">
+                    G
+                  </div>
+                  <div>
+                    <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+                      {lang === "vi" ? "Biểu Mẫu Google Form GEN 1.0 (Bản Gốc)" : "Official STIC GEN 1.0 Google Form"}
+                    </h2>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                      {lang === "vi"
+                        ? "Nếu bạn dùng iPhone hoặc thấy Google Form tải chậm, hãy chuyển sang tab 'Form Siêu Tốc (0ms)' ở trên hoặc bấm 'Mở tab riêng' bên phải."
+                        : "If Google Form loads slowly on your mobile, switch to 'Instant Form (0ms)' above or open in a new tab."}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
-                    {lang === "vi" ? "Biểu Mẫu Đăng Ký Tuyển Thành Viên GEN 1.0" : "Official STIC GEN 1.0 Application Form"}
-                  </h2>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    {lang === "vi" ? "Điền và bấm 'Gửi' trực tiếp ngay bên dưới — dữ liệu chuyển thẳng về Google Sheets của BCN" : "Fill and submit directly below — responses are stored in Club Board's Google Sheets"}
-                  </p>
-                </div>
+
+                <a
+                  href={CLUB_INFO.formLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-sm transition-all hover:scale-105 shrink-0 cursor-pointer"
+                >
+                  <span>{lang === "vi" ? "Mở tab riêng" : "Open in new tab"}</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
               </div>
 
-              <a
-                href={CLUB_INFO.formLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors shrink-0"
-              >
-                <span>{lang === "vi" ? "Mở tab riêng" : "Open in new tab"}</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
+              {/* Iframe Frame */}
+              <div className="relative w-full rounded-2xl overflow-hidden bg-white dark:bg-slate-950 min-h-[680px] sm:min-h-[900px] border border-slate-200/80 dark:border-slate-800 shadow-inner">
+                {isIframeLoading && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/90 dark:bg-slate-900/90 backdrop-blur-xs z-10 gap-3 p-4 text-center transition-opacity duration-300">
+                    <div className="w-9 h-9 border-3 border-blue-600/30 border-t-blue-600 rounded-full animate-spin" />
+                    <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-100 font-bold">
+                      {lang === "vi" ? "Đang đồng bộ biểu mẫu Google Form..." : "Loading application form..."}
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 max-w-xs">
+                      {lang === "vi"
+                        ? "Google Forms đang nạp mã từ máy chủ Google. Bạn có thể mở trực tiếp để điền nhanh hơn:"
+                        : "Optimizing connection for mobile device"}
+                    </p>
+                    <a
+                      href={CLUB_INFO.formLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors cursor-pointer"
+                    >
+                      <span>{lang === "vi" ? "Mở trực tiếp trên tab mới" : "Open in new tab"}</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                )}
+                <iframe
+                  src="https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/viewform?embedded=true"
+                  width="100%"
+                  height="1850"
+                  frameBorder="0"
+                  marginHeight={0}
+                  marginWidth={0}
+                  className="w-full min-h-[1400px] sm:min-h-[1600px] border-none"
+                  loading="eager"
+                  // @ts-expect-error fetchpriority is a modern web standard
+                  fetchpriority="high"
+                  onLoad={() => setIsIframeLoading(false)}
+                  title="STIC GEN 1.0 Recruitment Application Google Form"
+                >
+                  Đang tải Google Form...
+                </iframe>
+              </div>
             </div>
-
-            {/* Iframe Frame */}
-            <div className="relative w-full rounded-2xl overflow-hidden bg-white dark:bg-slate-950 min-h-[680px] sm:min-h-[900px] border border-slate-200/80 dark:border-slate-800 shadow-inner">
-              {isIframeLoading && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs z-10 gap-3 p-4 text-center">
-                  <div className="w-9 h-9 border-3 border-blue-600/30 border-t-blue-600 rounded-full animate-spin" />
-                  <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-200 font-medium">
-                    {lang === "vi" ? "Đang mở biểu mẫu ứng tuyển STIC..." : "Loading application form..."}
-                  </p>
-                  <p className="text-[11px] text-slate-400">
-                    {lang === "vi" ? "Tự động tối ưu hoá kết nối cho điện thoại" : "Optimizing connection for mobile"}
-                  </p>
-                </div>
-              )}
-              <iframe
-                src="https://docs.google.com/forms/d/e/1FAIpQLSfEfAvIevbb0BFHFixLPn7TAy64tkk0lYzLv8ohGfm2EmizBw/viewform?embedded=true"
-                width="100%"
-                height="1850"
-                frameBorder="0"
-                marginHeight={0}
-                marginWidth={0}
-                className="w-full min-h-[1400px] sm:min-h-[1600px] border-none"
-                loading="eager"
-                // @ts-expect-error fetchpriority is a modern web standard
-                fetchpriority="high"
-                onLoad={() => setIsIframeLoading(false)}
-                title="STIC GEN 1.0 Recruitment Application Google Form"
-              >
-                Đang tải Google Form...
-              </iframe>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Benefits Grid */}
