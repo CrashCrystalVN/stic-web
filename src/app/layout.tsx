@@ -124,6 +124,14 @@ export default function RootLayout({
         {/* Zalo & In-App Browser Specific OpenGraph Fallbacks */}
         <meta property="og:image:secure_url" content={`${siteUrl}/banner.jpg?v=2`} />
         <link rel="image_src" href={`${siteUrl}/banner.jpg?v=2`} />
+
+        {/* Global ChunkLoadError Auto-Recovery: Tự động tải lại trang mượt mà khi phiên bản mới được deploy */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "window.addEventListener('error',function(e){if(e&&e.message&&/Loading chunk .* failed|ChunkLoadError/i.test(e.message)){var k='stic_chunk_reload_guard';var l=sessionStorage.getItem(k);var n=Date.now();if(!l||n-parseInt(l,10)>15000){sessionStorage.setItem(k,n.toString());window.location.reload();}}});",
+          }}
+        />
       </head>
       <body
         className={`${font.variable} font-sans min-h-screen antialiased flex flex-col relative`}

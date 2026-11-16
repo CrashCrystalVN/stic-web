@@ -1,8 +1,7 @@
 // STIC Web High-Performance Service Worker (Zero-Overhead Static Delivery)
-const CACHE_NAME = 'stic-cache-v5';
+const CACHE_NAME = 'stic-cache-v6';
 const BASE_PATH = self.location.pathname.replace(/\/sw\.js$/, '');
 const PRECACHE_URLS = [
-  `${BASE_PATH}/`,
   `${BASE_PATH}/logo.png`,
   `${BASE_PATH}/favicon.png`,
 ];
